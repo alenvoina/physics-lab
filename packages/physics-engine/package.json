@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "run": "ts-node --esm src/test.ts"
+    "run": "ts-node --esm src/test.ts",
+    "sim:orbit": "ts-node --esm src/simulations/orbit-simulation.ts"
   },
   "keywords": [],
   "author": "",

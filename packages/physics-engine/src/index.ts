@@ -1,8 +1,8 @@
-export * from "./vector.js";
-export * from "./body.js";
-export * from "./world.js";
+export * from "./vector";
+export * from "./body";
+export * from "./world";
 
-import { Body, Vector, World } from "./index.js";
+import { Body, Vector, World } from "./index";
 
 const body = new Body({
   position: new Vector(0, 0),

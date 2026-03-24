@@ -1,24 +1,28 @@
-import { Vector } from "./vector.js";
+import { Vector } from "./vector";
 
 export class Body {
   position: Vector;
   velocity: Vector;
   force: Vector;
   mass: number;
+  radius: number;
 
   constructor({
     position = new Vector(),
     velocity = new Vector(),
     mass = 1,
+    radius = 1,
   }: {
     position?: Vector;
     velocity?: Vector;
     mass?: number;
+    radius?: number;
   }) {
     this.position = position;
     this.velocity = velocity;
     this.force = new Vector();
     this.mass = mass;
+    this.radius = radius;
   }
 
   applyForce(force: Vector) {

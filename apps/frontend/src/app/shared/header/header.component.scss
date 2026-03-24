@@ -1,0 +1,54 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+
+  padding: 0 20px;
+   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* LEFT */
+.left {
+  display: flex;
+  align-items: center;
+}
+
+/* CENTER (идеальный центр) */
+.center {
+  display: flex;
+  justify-content: center;
+}
+
+/* RIGHT */
+.right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+/* NAV */
+.nav {
+  display: flex;
+  gap: 20px;
+
+  button {
+    font-weight: 500;
+  }
+}
+
+/* LOGO */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  img {
+    width: 24px;
+    height: 24px;
+  }
+}

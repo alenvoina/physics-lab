@@ -1,7 +1,7 @@
 import { Body } from '../body.js'
 
 export function applyGravity(a: Body, b: Body) {
-  const G = 6.67e-11;
+  const G = 1;
 
   const r = b.position.subtract(a.position);
   const distance = r.length();
