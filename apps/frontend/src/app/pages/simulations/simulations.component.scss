@@ -1,0 +1,62 @@
+.simulations-page {
+  padding: 2rem;
+
+  .hero {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    .hero-text {
+      max-width: 50%;
+
+      h1 { 
+        font-size: 2.5rem; 
+        margin-bottom: 3rem; 
+        text-align: center;
+    }
+      p { 
+        font-size: 1.2rem; 
+        color: #555;
+        text-align: center;
+    }
+}
+
+    .hero-animation {
+      width: 40%;
+      /* SVG или Lottie анимация */
+    }
+  }
+
+  .simulation-category {
+    margin-bottom: 3rem;
+
+    h2 { 
+        font-size: 2rem;
+        margin-bottom: 2.5rem; 
+        text-align: center; 
+    }
+
+    .cards-container {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+
+      .sim-card {
+        width: 300px;
+        transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+
+        &:hover {
+          transform: scale(1.05);
+          box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        mat-card-actions {
+          display: flex;
+          justify-content: center;
+        }
+      }
+    }
+  }
+}

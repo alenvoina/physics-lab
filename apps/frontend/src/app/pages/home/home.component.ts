@@ -1,29 +1,88 @@
 import {
   AfterViewInit,
+  AfterViewChecked,
   Component,
   ElementRef,
   ViewChild,
+  OnDestroy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterModule } from '@angular/router';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, MatButtonModule],
+  imports: [CommonModule, MatButtonModule, RouterModule, MatTooltipModule, MatIconModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements AfterViewInit {
-  @ViewChild('atomCanvas') canvasRef!: ElementRef<HTMLCanvasElement>;
+export class HomeComponent implements AfterViewInit, AfterViewChecked, OnDestroy {
+
+timelineEvents = [
+  { year: 1609, title: 'Галилео Галилей', description: 'Наблюдает Луны Юпитера и строит телескоп', icon: 'assets/Galilei.webp' },
+  { year: 1687, title: 'Исаак Ньютон', description: 'Публикует Principia, законы движения и гравитации', icon: 'assets/Newton.jpg' },
+  { year: 1865, title: 'Джеймс Клерк Максвелл', description: 'Формулирует уравнения электромагнетизма', icon: 'assets/Maxwell.jpg' },
+  { year: 1905, title: 'Альберт Эйнштейн', description: 'Специальная теория относительности', icon: 'assets/Einstein.jpg' },
+  { year: 1926, title: 'Эрвин Шредингер', description: 'Волновая функция и квантовая механика', icon: 'assets/Srhedinger.jpg' },
+  { year: 1932, title: 'Джеймс Чедвик', description: 'Открытие нейтрона', icon: 'assets/Chedwik.jpg' },
+  { year: 1942, title: 'Проект Манхэттен', description: 'Разработка атомной бомбы', icon: 'assets/Einstein.jpg' },
+  { year: 1964, title: 'Кварки', description: 'Появляется квантовая хромодинамика', icon: 'assets/Einstein.jpg' },
+  { year: 1984, title: 'Лазерное охлаждение', description: 'Разработка лазерных охлаждений атомов', icon: 'assets/Einstein.jpg' },
+  { year: 2001, title: 'Квантовые компьютеры', description: 'Первые прототипы квантовых вычислений', icon: 'assets/Einstein.jpg' },
+  { year: 2002, title: 'Нейтрино', description: 'Обнаружение космических нейтрино', icon: 'assets/Einstein.jpg' },
+  { year: 2012, title: 'Бозон Хиггса', description: 'Открыт бозон Хиггса в CERN', icon: 'assets/Einstein.jpg' },
+  { year: 2015, title: 'Такааки Кадзита', description: 'Нейтрино меняют “тип” → значит имеют массу', icon: 'assets/Einstein.jpg' },
+  { year: 2016, title: 'Райнер Вайс', description: 'Впервые зарегистрированы волны пространства-времени', icon: 'assets/Einstein.jpg' },
+  { year: 2020, title: 'Роджер Пенроуз', description: 'доказательство существования сверхмассивной чёрной дыры в центре галактики', icon: 'assets/Einstein.jpg' },
+  { year: 2025, title: 'Джон Кларк', description: 'Квантовые эффекты в электрических цепях', icon: 'assets/Einstein.jpg' },
+  
+];
+
+  @ViewChild('atomCanvas', { static: false })
+  canvasRef!: ElementRef<HTMLCanvasElement>;
+
+  private animationId!: number;
+  private currentCanvas: HTMLCanvasElement | null = null;
 
   ngAfterViewInit() {
-    const canvas = this.canvasRef.nativeElement;
-    const ctx = canvas.getContext('2d')!;
+    this.initCanvas();
+  }
+
+  ngAfterViewChecked() {
+    this.initCanvas();
+  }
+
+  private initCanvas() {
+    const canvas = this.canvasRef?.nativeElement;
+    if (!canvas) return;
+
+    // если canvas уже тот же самый — ничего не делаем
+    if (this.currentCanvas === canvas) return;
+
+    // если был старый — останавливаем
+    if (this.animationId) {
+      cancelAnimationFrame(this.animationId);
+    }
+
+    this.currentCanvas = canvas;
+    this.startAnimation(canvas);
+  }
+
+  private startAnimation(canvas: HTMLCanvasElement) {
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
     const size = 350;
-    canvas.width = size;
-    canvas.height = size;
+
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = size * dpr;
+    canvas.height = size * dpr;
+    canvas.style.width = size + 'px';
+    canvas.style.height = size + 'px';
+    ctx.scale(dpr, dpr);
 
     const center = { x: size / 2, y: size / 2 };
 
@@ -35,11 +94,12 @@ export class HomeComponent implements AfterViewInit {
       ctx.save();
       ctx.translate(center.x, center.y);
       ctx.rotate(tilt);
+
       ctx.beginPath();
       ctx.ellipse(0, 0, radius, radius * 0.4, 0, 0, Math.PI * 2);
       ctx.strokeStyle = 'rgba(100,150,255,0.2)';
-      ctx.lineWidth = 1;
       ctx.stroke();
+
       ctx.restore();
     };
 
@@ -58,8 +118,8 @@ export class HomeComponent implements AfterViewInit {
 
       ctx.beginPath();
       ctx.arc(x, y, 5, 0, Math.PI * 2);
-      ctx.fillStyle = color;
 
+      ctx.fillStyle = color;
       ctx.shadowBlur = 15;
       ctx.shadowColor = color;
 
@@ -74,10 +134,8 @@ export class HomeComponent implements AfterViewInit {
       ctx.beginPath();
       ctx.arc(center.x, center.y, 12, 0, Math.PI * 2);
       ctx.fillStyle = '#1976d2';
-
       ctx.shadowBlur = 25;
       ctx.shadowColor = '#1976d2';
-
       ctx.fill();
 
       // орбиты
@@ -94,9 +152,15 @@ export class HomeComponent implements AfterViewInit {
       angle2 += 0.015;
       angle3 += 0.01;
 
-      requestAnimationFrame(draw);
+      this.animationId = requestAnimationFrame(draw);
     };
 
     draw();
+  }
+
+  ngOnDestroy() {
+    if (this.animationId) {
+      cancelAnimationFrame(this.animationId);
+    }
   }
 }

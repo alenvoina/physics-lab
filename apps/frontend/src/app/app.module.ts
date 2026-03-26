@@ -7,11 +7,14 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './shared/header/header.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { HomeComponent } from './pages/home/home.component';
+import { SimulationsComponent } from './pages/simulations/simulations.component';
 import { ClassicalComponent } from './pages/simulation/classical/classical.component';
 import { QuantumComponent } from './pages/simulation/quantum/quantum.component';
 import { NuclearComponent } from './pages/simulation/nuclear/nuclear.component';
 import { QuantumTheoryComponent } from './pages/theory/quantum-theory/quantum-theory.component';
 import { NuclearTheoryComponent } from './pages/theory/nuclear-theory/nuclear-theory.component';
+
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -22,13 +25,15 @@ import { NuclearTheoryComponent } from './pages/theory/nuclear-theory/nuclear-th
     QuantumComponent,
     NuclearComponent,
     QuantumTheoryComponent,
-    NuclearTheoryComponent
+    NuclearTheoryComponent,
   ],
   imports: [
     BrowserModule,
     HomeComponent,
+    SimulationsComponent,
     AppRoutingModule,
-    MaterialModule
+    MaterialModule,
+     MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

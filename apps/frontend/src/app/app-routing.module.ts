@@ -7,9 +7,12 @@ import { QuantumComponent } from './pages/simulation/quantum/quantum.component';
 import { NuclearComponent } from './pages/simulation/nuclear/nuclear.component';
 import { QuantumTheoryComponent } from './pages/theory/quantum-theory/quantum-theory.component';
 import { NuclearTheoryComponent } from './pages/theory/nuclear-theory/nuclear-theory.component';
+import { SimulationsComponent } from './pages/simulations/simulations.component';
+
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
+   { path: 'simulations', component: SimulationsComponent },
   { path: 'simulation/classical', component: ClassicalComponent },
   { path: 'simulation/quantum', component: QuantumComponent },
   { path: 'simulation/nuclear', component: NuclearComponent },

@@ -5,7 +5,7 @@
       <h1>Physics Lab</h1>
       <p>Interactive simulations of quantum and nuclear physics</p>
 
-      <button mat-raised-button color="primary" routerLink="simulation/classical">
+      <button mat-raised-button color="primary" [routerLink]="['/simulations']">
         Start Simulation
       </button>
     </div>
@@ -13,27 +13,56 @@
     <div class="visual">
       <canvas #atomCanvas></canvas>
     </div>
+  </div>
+</section>
 
+<section class="timeline">
+  <div class="timeline-container">
+    <div class="timeline-line"></div>
+
+    <div class="timeline-events">
+      <div class="event" *ngFor="let event of timelineEvents">
+        <div class="dot"></div>
+        <div class="label">{{ event.year }}</div>
+
+        <div class="event-card">
+          <img *ngIf="event.icon" [src]="event.icon" alt="{{event.title}}" class="event-icon">
+          <h4>{{ event.title }}</h4>
+          <p>{{ event.description }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
 <section class="features">
   <div class="container">
     <div class="cards">
-      <div class="card">
-        <h3>Orbital Mechanics</h3>
-        <p>Simulate planetary motion and gravity</p>
-      </div>
+     <div class="card">
+  <h3>Orbital Mechanics</h3>
+  <p>Simulate planetary motion and gravity systems</p>
 
+  <button mat-stroked-button color="primary">
+    Open Simulation
+  </button>
+</div>
       <div class="card">
-        <h3>Quantum Physics</h3>
-        <p>Explore probabilistic systems</p>
-      </div>
+  <h3>Orbital Mechanics</h3>
+  <p>Simulate planetary motion and gravity systems</p>
 
-      <div class="card">
-        <h3>Nuclear Physics</h3>
-        <p>Visualize particle interactions</p>
-      </div>
+  <button mat-stroked-button color="primary">
+    Open Simulation
+  </button>
+</div>
+
+     <div class="card">
+  <h3>Orbital Mechanics</h3>
+  <p>Simulate planetary motion and gravity systems</p>
+
+  <button mat-stroked-button color="primary">
+    Open Simulation
+  </button>
+</div>
     </div>
   </div>
 </section>
