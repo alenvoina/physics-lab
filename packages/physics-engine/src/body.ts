@@ -32,13 +32,10 @@ export class Body {
   update(dt: number) {
   const acceleration = this.force.scale(1 / this.mass);
 
-  // сначала скорость
   this.velocity = this.velocity.add(acceleration.scale(dt));
 
-  // потом позиция
   this.position = this.position.add(this.velocity.scale(dt));
 
-    // сброс силы после шага
     this.force = new Vector();
   }
 }

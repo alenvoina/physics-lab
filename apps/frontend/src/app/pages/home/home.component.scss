@@ -13,7 +13,6 @@
   gap: 60px;
 }
 
-/* TEXT BLOCK */
 .text {
   h1 {
     font-size: 48px;
@@ -34,7 +33,6 @@
   }
 }
 
-/* CANVAS BLOCK */
 .visual {
   display: flex;
   justify-content: center;
@@ -52,16 +50,16 @@
 
   .timeline-container {
     position: relative;
-    padding: 60px 0; // отступ сверху и снизу для карточек
+    padding: 60px 0;
     white-space: nowrap;
 
     .timeline-line {
       position: absolute;
-      top: 50%; // линия по центру контейнера
+      top: 50%;
       transform: translateY(-50%);
       left: 0;
       height: 4px;
-      width: 80%; // длинная линия для скролла
+      width: 80%;
       background: #ccc;
       z-index: 1;
       margin-left: 200px;
@@ -74,7 +72,7 @@
       margin-left: 200px;
 
       .event {
-        position: relative; // карточка будет абсолютной относительно точки
+        position: relative;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -82,7 +80,7 @@
 
         .dot {
           position: absolute;
-          top: 50%; // центрируем на линии
+          top: 50%;
           transform: translateY(-50%);
           width: 20px;
           height: 20px;
@@ -98,7 +96,7 @@
         }
 
         .label {
-          margin-top: 35px; // ниже линии
+          margin-top: 35px;
           font-size: 0.8rem;
           color: #555;
           text-align: center;
@@ -111,7 +109,7 @@
           transform: translateX(-50%);
           width: 300px;
           padding: 1rem;
-          font-size: 14px; // лучше чуть меньше для контроля
+          font-size: 14px;
           line-height: 1.4;
           background: #fff;
           word-wrap: break-word;
@@ -150,7 +148,6 @@
   gap: 35px;
 }
 
-/* CARD */
 .card {
   position: relative;
   padding: 30px;
@@ -180,7 +177,6 @@
     transition: all 0.3s ease;
   }
 
-  /* glowing border */
   &::before {
     content: '';
     position: absolute;
@@ -212,7 +208,6 @@
   }
 }
 
-/* ADAPTIVE */
 @media (max-width: 900px) {
   .hero-content {
     grid-template-columns: 1fr;

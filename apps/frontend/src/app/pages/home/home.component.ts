@@ -79,7 +79,6 @@ private allNews: News[] = [
   ];
 
    generateRandomNews() {
-    // Выбираем случайные 3 новости из массива
     this.newsList = this.shuffleArray(this.allNews).slice(0, 3);
   }
 
@@ -175,7 +174,6 @@ private allNews: News[] = [
     const draw = () => {
       ctx.clearRect(0, 0, size, size);
 
-      // ядро
       ctx.beginPath();
       ctx.arc(center.x, center.y, 12, 0, Math.PI * 2);
       ctx.fillStyle = '#1976d2';
@@ -183,12 +181,10 @@ private allNews: News[] = [
       ctx.shadowColor = '#1976d2';
       ctx.fill();
 
-      // орбиты
       drawOrbit(80, 0);
       drawOrbit(80, Math.PI / 3);
       drawOrbit(80, -Math.PI / 3);
 
-      // электроны
       drawElectron(80, angle1, 0, '#ff4081');
       drawElectron(80, angle2, Math.PI / 3, '#00e5ff');
       drawElectron(80, angle3, -Math.PI / 3, '#69f0ae');

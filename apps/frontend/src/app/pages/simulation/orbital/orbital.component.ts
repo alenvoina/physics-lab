@@ -64,7 +64,6 @@ setupSimulation() {
   this.world = new World();
   this.world.friction = 1;
 
-  // 🌞 солнце
   this.sun = new Body({
     position: new Vector(cx, cy),
     mass: M,
@@ -73,7 +72,6 @@ setupSimulation() {
 
   this.world.addBody(this.sun);
 
-  // 🪐 планеты
   this.planets = [];
 
   this.planetsConfig.forEach(cfg => {
@@ -95,18 +93,15 @@ render(time: number) {
   const ctx = this.ctx;
   const canvas = this.canvas.nativeElement;
 
-  // --- FPS ---
   if (this.lastTime) {
     const delta = time - this.lastTime;
     this.fps = Math.round(1000 / delta);
   }
   this.lastTime = time;
 
-  // --- ФОН (космос) ---
   ctx.fillStyle = '#020617';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // --- ЗВЁЗДЫ ---
   ctx.fillStyle = 'white';
   this.stars.forEach(star => {
     ctx.beginPath();
@@ -114,10 +109,8 @@ render(time: number) {
     ctx.fill();
   });
 
-  // --- ФИЗИКА ---
   this.world.step(0.01);
 
-  // --- ОРБИТЫ ---
   ctx.strokeStyle = 'rgba(255,255,255,0.08)';
   ctx.lineWidth = 1;
 
@@ -133,11 +126,9 @@ render(time: number) {
     ctx.stroke();
   });
 
-  // --- СОЛНЦЕ 🌞 ---
   const sx = this.sun.position.x;
   const sy = this.sun.position.y;
 
-  // glow
   const glow = ctx.createRadialGradient(sx, sy, 0, sx, sy, this.sun.radius * 6);
   glow.addColorStop(0, '#fff7ed');
   glow.addColorStop(0.3, '#facc15');
@@ -148,24 +139,20 @@ render(time: number) {
   ctx.arc(sx, sy, this.sun.radius * 6, 0, Math.PI * 2);
   ctx.fill();
 
-  // ядро
   ctx.fillStyle = '#facc15';
   ctx.beginPath();
   ctx.arc(sx, sy, this.sun.radius, 0, Math.PI * 2);
   ctx.fill();
 
-  // --- ПЛАНЕТЫ 🪐 ---
   this.planets.forEach(p => {
     const b = p.body;
     const color = p.config.color;
 
-    // тело
     ctx.fillStyle = color;
     ctx.beginPath();
     ctx.arc(b.position.x, b.position.y, b.radius, 0, Math.PI * 2);
     ctx.fill();
 
-    // атмосфера
     const atm = ctx.createRadialGradient(
       b.position.x,
       b.position.y,

@@ -34,7 +34,6 @@ export class Pendulum {
     this.angle += this.angularVelocity * dt;
     this.angle = this.normalizeAngle(this.angle);
 
-    // Обновляем период
     if (this.prevAngle < 0 && this.angle >= 0) {
       if (this.lastCrossTime !== 0) {
         this._period = (time - this.lastCrossTime) / 1000;
@@ -52,7 +51,6 @@ export class Pendulum {
     this._period = 0;
   }
 
-  // --- геттеры для UI ---
   get kineticEnergy() {
     const v = this.angularVelocity * this.length;
     return 0.5 * this.mass * v * v;
@@ -76,7 +74,6 @@ export class Pendulum {
     return this._period || 2 * Math.PI * Math.sqrt(this.length / this.gravity);
   }
 
-  // --- вспомогательные ---
   private normalizeAngle(angle: number) {
     while (angle > Math.PI) angle -= 2 * Math.PI;
     while (angle < -Math.PI) angle += 2 * Math.PI;

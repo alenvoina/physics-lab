@@ -1,11 +1,11 @@
 .main-content {
   padding: 16px;
-  margin-bottom: 64px; // чтобы футер не перекрывал контент
+  margin-bottom: 64px;
 }
 
 .dark-theme {
-  background-color: #0b0c17 !important; // космический тёмный фон
-  color: #f8fafc;            // светлый текст
+  background-color: #0b0c17 !important;
+  color: #f8fafc;            
   transition: background 1s, color 0.3s;
   margin-bottom: 0; 
 }

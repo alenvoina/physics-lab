@@ -1,6 +1,5 @@
 <div class="sim-root">
 
-  <!-- HEADER -->
   <header class="sim-header">
     <div class="title">
       <mat-icon>public</mat-icon>
@@ -22,10 +21,8 @@
     </div>
   </header>
 
-  <!-- MAIN -->
   <div class="sim-main">
 
-    <!-- LEFT PANEL -->
     <aside class="control-panel">
       <h3>Simulation Info</h3>
 
@@ -52,11 +49,9 @@
       </div>
     </aside>
 
-    <!-- CANVAS -->
     <section class="canvas-section">
       <canvas #canvas></canvas>
 
-      <!-- overlay -->
       <div class="overlay">
         <span>FPS: {{ fps }}</span>
         <span>Objects: {{ world?.bodies?.length || 0 }}</span>
@@ -65,7 +60,6 @@
 
   </div>
 
-  <!-- FOOTER -->
   <footer class="sim-footer">
     <p>
       Real-time gravitational simulation. Stable orbit achieved via correct velocity vector.

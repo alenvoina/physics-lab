@@ -48,7 +48,6 @@ export class PendulumComponent implements OnInit {
       gravity: 9.81
     });
 
-    // мышка
     canvas.addEventListener('mousedown', (e) => this.onMouseDown(e));
     canvas.addEventListener('mousemove', (e) => this.onMouseMove(e));
     canvas.addEventListener('mouseup', () => this.isDragging = false);
@@ -100,7 +99,6 @@ export class PendulumComponent implements OnInit {
     const x = this.origin.x + this.pendulum.length * Math.sin(this.pendulum.angle);
     const y = this.origin.y + this.pendulum.length * Math.cos(this.pendulum.angle);
 
-    // нить
     ctx.strokeStyle = '#64748b';
     ctx.lineWidth = 2;
     ctx.beginPath();
@@ -108,13 +106,11 @@ export class PendulumComponent implements OnInit {
     ctx.lineTo(x, y);
     ctx.stroke();
 
-    // крепление
     ctx.fillStyle = '#0f172a';
     ctx.beginPath();
     ctx.arc(this.origin.x, this.origin.y, 6, 0, Math.PI * 2);
     ctx.fill();
 
-    // груз
     const grad = ctx.createRadialGradient(x, y, 5, x, y, 30);
     grad.addColorStop(0, '#67e8f9');
     grad.addColorStop(1, '#0284c7');
@@ -124,7 +120,6 @@ export class PendulumComponent implements OnInit {
     ctx.arc(x, y, 20, 0, Math.PI * 2);
     ctx.fill();
 
-    // данные
     const k = this.pendulum.kineticEnergy;
     const p = this.pendulum.potentialEnergy;
 
@@ -172,11 +167,9 @@ export class PendulumComponent implements OnInit {
   const width = 360;
   const height = 160;
 
-  // фон
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(x, y, width, height);
 
-  // рамка
   ctx.strokeStyle = '#cbd5e1';
   ctx.strokeRect(x, y, width, height);
 
@@ -187,7 +180,6 @@ export class PendulumComponent implements OnInit {
   const max = Math.max(...all);
   const range = max - min || 1;
 
-  // --- сетка ---
   ctx.strokeStyle = '#e2e8f0';
   ctx.lineWidth = 1;
 
@@ -200,7 +192,6 @@ export class PendulumComponent implements OnInit {
     ctx.stroke();
   }
 
-  // --- функция рисования ---
   const drawLine = (data: number[], color: string) => {
     ctx.beginPath();
 
@@ -216,7 +207,6 @@ export class PendulumComponent implements OnInit {
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // текущая точка
     const last = data.length - 1;
     const px = x + (last / (this.maxPoints - 1)) * width;
     const py = y + height - ((data[last] - min) / range) * height;
@@ -227,21 +217,18 @@ export class PendulumComponent implements OnInit {
     ctx.fill();
   };
 
-  // цвета под режим
   const kineticColor = this.mode === 'earth' ? '#16a34a' : '#22c55e';
   const potentialColor = this.mode === 'earth' ? '#dc2626' : '#f43f5e';
 
   drawLine(this.kineticHistory, kineticColor);
   drawLine(this.potentialHistory, potentialColor);
 
-  // --- подписи ---
   ctx.fillStyle = '#0f172a';
   ctx.font = '11px Arial';
 
   ctx.fillText(`max: ${max.toFixed(2)}`, x + 5, y + 12);
   ctx.fillText(`min: ${min.toFixed(2)}`, x + 5, y + height - 5);
 
-  // --- легенда ---
   ctx.fillStyle = kineticColor;
   ctx.fillRect(x + 120, y - 14, 10, 3);
   ctx.fillStyle = '#0f172a';
@@ -252,7 +239,6 @@ export class PendulumComponent implements OnInit {
   ctx.fillStyle = '#0f172a';
   ctx.fillText('Potential', x + 225, y - 10);
 
-  // --- заголовок ---
   ctx.font = 'bold 12px Arial';
   ctx.fillText('Energy vs Time', x + 10, y - 25);
 }
