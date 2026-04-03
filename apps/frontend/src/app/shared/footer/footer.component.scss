@@ -1,10 +1,7 @@
 .footer {
   background: #f5f7fa;
-  border-top: 1px solid #e0e0e0;
-  margin-top: 40px;
-  position: sticky;
-  bottom: 0;
   width: 100%;
+  border-top: 2px solid white;
 }
 
 .container {
@@ -18,7 +15,6 @@
   flex-wrap: wrap;
 }
 
-/* LEFT */
 .left {
   display: flex;
   flex-direction: column;
@@ -35,7 +31,6 @@
   }
 }
 
-/* CENTER */
 .center {
   display: flex;
   gap: 20px;
@@ -51,8 +46,18 @@
   }
 }
 
-/* RIGHT */
 .right {
   display: flex;
   gap: 10px;
+}
+
+.footer.dark-theme {
+  background-color: #1e1f2e !important; // !important чтобы перебить Material
+  color: #f8fafc !important;
+  transition: background 1s, color 0.3s;
+  border-top: none;
+
+  .mat-toolbar-row, button, a, span {
+    color: #f8fafc !important;
+  }
 }

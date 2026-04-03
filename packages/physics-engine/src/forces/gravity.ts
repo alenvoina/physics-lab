@@ -1,17 +1,17 @@
 import { Body } from '../body.js'
 
+const G = 1;
+
 export function applyGravity(a: Body, b: Body) {
-  const G = 1;
+  const delta = b.position.subtract(a.position);
+  const distSq = delta.x * delta.x + delta.y * delta.y;
 
-  const r = b.position.subtract(a.position);
-  const distance = r.length();
+  const epsilon = 0.01; // SOFTENING
+  const forceMag = (G * a.mass * b.mass) / (distSq + epsilon);
 
-  if (distance === 0) return;
+  const distance = Math.sqrt(distSq + epsilon);
+  const force = delta.scale(1 / distance).scale(forceMag);
 
-  const forceMagnitude = (G * a.mass * b.mass) / (distance * distance);
-
-  const force = r.normalize().scale(forceMagnitude);
-
-  a.applyForce(force);
-  b.applyForce(force.scale(-1));
+  a.force = a.force.add(force);
+  b.force = b.force.subtract(force);
 }

@@ -2,3 +2,10 @@
   padding: 16px;
   margin-bottom: 64px; // чтобы футер не перекрывал контент
 }
+
+.dark-theme {
+  background-color: #0b0c17 !important; // космический тёмный фон
+  color: #f8fafc;            // светлый текст
+  transition: background 1s, color 0.3s;
+  margin-bottom: 0; 
+}

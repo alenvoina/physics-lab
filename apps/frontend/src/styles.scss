@@ -48,3 +48,14 @@ app-root {
   flex: 1;
 }
 /* You can add global styles to this file, and also import other style files */
+
+
+body.sim-dark-theme ::ng-deep app-header,
+body.sim-dark-theme ::ng-deep app-footer {
+  background-color: #1e1f2e !important;
+  color: #f8fafc !important;
+
+  button, a, span {
+    color: #f8fafc !important;
+  }
+}

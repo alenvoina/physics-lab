@@ -29,7 +29,7 @@ let stepCount = 0;
 
 // Симуляция с выводом
 const interval = setInterval(() => {
-  world.step(0.016); // шаг интеграции ~16ms
+  world.step(0.005);
   stepCount++;
   
   console.log(`Step ${stepCount}`);

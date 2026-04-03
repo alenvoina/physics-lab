@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
     selector: 'app-footer',
@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
     standalone: false
 })
 export class FooterComponent {
-
+    @Input() darkTheme = false;
 }

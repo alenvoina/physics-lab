@@ -1,6 +1,8 @@
 export * from "./vector";
 export * from "./body";
 export * from "./world";
+export * from "./simulations/orbit-simulation"
+export * from "./simulations/pendulum";
 
 import { Body, Vector, World } from "./index";
 

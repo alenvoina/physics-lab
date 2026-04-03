@@ -1,32 +1,32 @@
 import { Body } from './body'
 import { applyGravity } from './forces/gravity'
+import { Vector } from './vector';
 
 export class World {
   bodies: Body[] = [];
   restitution: number = 0.9; // коэффициент упругости при столкновениях
-  friction: number = 0.99;   // простое трение, для замедления тел
+  friction = 1;   
 
   addBody(body: Body) {
     this.bodies.push(body);
   }
 
   step(dt: number) {
-    // --- 1. Применяем силы (гравитацию пока) ---
+    this.bodies.forEach(body => {
+    body.force = new Vector(0, 0);
+});
     for (let i = 0; i < this.bodies.length; i++) {
       for (let j = i + 1; j < this.bodies.length; j++) {
         applyGravity(this.bodies[i], this.bodies[j]);
       }
     }
 
-    // --- 2. Обновляем позиции и скорости ---
     this.bodies.forEach(body => {
       body.update(dt);
 
-      // применяем простое трение
       body.velocity = body.velocity.scale(this.friction);
     });
 
-    // --- 3. Проверяем столкновения и отталкивание ---
     for (let i = 0; i < this.bodies.length; i++) {
       for (let j = i + 1; j < this.bodies.length; j++) {
         this.resolveCollision(this.bodies[i], this.bodies[j]);
@@ -34,21 +34,20 @@ export class World {
     }
   }
 
-  // метод для упругих столкновений
   resolveCollision(a: Body, b: Body) {
     const delta = b.position.subtract(a.position);
     const distance = delta.length();
 
-    const minDist = a.radius + b.radius; // предполагаем, что у Body есть radius
+    const minDist = a.radius + b.radius; 
     if (distance < minDist && distance > 0) {
       // нормаль столкновения
       const normal = delta.scale(1 / distance);
 
       // относительная скорость
       const relVel = b.velocity.subtract(a.velocity);
-      const speed = relVel.x * normal.x + relVel.y * normal.y; // скалярное произведение
+      const speed = relVel.x * normal.x + relVel.y * normal.y;
 
-      if (speed < 0) return; // если тела разлетаются, не отталкиваем
+      if (speed < 0) return;
 
       // импульс для упругого столкновения
       const impulse = (2 * speed) / (a.mass + b.mass);

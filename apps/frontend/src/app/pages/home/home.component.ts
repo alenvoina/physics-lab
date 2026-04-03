@@ -12,6 +12,12 @@ import { RouterModule } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 
+interface News {
+  title: string;
+  content: string;
+  image: string;
+}
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -19,6 +25,7 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
+
 export class HomeComponent implements AfterViewInit, AfterViewChecked, OnDestroy {
 
 timelineEvents = [
@@ -41,6 +48,45 @@ timelineEvents = [
   
 ];
 
+newsList: News[] = [];
+
+private allNews: News[] = [
+    {
+      title: 'Quantum Entanglement Breakthrough',
+      content: 'Scientists have achieved record distances for entangled particles, opening new possibilities for quantum communication.',
+      image: 'assets/quantum.jpg'
+    },
+    {
+      title: 'Black Hole Imaging Updated',
+      content: 'The Event Horizon Telescope released a new image of a black hole with unprecedented detail.',
+      image: 'assets/blackhole.jpeg'
+    },
+    {
+      title: 'Fusion Energy Milestone',
+      content: 'Researchers generated more energy from fusion than the input energy for the first time.',
+      image: 'assets/fusion.jpg'
+    },
+    {
+      title: 'Gravitational Waves Detected',
+      content: 'LIGO observatory detected new gravitational waves from a binary neutron star merger.',
+      image: 'assets/gravity.jpg'
+    },
+    {
+      title: 'Dark Matter Clues',
+      content: 'Experiments hint at possible interactions of dark matter with normal matter.',
+      image: 'assets/dark-matter.webp'
+    }
+  ];
+
+   generateRandomNews() {
+    // Выбираем случайные 3 новости из массива
+    this.newsList = this.shuffleArray(this.allNews).slice(0, 3);
+  }
+
+    private shuffleArray(arr: News[]): News[] {
+    return [...arr].sort(() => Math.random() - 0.5);
+  }
+
   @ViewChild('atomCanvas', { static: false })
   canvasRef!: ElementRef<HTMLCanvasElement>;
 
@@ -48,6 +94,7 @@ timelineEvents = [
   private currentCanvas: HTMLCanvasElement | null = null;
 
   ngAfterViewInit() {
+    this.generateRandomNews();
     this.initCanvas();
   }
 
@@ -59,10 +106,8 @@ timelineEvents = [
     const canvas = this.canvasRef?.nativeElement;
     if (!canvas) return;
 
-    // если canvas уже тот же самый — ничего не делаем
     if (this.currentCanvas === canvas) return;
 
-    // если был старый — останавливаем
     if (this.animationId) {
       cancelAnimationFrame(this.animationId);
     }
@@ -163,4 +208,6 @@ timelineEvents = [
       cancelAnimationFrame(this.animationId);
     }
   }
+
+
 }

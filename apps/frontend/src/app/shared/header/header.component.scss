@@ -53,3 +53,37 @@
     height: 24px;
   }
 }
+
+.header.dark-theme {
+  background-color: #1e1f2e !important;
+  color: #f8fafc !important;
+  transition: background 1s, color 0.3s;
+
+  .mat-toolbar-row, button, a {
+    color: #f8fafc !important;
+  }
+
+  .button-black {
+    color: #1e1f2e !important;
+  }
+}
+
+.custom-dialog-container {
+  border-radius: 8px;
+  text-align: center;
+}
+
+.dialog-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.dialog-content {
+  margin-bottom: 1rem;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+}

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ClassicalComponent } from './classical.component';
+import { PendulumComponent } from './pendulum.component';
 
-describe('ClassicalComponent', () => {
-  let component: ClassicalComponent;
-  let fixture: ComponentFixture<ClassicalComponent>;
+describe('PendulumComponent', () => {
+  let component: PendulumComponent;
+  let fixture: ComponentFixture<PendulumComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ClassicalComponent ]
+      imports: [PendulumComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ClassicalComponent);
+    fixture = TestBed.createComponent(PendulumComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

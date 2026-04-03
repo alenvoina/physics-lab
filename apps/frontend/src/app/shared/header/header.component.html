@@ -1,4 +1,4 @@
-<mat-toolbar class="header">
+<mat-toolbar class="header" [class.dark-theme]="darkTheme">
 
   <div class="left">
     <div class="logo" routerLink="/">
@@ -16,10 +16,17 @@
   </div>
 
   <div class="right">
-    <button mat-icon-button>
-      <mat-icon>code</mat-icon>
-    </button>
-    <button mat-raised-button color="accent">Login</button>
+    <button mat-raised-button filled class="button-black" color="accent" (click)="openLoginModal()">Login</button>
+    <button matButton class="button-black" color="accent" (click)="openLoginModal()">Sign in</button>
   </div>
-
 </mat-toolbar>
+
+<ng-template #loginModal>
+  <h2 mat-dialog-title>Coming Soon 🚀</h2>
+  <mat-dialog-content>
+    The Login feature is under construction.
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Close</button>
+  </mat-dialog-actions>
+</ng-template>

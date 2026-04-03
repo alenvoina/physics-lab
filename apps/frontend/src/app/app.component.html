@@ -1,7 +1,8 @@
-<app-header></app-header>
 
-<div class="main-content">
+<app-header [darkTheme]="isSimulationPage"></app-header>
+
+<div class="main-content"  [class.dark-theme]="isSimulationPage">
   <router-outlet></router-outlet>
 </div>
 
-<app-footer></app-footer>
+<app-footer [darkTheme]="isSimulationPage"></app-footer>

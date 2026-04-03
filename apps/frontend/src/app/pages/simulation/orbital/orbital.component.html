@@ -1,0 +1,75 @@
+<div class="sim-root">
+
+  <!-- HEADER -->
+  <header class="sim-header">
+    <div class="title">
+      <mat-icon>public</mat-icon>
+      <span>Orbital Simulation</span>
+    </div>
+
+    <div class="actions">
+      <button mat-button (click)="start()">
+        Start
+      </button>
+
+      <button mat-stroked-button (click)="pause()">
+        Pause
+      </button>
+
+      <button mat-button (click)="reset()">
+        Reset
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <div class="sim-main">
+
+    <!-- LEFT PANEL -->
+    <aside class="control-panel">
+      <h3>Simulation Info</h3>
+
+      <div class="control">
+        <label>FPS</label>
+        <span>{{ fps }}</span>
+      </div>
+
+      <div class="control">
+        <label>Bodies</label>
+        <span>{{ world?.bodies?.length || 0 }}</span>
+      </div>
+
+      <div class="control">
+        <label>Orbit Type</label>
+        <span>Stable Circular</span>
+      </div>
+
+      <div class="control">
+        <label>Tip</label>
+        <span style="font-size: 12px; color: #94a3b8;">
+          Try modifying physics parameters in code for chaos
+        </span>
+      </div>
+    </aside>
+
+    <!-- CANVAS -->
+    <section class="canvas-section">
+      <canvas #canvas></canvas>
+
+      <!-- overlay -->
+      <div class="overlay">
+        <span>FPS: {{ fps }}</span>
+        <span>Objects: {{ world?.bodies?.length || 0 }}</span>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="sim-footer">
+    <p>
+      Real-time gravitational simulation. Stable orbit achieved via correct velocity vector.
+    </p>
+  </footer>
+
+</div>

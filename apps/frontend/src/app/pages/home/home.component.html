@@ -38,31 +38,12 @@
 <section class="features">
   <div class="container">
     <div class="cards">
-     <div class="card">
-  <h3>Orbital Mechanics</h3>
-  <p>Simulate planetary motion and gravity systems</p>
-
-  <button mat-stroked-button color="primary">
-    Open Simulation
-  </button>
-</div>
-      <div class="card">
-  <h3>Orbital Mechanics</h3>
-  <p>Simulate planetary motion and gravity systems</p>
-
-  <button mat-stroked-button color="primary">
-    Open Simulation
-  </button>
-</div>
-
-     <div class="card">
-  <h3>Orbital Mechanics</h3>
-  <p>Simulate planetary motion and gravity systems</p>
-
-  <button mat-stroked-button color="primary">
-    Open Simulation
-  </button>
-</div>
+      <div class="card" *ngFor="let news of newsList">
+        <img [src]="news.image" alt="news image" class="news-image" />
+        <h3>{{ news.title }}</h3>
+        <p>{{ news.content }}</p>
+        <button mat-stroked-button color="primary">Read More</button>
+      </div>
     </div>
   </div>
 </section>

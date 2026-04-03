@@ -22,8 +22,8 @@ export class SimulationsComponent {
       title: 'Механика и орбиты',
       color: '#2196F3',
       simulations: [
-        { title: 'Движение планет', description: 'Исследуйте орбиты планет и гравитационные законы', points: ['Орбиты планет', 'Гравитация', 'Скорость движения'], link: '/simulation/classical/planets' },
-        { title: 'Маятник', description: 'Изучите колебания маятника и их зависимость от длины и массы', points: ['Период колебаний', 'Амплитуда', 'Энергия'], link: '/simulation/classical/pendulum' },
+        { title: 'Движение планет', description: 'Исследуйте орбиты планет и гравитационные законы', points: ['Орбиты планет', 'Гравитация', 'Скорость движения'], link: '/simulation/orbital' },
+        { title: 'Маятник', description: 'Изучите колебания маятника и их зависимость от длины и массы', points: ['Период колебаний', 'Амплитуда', 'Энергия'], link: '/simulation/pendulum' },
         { title: 'Гравитационные взаимодействия', description: 'Наблюдайте взаимодействие двух и более тел под действием гравитации', points: ['Силы', 'Законы движения', 'Энергия системы'], link: '/simulation/classical/gravity' },
       ]
     },

@@ -30,14 +30,13 @@ export class Body {
   }
 
   update(dt: number) {
-    // a = F / m
-    const acceleration = this.force.scale(1 / this.mass);
+  const acceleration = this.force.scale(1 / this.mass);
 
-    // v = v + a * dt
-    this.velocity = this.velocity.add(acceleration.scale(dt));
+  // сначала скорость
+  this.velocity = this.velocity.add(acceleration.scale(dt));
 
-    // x = x + v * dt
-    this.position = this.position.add(this.velocity.scale(dt));
+  // потом позиция
+  this.position = this.position.add(this.velocity.scale(dt));
 
     // сброс силы после шага
     this.force = new Vector();

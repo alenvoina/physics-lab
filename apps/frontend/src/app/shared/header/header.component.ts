@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-header',
@@ -7,5 +8,16 @@ import { Component } from '@angular/core';
     standalone: false
 })
 export class HeaderComponent {
-    
+     @Input() darkTheme = false;
+     
+       @ViewChild('loginModal') loginModal!: TemplateRef<any>;
+
+        constructor(public dialog: MatDialog) {}
+
+  openLoginModal() {
+    this.dialog.open(this.loginModal, {
+      width: '300px',
+      panelClass: 'custom-dialog-container'
+    });
+  }
 }
