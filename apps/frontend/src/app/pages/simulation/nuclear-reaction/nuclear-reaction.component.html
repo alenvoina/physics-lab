@@ -1,0 +1,23 @@
+<div class="container">
+  <canvas #canvas></canvas>
+
+  <div class="panel">
+    <h2>☢ Reactor Control</h2>
+
+    <label>Control Rods</label>
+    <input
+      type="range"
+      min="0"
+      max="1"
+      step="0.01"
+      (input)="setControl($any($event.target).value)"
+    />
+
+    <button (click)="reset()">Reset</button>
+
+    <p>
+      ↓ rods → runaway reaction  
+      ↑ rods → reaction stops
+    </p>
+  </div>
+</div>

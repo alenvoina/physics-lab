@@ -1,0 +1,101 @@
+<div class="container">
+  <div class="sidebar">
+    <h2>🌌 Gravity Lab</h2>
+
+    <p class="description">
+      Bodies attract each other via gravity. Change modes to explore different systems.
+    </p>
+
+    <div class="buttons">
+      <button (click)="setMode('orbit')" [class.active]="mode === 'orbit'">
+        🪐 Orbit
+      </button>
+
+      <button (click)="setMode('galaxy')" [class.active]="mode === 'galaxy'">
+        🌌 Galaxy
+      </button>
+
+      <button (click)="setMode('chaos')" [class.active]="mode === 'chaos'">
+        🌪 Chaos
+      </button>
+    </div>
+
+    <div class="info">
+      <h3>Info</h3>
+      <p *ngIf="mode === 'orbit'">
+        A stable orbit: velocity balances gravity.
+      </p>
+      <p *ngIf="mode === 'galaxy'">
+        Multiple bodies rotating around a massive center.
+      </p>
+      <p *ngIf="mode === 'chaos'">
+        Random motion with gravitational interaction.
+      </p>
+    </div>
+
+    <div class="energy">
+      <h3>Energy</h3>
+      <p>Kinetic: {{ kinetic | number:'1.0-2' }}</p>
+      <p>Potential: {{ potential | number:'1.0-2' }}</p>
+      <p>Total: {{ total | number:'1.0-2' }}</p>
+    </div>
+  </div>
+
+  <canvas #canvas></canvas>
+</div>
+
+
+<div class="simulation-theory">
+  <h2>Gravity Lab – Theory</h2>
+
+  <p>
+    This simulation visualizes how bodies interact via <strong>gravity</strong>. 
+    Every object with mass attracts every other object with a force proportional to their masses 
+    and inversely proportional to the square of the distance between them (Newton's Law of Gravitation):
+  </p>
+
+  <p class="formula">
+    F = G * (m₁ * m₂) / r²
+  </p>
+
+  <h3>Modes of the Simulation:</h3>
+
+  <ul>
+    <li>
+      <strong>Orbit:</strong> Bodies move in stable orbits where the gravitational pull is balanced 
+      by their tangential velocity. This demonstrates circular and elliptical motion, centripetal force, 
+      and energy conservation (kinetic + potential energy remains roughly constant).
+    </li>
+
+    <li>
+      <strong>Galaxy:</strong> Many bodies rotate around a central massive body, forming spiral patterns. 
+      This shows collective gravitational interactions, angular momentum conservation, and how structures like galaxies form.
+    </li>
+
+    <li>
+      <strong>Chaos:</strong> Bodies start with random positions and velocities. Small differences in initial conditions 
+      lead to very different trajectories over time, illustrating the concept of chaotic dynamics in N-body gravitational systems.
+    </li>
+  </ul>
+
+  <h3>Energy Visualization:</h3>
+  <p>
+    The graphs show <strong>kinetic energy</strong> (energy of motion) and <strong>potential energy</strong> 
+    (energy stored in gravitational fields). Total energy helps track how the system conserves energy over time.
+  </p>
+
+  <h3>Physics Behind the Simulation:</h3>
+  <p>
+    Each body in the system is modeled with:
+  </p>
+  <ul>
+    <li>Mass (m) – determines the gravitational pull it exerts.</li>
+    <li>Position and velocity – updated every step using Newton's second law (F = m * a).</li>
+    <li>Gravitational interaction – every pair of bodies exerts forces on each other, summed to find acceleration.</li>
+  </ul>
+
+  <p>
+    By exploring different modes, you can see real physics in action: from predictable orbits to 
+    chaotic interactions, all governed by fundamental laws of motion and gravitation.
+  </p>
+</div>

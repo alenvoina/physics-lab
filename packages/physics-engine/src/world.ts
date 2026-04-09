@@ -5,34 +5,36 @@ import { Vector } from './vector';
 export class World {
   bodies: Body[] = [];
   restitution: number = 0.9;
-  friction = 1;   
+  friction = 1;
+  width = 900;
+  height = 600;   
 
   addBody(body: Body) {
     this.bodies.push(body);
   }
 
-  step(dt: number) {
-    this.bodies.forEach(body => {
-    body.force = new Vector(0, 0);
-});
-    for (let i = 0; i < this.bodies.length; i++) {
-      for (let j = i + 1; j < this.bodies.length; j++) {
-        applyGravity(this.bodies[i], this.bodies[j]);
-      }
-    }
+step(dt: number) {
+  // 1. обнуляем силы
+  this.bodies.forEach(body => body.force = new Vector(0, 0));
 
-    this.bodies.forEach(body => {
-      body.update(dt);
-
-      body.velocity = body.velocity.scale(this.friction);
-    });
-
-    for (let i = 0; i < this.bodies.length; i++) {
-      for (let j = i + 1; j < this.bodies.length; j++) {
-        this.resolveCollision(this.bodies[i], this.bodies[j]);
-      }
+  // 2. вычисляем силы
+  for (let i = 0; i < this.bodies.length; i++) {
+    for (let j = i + 1; j < this.bodies.length; j++) {
+      applyGravity(this.bodies[i], this.bodies[j]);
     }
   }
+
+  // 3. обновляем позиции
+  this.bodies.forEach(body => body.update(dt));
+
+  // 4. коллизии между телами
+  for (let i = 0; i < this.bodies.length; i++) {
+    for (let j = i + 1; j < this.bodies.length; j++) {
+      this.resolveCollision(this.bodies[i], this.bodies[j]);
+    }
+  }
+
+}
 
   resolveCollision(a: Body, b: Body) {
     const delta = b.position.subtract(a.position);

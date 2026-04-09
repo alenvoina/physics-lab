@@ -29,7 +29,6 @@ export class PendulumComponent implements OnInit {
 
   length = 220;
   timeScale = 1;
-
   isDragging = false;
 
   private origin = { x: 0, y: 120 };
@@ -81,7 +80,6 @@ export class PendulumComponent implements OnInit {
     const dy = my - this.origin.y;
 
     const angle = Math.atan2(dx, dy);
-
     this.pendulum.angle = angle;
     this.pendulum.angularVelocity = 0;
   }
@@ -90,10 +88,10 @@ export class PendulumComponent implements OnInit {
     const ctx = this.ctx;
     const canvas = this.canvas.nativeElement;
     this.origin.x = canvas.width / 2;
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     this.drawGrid(ctx, canvas);
-
     this.pendulum.step(0.016 * this.timeScale, time);
 
     const x = this.origin.x + this.pendulum.length * Math.sin(this.pendulum.angle);
@@ -114,7 +112,6 @@ export class PendulumComponent implements OnInit {
     const grad = ctx.createRadialGradient(x, y, 5, x, y, 30);
     grad.addColorStop(0, '#67e8f9');
     grad.addColorStop(1, '#0284c7');
-
     ctx.fillStyle = grad;
     ctx.beginPath();
     ctx.arc(x, y, 20, 0, Math.PI * 2);
@@ -142,7 +139,6 @@ export class PendulumComponent implements OnInit {
 
   drawGrid(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
     const step = 40;
-
     ctx.strokeStyle = '#e2e8f0';
     ctx.lineWidth = 1;
 
@@ -161,87 +157,79 @@ export class PendulumComponent implements OnInit {
     }
   }
 
- drawGraph(ctx: CanvasRenderingContext2D) {
-  const x = 20;
-  const y = 360;
-  const width = 360;
-  const height = 160;
+  drawGraph(ctx: CanvasRenderingContext2D) {
+    const x = 20;
+    const y = 360;
+    const width = 360;
+    const height = 160;
 
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(x, y, width, height);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(x, y, width, height);
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.strokeRect(x, y, width, height);
 
-  ctx.strokeStyle = '#cbd5e1';
-  ctx.strokeRect(x, y, width, height);
+    if (this.kineticHistory.length < 2) return;
 
-  if (this.kineticHistory.length < 2) return;
+    const all = [...this.kineticHistory, ...this.potentialHistory];
+    const min = Math.min(...all);
+    const max = Math.max(...all);
+    const range = max - min || 1;
 
-  const all = [...this.kineticHistory, ...this.potentialHistory];
-  const min = Math.min(...all);
-  const max = Math.max(...all);
-  const range = max - min || 1;
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 4; i++) {
+      const gy = y + (i / 4) * height;
+      ctx.beginPath();
+      ctx.moveTo(x, gy);
+      ctx.lineTo(x + width, gy);
+      ctx.stroke();
+    }
 
-  ctx.strokeStyle = '#e2e8f0';
-  ctx.lineWidth = 1;
+    const drawLine = (data: number[], color: string) => {
+      ctx.beginPath();
+      data.forEach((v, i) => {
+        const px = x + (i / (this.maxPoints - 1)) * width;
+        const py = y + height - ((v - min) / range) * height;
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      });
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      ctx.stroke();
 
-  for (let i = 0; i <= 4; i++) {
-    const gy = y + (i / 4) * height;
+      const last = data.length - 1;
+      const px = x + (last / (this.maxPoints - 1)) * width;
+      const py = y + height - ((data[last] - min) / range) * height;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(px, py, 4, 0, Math.PI * 2);
+      ctx.fill();
+    };
 
-    ctx.beginPath();
-    ctx.moveTo(x, gy);
-    ctx.lineTo(x + width, gy);
-    ctx.stroke();
+    const kineticColor = this.mode === 'earth' ? '#16a34a' : '#22c55e';
+    const potentialColor = this.mode === 'earth' ? '#dc2626' : '#f43f5e';
+
+    drawLine(this.kineticHistory, kineticColor);
+    drawLine(this.potentialHistory, potentialColor);
+
+    ctx.fillStyle = '#0f172a';
+    ctx.font = '11px Arial';
+    ctx.fillText(`max: ${max.toFixed(2)}`, x + 5, y + 12);
+    ctx.fillText(`min: ${min.toFixed(2)}`, x + 5, y + height - 5);
+
+    ctx.fillStyle = kineticColor;
+    ctx.fillRect(x + 120, y - 14, 10, 3);
+    ctx.fillStyle = '#0f172a';
+    ctx.fillText('Kinetic', x + 135, y - 10);
+
+    ctx.fillStyle = potentialColor;
+    ctx.fillRect(x + 210, y - 14, 10, 3);
+    ctx.fillStyle = '#0f172a';
+    ctx.fillText('Potential', x + 225, y - 10);
+
+    ctx.font = 'bold 12px Arial';
+    ctx.fillText('Energy vs Time', x + 10, y - 25);
   }
-
-  const drawLine = (data: number[], color: string) => {
-    ctx.beginPath();
-
-    data.forEach((v, i) => {
-      const px = x + (i / (this.maxPoints - 1)) * width;
-      const py = y + height - ((v - min) / range) * height;
-
-      if (i === 0) ctx.moveTo(px, py);
-      else ctx.lineTo(px, py);
-    });
-
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    const last = data.length - 1;
-    const px = x + (last / (this.maxPoints - 1)) * width;
-    const py = y + height - ((data[last] - min) / range) * height;
-
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.arc(px, py, 4, 0, Math.PI * 2);
-    ctx.fill();
-  };
-
-  const kineticColor = this.mode === 'earth' ? '#16a34a' : '#22c55e';
-  const potentialColor = this.mode === 'earth' ? '#dc2626' : '#f43f5e';
-
-  drawLine(this.kineticHistory, kineticColor);
-  drawLine(this.potentialHistory, potentialColor);
-
-  ctx.fillStyle = '#0f172a';
-  ctx.font = '11px Arial';
-
-  ctx.fillText(`max: ${max.toFixed(2)}`, x + 5, y + 12);
-  ctx.fillText(`min: ${min.toFixed(2)}`, x + 5, y + height - 5);
-
-  ctx.fillStyle = kineticColor;
-  ctx.fillRect(x + 120, y - 14, 10, 3);
-  ctx.fillStyle = '#0f172a';
-  ctx.fillText('Kinetic', x + 135, y - 10);
-
-  ctx.fillStyle = potentialColor;
-  ctx.fillRect(x + 210, y - 14, 10, 3);
-  ctx.fillStyle = '#0f172a';
-  ctx.fillText('Potential', x + 225, y - 10);
-
-  ctx.font = 'bold 12px Arial';
-  ctx.fillText('Energy vs Time', x + 10, y - 25);
-}
 
   reset() {
     this.pendulum.reset(Math.PI / 4);

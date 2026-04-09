@@ -1,0 +1,120 @@
+.container {
+  display: flex;
+  height: 100%;
+  background: radial-gradient(circle at center, #020617, #000);
+  color: white;
+}
+
+canvas {
+  flex: 1;
+  display: block;
+}
+
+.sidebar {
+  width: 280px;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(255,255,255,0.1);
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  .description {
+    font-size: 13px;
+    opacity: 0.7;
+    margin-bottom: 20px;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+
+    button {
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      background: #1e293b;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+
+      &:hover {
+        background: #334155;
+      }
+
+      &.active {
+        background: #38bdf8;
+        color: black;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .info, .energy {
+    margin-top: 20px;
+
+    h3 {
+      font-size: 14px;
+      margin-bottom: 5px;
+      opacity: 0.8;
+    }
+
+    p {
+      font-size: 13px;
+      margin: 2px 0;
+    }
+  }
+}
+
+.simulation-theory {
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.95);
+  color: #f8fafc;
+  font-size: 14px;
+  line-height: 1.6;
+  border-radius: 8px;
+
+  h2 {
+    margin-bottom: 12px;
+    font-size: 18px;
+    color: #38bdf8;
+  }
+
+  h3 {
+    margin-top: 16px;
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: #60a5fa;
+  }
+
+  p {
+    margin-bottom: 10px;
+  }
+
+  ul {
+    margin-left: 20px;
+    margin-bottom: 10px;
+
+    li {
+      margin-bottom: 6px;
+    }
+  }
+
+  .formula {
+    font-family: monospace;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 8px 0;
+  }
+
+  strong {
+    color: #facc15;
+  }
+}

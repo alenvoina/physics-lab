@@ -1,0 +1,12 @@
+<section class="news-list">
+  <div class="cards">
+    <div class="card" *ngFor="let news of newsList">
+      <img [src]="news.image" alt="news image" class="news-image"/>
+      <h3>{{ news.title }}</h3>
+      <p [innerHTML]="news.summary"></p>
+      <button matButton color="primary" class="news-button" [routerLink]="['/news', news.id]">
+        Read More
+      </button>
+    </div>
+  </div>
+</section>

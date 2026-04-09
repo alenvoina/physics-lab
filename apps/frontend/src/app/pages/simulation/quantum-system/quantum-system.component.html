@@ -1,0 +1,57 @@
+<div class="container">
+  <div class="panel">
+    <h2>⚛ Quantum Lab</h2>
+
+    <button (click)="setMode('levels')">Energy Levels</button>
+    <button (click)="setMode('wave')">Wave Function</button>
+    <button (click)="setMode('states')">States</button>
+
+    <p *ngIf="mode === 'levels'">
+      Electrons occupy discrete energy levels.
+    </p>
+    <p *ngIf="mode === 'wave'">
+      Probability distribution of electron positions.
+    </p>
+    <p *ngIf="mode === 'states'">
+      Each level has quantized energy.
+    </p>
+  </div>
+
+  <canvas #canvas></canvas>
+</div>
+
+<section class="quantum-theory">
+  <h2>Quantum Mechanics in Action</h2>
+
+  <p>
+    Electrons do not orbit the nucleus like planets around the Sun. Instead, they exist in regions of
+    probability called orbitals. These orbitals represent where an electron is likely to be found at
+    any given moment, forming a kind of quantum cloud around the nucleus.
+  </p>
+
+  <p>
+    Each electron can occupy only certain discrete energy levels. This is why atoms absorb and emit
+    light at specific wavelengths — energy changes only in quantized steps. Watching electrons move
+    through these levels in this simulation gives a tangible sense of how nature enforces order
+    at the smallest scales.
+  </p>
+
+  <p>
+    The wave function, which you can see in the "Wave Function" mode, describes the probability
+    distribution of an electron’s position. Peaks show the regions where an electron is most likely
+    to be found. This is the essence of quantum uncertainty — we can never know both position and
+    momentum precisely, but we can map the likelihood of where electrons exist.
+  </p>
+
+  <p>
+    Finally, the “States” mode summarizes each electron’s energy level. Observing these states together
+    highlights the harmony in the atomic structure — despite the apparent chaos at the quantum scale,
+    there is a precise, predictable pattern dictated by fundamental physics.
+  </p>
+
+  <p>
+    Exploring these visualizations gives more than pretty graphics. It provides intuition about
+    quantum behavior, helps understand spectroscopy, chemical reactions, and the fundamental rules
+    that govern matter. This is the invisible structure of the universe, brought to life on your screen.
+  </p>
+</section>

@@ -6,6 +6,7 @@ export class Body {
   force: Vector;
   mass: number;
   radius: number;
+  isStatic: boolean = false;
 
   constructor({
     position = new Vector(),
@@ -29,13 +30,14 @@ export class Body {
     this.force = this.force.add(force);
   }
 
-  update(dt: number) {
+update(dt: number) {
+  if (this.isStatic) return;
+
   const acceleration = this.force.scale(1 / this.mass);
 
   this.velocity = this.velocity.add(acceleration.scale(dt));
-
   this.position = this.position.add(this.velocity.scale(dt));
 
-    this.force = new Vector();
-  }
+  this.force = new Vector();
+}
 }

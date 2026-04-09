@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="panel">
+    <h2>⚛ Superposition Lab</h2>
+
+    <button (click)="setMode('states')">States</button>
+    <button (click)="setMode('probability')">Probabilities</button>
+    <button (click)="setMode('measurement')">Measurement</button>
+
+    <button (click)="addState()">+ State</button>
+    <button (click)="measure()">Measure</button>
+
+    <p *ngIf="mode === 'states'">
+      Multiple quantum states exist simultaneously.
+    </p>
+
+    <p *ngIf="mode === 'probability'">
+      Probability is determined by amplitude squared.
+    </p>
+
+    <p *ngIf="mode === 'measurement'">
+      Measurement collapses the system into one state.
+    </p>
+  </div>
+
+  <canvas #canvas></canvas>
+</div>

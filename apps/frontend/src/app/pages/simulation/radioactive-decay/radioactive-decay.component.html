@@ -1,0 +1,53 @@
+<div class="container">
+  <div class="panel">
+    <h2>☢ Radioactive Decay</h2>
+
+    <button (click)="setType('alpha')">Alpha</button>
+    <button (click)="setType('beta')">Beta</button>
+    <button (click)="setType('gamma')">Gamma</button>
+
+    <button (click)="reset()">Reset</button>
+
+    <p>
+      Observe how unstable atoms decay over time.
+    </p>
+  </div>
+
+  <canvas #canvas></canvas>
+
+  <div class="theory">
+  <h2>Radioactive Decay</h2>
+
+  <p>
+    Radioactive decay is a random process in which unstable atomic nuclei lose energy
+    by emitting radiation. Unlike classical processes, it is impossible to predict exactly
+    when a single atom will decay.
+  </p>
+
+  <h3>Types of Decay</h3>
+  <ul>
+    <li><strong>Alpha:</strong> emission of a helium nucleus (2 protons + 2 neutrons)</li>
+    <li><strong>Beta:</strong> transformation of a neutron into a proton (or vice versa)</li>
+    <li><strong>Gamma:</strong> emission of high-energy photons</li>
+  </ul>
+
+  <h3>Decay Rate</h3>
+  <p>
+    The decay rate depends on a constant probability per unit time.
+    Even though each atom behaves randomly, large groups follow precise statistical laws.
+  </p>
+
+  <h3>Half-life</h3>
+  <p>
+    Half-life is the time required for half of the atoms in a sample to decay.
+    This value is constant for a given substance and does not depend on initial quantity.
+  </p>
+
+  <h3>Applications</h3>
+  <ul>
+    <li>Radiocarbon dating</li>
+    <li>Nuclear energy production</li>
+    <li>Medical imaging and cancer treatment</li>
+  </ul>
+</div>
+</div>
