@@ -7,8 +7,6 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './shared/header/header.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { OrbitalComponent } from './pages/simulation/orbital/orbital.component';
-import { QuantumTheoryComponent } from './pages/theory/quantum-theory/quantum-theory.component';
-import { NuclearTheoryComponent } from './pages/theory/nuclear-theory/nuclear-theory.component';
 
 @NgModule({
   declarations: [
@@ -16,8 +14,6 @@ import { NuclearTheoryComponent } from './pages/theory/nuclear-theory/nuclear-th
     HeaderComponent,
     FooterComponent,
     OrbitalComponent,
-    QuantumTheoryComponent,
-    NuclearTheoryComponent,
   ],
   imports: [
     BrowserModule,

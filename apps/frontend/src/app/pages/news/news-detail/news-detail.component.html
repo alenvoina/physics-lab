@@ -1,6 +1,6 @@
 <div class="news-detail" *ngIf="news">
-  <h1>{{ news?.title }}</h1>
-  <p><i>{{ news?.date }}</i></p>
-  <div [innerHTML]="news?.content"></div>
-  <a [href]="news?.link" target="_blank">Read on NASA</a>
+  <h1>{{ news.title }}</h1>
+  <p><i>{{ news.date }}</i></p>
+  <div [innerHTML]="news.content"></div>
+  <a [href]="news.link" target="_blank">Read on NASA</a>
 </div>

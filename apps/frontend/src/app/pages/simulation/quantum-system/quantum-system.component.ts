@@ -6,11 +6,13 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { QuantumSystem } from '@physics-lab/engine';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-quantum',
   templateUrl: './quantum-system.component.html',
   styleUrls: ['./quantum-system.component.scss'],
+  imports: [CommonModule]
 })
 export class QuantumComponent implements AfterViewInit, OnDestroy {
   @ViewChild('canvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;

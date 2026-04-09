@@ -1,0 +1,23 @@
+<div class="life">
+  <h1>Физика в жизни</h1>
+  <p class="subtitle">
+    Как физические законы работают в реальном мире и технологиях
+  </p>
+
+  <div class="grid">
+    <div class="card" *ngFor="let item of items" (click)="open(item)">
+      <mat-icon class="icon">{{ item.icon }}</mat-icon>
+      <h3>{{ item.title }}</h3>
+      <p>{{ item.description }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="modal" *ngIf="selected" (click)="close()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <mat-icon class="modal-icon">{{ selected.icon }}</mat-icon>
+    <h2>{{ selected.title }}</h2>
+    <p>{{ selected.details }}</p>
+    <button mat-raised-button color="accent" (click)="close()">Закрыть</button>
+  </div>
+</div>

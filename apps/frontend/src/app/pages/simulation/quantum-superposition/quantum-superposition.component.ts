@@ -7,11 +7,14 @@ import {
 } from '@angular/core';
 
 import { QuantumSuperposition } from '@physics-lab/engine';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-quantum-superposition',
   templateUrl: './quantum-superposition.component.html',
   styleUrls: ['./quantum-superposition.component.scss'],
+  imports: [CommonModule]
 })
 export class QuantumSuperpositionComponent implements AfterViewInit, OnDestroy {
   @ViewChild('canvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;

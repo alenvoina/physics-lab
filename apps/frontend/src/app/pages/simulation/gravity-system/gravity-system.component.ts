@@ -6,7 +6,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 
-import {DecimalPipe} from '@angular/common'
+import {DecimalPipe, CommonModule} from '@angular/common'
 
 import { GravitySystem, Body, Vector } from '@physics-lab/engine';
 
@@ -14,7 +14,7 @@ import { GravitySystem, Body, Vector } from '@physics-lab/engine';
   selector: 'app-gravity-system',
   templateUrl: './gravity-system.component.html',
   styleUrls: ['./gravity-system.component.scss'],
-  imports: [DecimalPipe]
+  imports: [DecimalPipe, CommonModule]
 })
 export class GravitySimComponent implements AfterViewInit, OnDestroy {
   @ViewChild('canvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
