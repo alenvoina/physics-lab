@@ -1,11 +1,9 @@
-/* ГЛОБАЛЬНЫЕ НАСТРОЙКИ */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
-/* HERO SECTION */
 .hero {
   padding-top: 80px;
 }
@@ -15,7 +13,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 40px;
-  flex-wrap: wrap; /* Позволяет блокам переноситься */
+  flex-wrap: wrap;
 }
 
 .text {
@@ -23,7 +21,7 @@
   min-width: 300px;
 
   h1 {
-    font-size: clamp(32px, 5vw, 48px); /* Адаптивный размер шрифта */
+    font-size: clamp(32px, 5vw, 48px);
     margin-bottom: 30px;
     font-weight: 700;
   }
@@ -49,7 +47,6 @@
   min-width: 300px;
 
   canvas {
-    /* Переопределяем инлайн-стили для адаптивности */
     width: 100% !important;
     max-width: 350px;
     height: auto !important;
@@ -57,16 +54,14 @@
   }
 }
 
-/* TIMELINE */
 .timeline {
   margin: 4rem 0;
 
   .timeline-wrapper {
-    overflow-x: auto; /* Горизонтальный скролл для десктопа */
-    padding-top: 260px; /* Место под всплывающие карточки */
+    overflow-x: auto;
+    padding-top: 260px; 
     padding-bottom: 40px;
     
-    /* Кастомизация скроллбара (опционально) */
     &::-webkit-scrollbar {
       height: 8px;
     }
@@ -78,7 +73,7 @@
 
   .timeline-container {
     position: relative;
-    min-width: max-content; /* Контейнер растягивается по контенту */
+    min-width: max-content;
   }
 
   .timeline-line {
@@ -162,7 +157,6 @@
   }
 }
 
-/* NEWS / FEATURES */
 .features {
   padding: 3rem 0;
 }
@@ -222,7 +216,6 @@
   }
 }
 
-/* === АДАПТИВНОСТЬ (ПЛАНШЕТЫ И ТЕЛЕФОНЫ) === */
 @media (max-width: 900px) {
   .hero-content {
     flex-direction: column;
@@ -238,12 +231,11 @@
 
   .card {
     button {
-      opacity: 1; /* На мобильных кнопка видна всегда */
+      opacity: 1;
       transform: none;
     }
   }
 
-  /* Превращаем таймлайн в вертикальный */
   .timeline {
     margin: 2rem 0;
     
@@ -260,7 +252,7 @@
 
     .timeline-line {
       top: 0;
-      left: 30px; /* Смещаем линию влево */
+      left: 30px;
       width: 4px;
       height: 100%;
     }
@@ -280,7 +272,7 @@
 
       .dot {
         position: relative;
-        left: 2px; /* Центрируем точку на линии */
+        left: 2px;
         flex-shrink: 0;
         margin-top: 5px;
       }
@@ -291,7 +283,6 @@
       }
 
       .event-card {
-        /* Отменяем скрытие и абсолютное позиционирование */
         position: static;
         transform: none;
         opacity: 1;

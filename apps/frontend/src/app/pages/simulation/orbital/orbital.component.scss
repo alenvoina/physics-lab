@@ -1,7 +1,7 @@
 .sim-root {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 64px); /* Вычитаем высоту навигации если она есть */
+  height: calc(100vh - 64px);
   background: #020617;
   color: #f8fafc;
   overflow: hidden;
@@ -50,7 +50,6 @@
   }
 }
 
-/* СТИЛЬНАЯ ПАНЕЛЬ ПОВЕРХ КАНВАСА */
 .overlay-panel {
   position: absolute;
   top: 20px;
@@ -61,7 +60,7 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 20px;
-  pointer-events: none; /* Чтобы не мешать кликам по канвасу (если добавите) */
+  pointer-events: none;
 
   .panel-section {
     margin-bottom: 20px;
@@ -80,8 +79,14 @@
     justify-content: space-between;
     margin-bottom: 8px;
     font-size: 0.9rem;
-    label { color: #64748b; }
-    .value { font-family: monospace; color: #3b82f6; font-weight: bold; }
+    label { 
+      color: #64748b;
+    }
+    .value {
+      font-family: monospace;
+      color: #3b82f6;
+      font-weight: bold;
+    }
   }
 
   .status-badge {
@@ -99,7 +104,11 @@
     gap: 10px;
     font-size: 0.75rem;
     color: #475569;
-    mat-icon { font-size: 16px; width: 16px; height: 16px; }
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
   }
 }
 
@@ -111,10 +120,13 @@
   background: #020617;
 }
 
-/* ТЕОРЕТИЧЕСКИЙ БЛОК */
 .theory-section {
   padding: 60px 0;
-  h2 { font-size: 2rem; margin-bottom: 30px; color: #1e293b; }
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #1e293b;
+  }
   
   .theory-grid {
     display: grid;
@@ -134,7 +146,6 @@
   }
 }
 
-/* АДАПТИВНОСТЬ */
 @media (max-width: 900px) {
   .overlay-panel {
     width: calc(100% - 40px);
@@ -143,17 +154,24 @@
     display: flex;
     justify-content: space-around;
     padding: 12px;
-    .panel-section, .panel-hint { margin: 0; }
+    .panel-section, .panel-hint {
+      margin: 0;
+    }
   }
 
-  .theory-grid { grid-template-columns: 1fr; }
+  .theory-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 600px) {
   .sim-header {
     flex-direction: column;
     padding: 15px;
-    .actions { width: 100%; justify-content: space-between; }
+    .actions {
+      width: 100%;
+      justify-content: space-between;
+    }
   }
-  .overlay-panel { display: none; } /* Убираем лишнее на совсем маленьких экранах */
+  .overlay-panel { display: none; }
 }

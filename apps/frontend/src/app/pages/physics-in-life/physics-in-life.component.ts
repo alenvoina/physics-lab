@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
-import { AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 
 interface LifeApplication {
   title: string;

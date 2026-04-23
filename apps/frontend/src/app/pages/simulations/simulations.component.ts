@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon'; // Добавили иконки
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-simulations',
@@ -13,7 +13,7 @@ import { MatIconModule } from '@angular/material/icon'; // Добавили ик
     RouterModule,
     MatButtonModule,
     MatCardModule,
-    MatIconModule // Не забудь добавить сюда
+    MatIconModule
   ],
   templateUrl: './simulations.component.html',
   styleUrl: './simulations.component.scss',

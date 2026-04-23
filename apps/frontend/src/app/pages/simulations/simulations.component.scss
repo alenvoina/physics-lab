@@ -1,6 +1,5 @@
-/* ГЛОБАЛЬНЫЕ НАСТРОЙКИ СТРАНИЦЫ */
 .simulations-page {
-  background-color: #f8fafc; /* Очень легкий, дорогой серый/голубоватый фон страницы */
+  background-color: #f8fafc;
   min-height: 100vh;
   padding-bottom: 5rem;
 }
@@ -11,7 +10,6 @@
   padding: 0 20px;
 }
 
-/* HERO SECTION */
 .hero {
   padding: 6rem 0 4rem;
   background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
@@ -29,14 +27,14 @@
     max-width: 700px;
 
     h1 { 
-      font-size: clamp(2.5rem, 5vw, 3.5rem); /* Адаптивный огромный заголовок */
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
       font-weight: 800;
       color: #1e293b;
       margin-bottom: 1.5rem; 
       line-height: 1.2;
 
       span {
-        color: #3f51b5; /* Акцентный цвет бренда */
+        color: #3f51b5;
       }
     }
 
@@ -49,7 +47,6 @@
   }
 }
 
-/* КАТЕГОРИИ И КАРТОЧКИ */
 .simulation-category {
   margin-bottom: 5rem;
 
@@ -66,7 +63,6 @@
       position: relative;
       padding-left: 1rem;
 
-      /* Элегантная вертикальная черта слева от заголовка */
       &::before {
         content: '';
         position: absolute;
@@ -81,26 +77,23 @@
   }
 
   .cards-container {
-    /* МАГИЯ АДАПТИВНОСТИ: Автоматическая сетка без медиа-запросов */
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 30px;
   }
 
-  /* СТИЛЬ КАРТОЧКИ */
   .sim-card {
     position: relative;
     border-radius: 16px;
     background: #ffffff;
     border: 1px solid rgba(0,0,0,0.04);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03); /* Очень мягкая дефолтная тень */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Чтобы линия сверху не вылезала за углы */
+    overflow: hidden;
     padding: 24px;
 
-    /* Та самая тонкая премиальная цветная линия сверху */
     .card-accent {
       position: absolute;
       top: 0;
@@ -113,15 +106,14 @@
     }
 
     &:hover {
-      transform: translateY(-8px); /* Поднимаем вверх, а не "зумим" */
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); /* Красивая глубокая тень */
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
       
       .card-accent {
-        height: 6px; /* Линия слегка утолщается при наведении */
+        height: 6px;
       }
     }
 
-    /* Переопределяем стандартные отступы mat-card */
     ::ng-deep .mat-mdc-card-header {
       padding: 0 0 16px 0;
       
@@ -134,7 +126,7 @@
 
     ::ng-deep .mat-mdc-card-content {
       padding: 0;
-      flex-grow: 1; /* Карточка тянется, если текст разной длины */
+      flex-grow: 1;
       display: flex;
       flex-direction: column;
     }
@@ -146,7 +138,6 @@
       margin-bottom: 20px;
     }
 
-    /* Оформление списка */
     .feature-list {
       list-style: none;
       padding: 0;
@@ -203,12 +194,12 @@
       justify-content: center;
       
       h2::before {
-        display: none; /* На мобилке убираем боковую черту для центрирования */
+        display: none;
       }
     }
     
     .cards-container {
-      grid-template-columns: 1fr; /* Одна колонка на мобилках */
+      grid-template-columns: 1fr;
     }
   }
 }

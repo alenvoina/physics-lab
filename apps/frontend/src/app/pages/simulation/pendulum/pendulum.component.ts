@@ -44,7 +44,6 @@ export class PendulumComponent implements OnInit, OnDestroy {
       gravity: 9.81
     });
 
-    // Следим за изменениями размера обоих контейнеров
     this.resizeObserver = new ResizeObserver(() => this.onResize());
     this.resizeObserver.observe(this.canvas.nativeElement);
     this.resizeObserver.observe(this.graphWrapper.nativeElement);
@@ -56,13 +55,11 @@ export class PendulumComponent implements OnInit, OnDestroy {
   private onResize() {
     const dpr = window.devicePixelRatio || 1;
     
-    // Ресайз основного канваса
     const mainRect = this.canvas.nativeElement.getBoundingClientRect();
     this.canvas.nativeElement.width = mainRect.width * dpr;
     this.canvas.nativeElement.height = mainRect.height * dpr;
     this.origin.x = mainRect.width / 2;
 
-    // Ресайз графического канваса
     const graphRect = this.graphWrapper.nativeElement.getBoundingClientRect();
     this.graphCanvas.nativeElement.width = graphRect.width * dpr;
     this.graphCanvas.nativeElement.height = graphRect.height * dpr;
@@ -79,7 +76,6 @@ export class PendulumComponent implements OnInit, OnDestroy {
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, w, h);
 
-    // Сетка
     ctx.strokeStyle = '#f1f5f9';
     ctx.lineWidth = 1;
     for (let i = 0; i < w; i += 50) { ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, h); ctx.stroke(); }
@@ -91,7 +87,6 @@ export class PendulumComponent implements OnInit, OnDestroy {
     const x = this.origin.x + this.pendulum.length * Math.sin(this.pendulum.angle);
     const y = this.origin.y + this.pendulum.length * Math.cos(this.pendulum.angle);
 
-    // Отрисовка нити и груза
     ctx.strokeStyle = '#94a3b8';
     ctx.lineWidth = 2;
     ctx.beginPath(); ctx.moveTo(this.origin.x, this.origin.y); ctx.lineTo(x, y); ctx.stroke();
@@ -153,7 +148,6 @@ export class PendulumComponent implements OnInit, OnDestroy {
     ctx.restore();
   }
 
-  // Вспомогательные методы
   private initEvents() {
     const canvas = this.canvas.nativeElement;
     const getPos = (e: MouseEvent | TouchEvent) => {

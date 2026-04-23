@@ -114,11 +114,9 @@ export class OrbitalComponent implements OnInit, OnDestroy {
     if (delta > 0) this.fps = Math.round(1000 / delta);
     this.lastTime = time;
 
-    // 1. Очистка
     ctx.fillStyle = '#020617';
     ctx.fillRect(0, 0, width, height);
 
-    // 2. Звезды
     ctx.fillStyle = 'white';
     this.stars.forEach(star => {
       ctx.globalAlpha = star.opacity;
@@ -128,12 +126,10 @@ export class OrbitalComponent implements OnInit, OnDestroy {
     });
     ctx.globalAlpha = 1;
 
-    // 3. Физика
     this.world.step(0.015);
     const sx = this.sun.position.x;
     const sy = this.sun.position.y;
 
-    // 4. Отрисовка ОРБИТ (теперь они не пропадут)
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
     ctx.lineWidth = 1;
     this.planets.forEach(p => {
@@ -142,11 +138,9 @@ export class OrbitalComponent implements OnInit, OnDestroy {
       ctx.stroke();
     });
 
-    // 5. Планеты и их кольца
     this.planets.forEach(p => {
       const b = p.body;
       
-      // Кольца (рисуем под планетой)
       if (p.config.name === 'Сатурн' || p.config.name === 'Уран') {
         ctx.strokeStyle = p.config.name === 'Сатурн' ? 'rgba(214, 186, 120, 0.4)' : 'rgba(103, 232, 249, 0.3)';
         ctx.lineWidth = 2;
@@ -155,13 +149,11 @@ export class OrbitalComponent implements OnInit, OnDestroy {
         ctx.stroke();
       }
 
-      // Планета
       ctx.fillStyle = p.config.color;
       ctx.beginPath();
       ctx.arc(b.position.x, b.position.y, b.radius, 0, Math.PI * 2);
       ctx.fill();
 
-      // Свечение атмосферы
       const pGlow = ctx.createRadialGradient(b.position.x, b.position.y, 0, b.position.x, b.position.y, b.radius * 2);
       pGlow.addColorStop(0, p.config.color + '33');
       pGlow.addColorStop(1, 'transparent');
@@ -171,7 +163,6 @@ export class OrbitalComponent implements OnInit, OnDestroy {
       ctx.fill();
     });
 
-    // 6. Солнце (поверх орбит, но под HUD)
     const glow = ctx.createRadialGradient(sx, sy, 0, sx, sy, 40);
     glow.addColorStop(0, '#fef9c3');
     glow.addColorStop(0.4, '#eab308');

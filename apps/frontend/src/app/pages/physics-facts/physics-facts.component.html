@@ -1,7 +1,6 @@
 <div class="facts">
   <h1>Физические факты</h1>
 
-  <!-- ФИЛЬТРЫ -->
   <div class="filters">
     <button 
       *ngFor="let cat of categories"
@@ -11,7 +10,6 @@
     </button>
   </div>
 
-  <!-- КАРТОЧКИ -->
   <div class="grid">
     <div class="card" *ngFor="let fact of filteredFacts">
       <span class="category">{{ fact.category }}</span>
