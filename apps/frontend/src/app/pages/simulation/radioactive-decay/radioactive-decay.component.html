@@ -1,53 +1,108 @@
-<div class="container">
-  <div class="panel">
-    <h2>☢ Radioactive Decay</h2>
+<div class="layout">
+  <!-- Верх: панель + канвас -->
+  <div class="top">
+    <div class="panel">
+      <h2>☢ Симуляция распада</h2>
 
-    <button (click)="setType('alpha')">Alpha</button>
-    <button (click)="setType('beta')">Beta</button>
-    <button (click)="setType('gamma')">Gamma</button>
+      <div class="controls">
+        <button
+          [class.active]="sim.decayType==='alpha'"
+          (click)="setType('alpha')"
+        >
+          α Альфа
+        </button>
 
-    <button (click)="reset()">Reset</button>
+        <button
+          [class.active]="sim.decayType==='beta'"
+          (click)="setType('beta')"
+        >
+          β Бета
+        </button>
 
-    <p>
-      Observe how unstable atoms decay over time.
-    </p>
+        <button
+          [class.active]="sim.decayType==='gamma'"
+          (click)="setType('gamma')"
+        >
+          γ Гамма
+        </button>
+      </div>
+
+      <div class="controls">
+        <button class="reset" (click)="reset()">Сброс</button>
+
+        <label>
+          Скорость
+          <input
+            type="range"
+            min="0.1"
+            max="2"
+            step="0.1"
+            [(ngModel)]="speed"
+          >
+        </label>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span>Время</span>
+          <strong>{{ sim.time | number:'1.1-1' }}</strong>
+        </div>
+
+        <div class="stat">
+          <span>Осталось</span>
+          <strong>{{ sim.getRemaining() }}</strong>
+        </div>
+
+        <div class="stat">
+          <span>Распалось</span>
+          <strong>{{ sim.getDecayed() }}</strong>
+        </div>
+
+        <div class="stat">
+          <span>Полураспад</span>
+          <strong>{{ sim.getHalfLife() | number:'1.1-1' }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <canvas #canvas></canvas>
   </div>
 
-  <canvas #canvas></canvas>
-
+  <!-- Низ: теория -->
   <div class="theory">
-  <h2>Radioactive Decay</h2>
+    <h3>Что происходит?</h3>
 
-  <p>
-    Radioactive decay is a random process in which unstable atomic nuclei lose energy
-    by emitting radiation. Unlike classical processes, it is impossible to predict exactly
-    when a single atom will decay.
-  </p>
+    <p>
+      Каждая зелёная точка — это нестабильное атомное ядро.
+      Со временем ядра случайным образом распадаются и становятся красными.
+    </p>
 
-  <h3>Types of Decay</h3>
-  <ul>
-    <li><strong>Alpha:</strong> emission of a helium nucleus (2 protons + 2 neutrons)</li>
-    <li><strong>Beta:</strong> transformation of a neutron into a proton (or vice versa)</li>
-    <li><strong>Gamma:</strong> emission of high-energy photons</li>
-  </ul>
+    <p>
+      Невозможно предсказать момент распада конкретного атома,
+      но большое количество атомов подчиняется строгому закону:
+    </p>
 
-  <h3>Decay Rate</h3>
-  <p>
-    The decay rate depends on a constant probability per unit time.
-    Even though each atom behaves randomly, large groups follow precise statistical laws.
-  </p>
+    <p class="formula">
+      N(t) = N₀ · e<sup>-λt</sup>
+    </p>
 
-  <h3>Half-life</h3>
-  <p>
-    Half-life is the time required for half of the atoms in a sample to decay.
-    This value is constant for a given substance and does not depend on initial quantity.
-  </p>
+    <h4>Как читать симуляцию:</h4>
+    <ul>
+      <li><b>Зелёные</b> — ещё не распались</li>
+      <li><b>Красные</b> — распались</li>
+      <li><b>Вспышки</b> — момент распада</li>
+    </ul>
 
-  <h3>Applications</h3>
-  <ul>
-    <li>Radiocarbon dating</li>
-    <li>Nuclear energy production</li>
-    <li>Medical imaging and cancer treatment</li>
-  </ul>
-</div>
+    <h4>Типы распада:</h4>
+    <ul>
+      <li><b>Альфа</b> — быстрый распад</li>
+      <li><b>Бета</b> — средний</li>
+      <li><b>Гамма</b> — медленный</li>
+    </ul>
+
+    <p>
+      Через один период полураспада остаётся примерно половина атомов —
+      независимо от начального количества.
+    </p>
+  </div>
 </div>

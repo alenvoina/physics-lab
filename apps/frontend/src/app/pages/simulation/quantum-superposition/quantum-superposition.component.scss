@@ -1,0 +1,49 @@
+.container {
+  display: flex;
+  height: 600px;
+  background: #000;
+  color: white;
+}
+
+canvas {
+  flex: 1;
+  display: block;
+}
+
+.panel {
+  width: 250px;
+  padding: 20px;
+  background: #020617;
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  button {
+    display: block;
+    margin: 10px 0;
+    padding: 8px;
+    width: 100%;
+    background: #1e293b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+
+    &:hover {
+      background: #38bdf8;
+      color: black;
+    }
+  }
+}
+
+.theory {
+  padding: 20px;
+  background: #020617;
+  color: #e2e8f0;
+  font-size: 14px;
+
+  h3 {
+    color: #38bdf8;
+  }
+}

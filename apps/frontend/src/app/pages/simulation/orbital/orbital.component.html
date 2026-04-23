@@ -1,110 +1,69 @@
 <div class="sim-root">
-
   <header class="sim-header">
     <div class="title">
       <mat-icon>public</mat-icon>
-      <span>Orbital Simulation</span>
+      <span>Орбитальная механика</span>
     </div>
 
     <div class="actions">
-      <button mat-button (click)="start()">
-        Start
+      <button mat-flat-button color="primary" (click)="start()">
+        <mat-icon>play_arrow</mat-icon> Запуск
       </button>
-
       <button mat-stroked-button (click)="pause()">
-        Pause
+        <mat-icon>pause</mat-icon> Пауза
       </button>
-
       <button mat-button (click)="reset()">
-        Reset
+        <mat-icon>refresh</mat-icon> Сброс
       </button>
     </div>
   </header>
 
-  <div class="sim-main">
-
-    <aside class="control-panel">
-      <h3>Simulation Info</h3>
-
-      <div class="control">
-        <label>FPS</label>
-        <span>{{ fps }}</span>
-      </div>
-
-      <div class="control">
-        <label>Bodies</label>
-        <span>{{ world.bodies.length || 0 }}</span>
-      </div>
-
-      <div class="control">
-        <label>Orbit Type</label>
-        <span>Stable Circular</span>
-      </div>
-
-      <div class="control">
-        <label>Tip</label>
-        <span style="font-size: 12px; color: #94a3b8;">
-          Try modifying physics parameters in code for chaos
-        </span>
-      </div>
-    </aside>
-
-    <section class="canvas-section">
+  <main class="sim-container">
+    <section class="canvas-wrapper">
       <canvas #canvas></canvas>
+      
+      <aside class="overlay-panel">
+        <div class="panel-section">
+          <h3>Статистика системы</h3>
+          <div class="stat-row">
+            <label>Кадры/сек (FPS)</label>
+            <span class="value">{{ fps }}</span>
+          </div>
+          <div class="stat-row">
+            <label>Объекты</label>
+            <span class="value">{{ world.bodies.length || 0 }}</span>
+          </div>
+        </div>
 
-      <div class="overlay">
-        <span>FPS: {{ fps }}</span>
-        <span>Objects: {{ world.bodies.length || 0 }}</span>
-      </div>
+        <div class="panel-section">
+          <h3>Режим</h3>
+          <div class="status-badge">Стабильная орбита</div>
+        </div>
+
+        <div class="panel-hint">
+          <mat-icon>info</mat-icon>
+          <span>Изменяйте массу и скорость в коде для создания хаоса</span>
+        </div>
+      </aside>
     </section>
-
-  </div>
+  </main>
 
   <footer class="sim-footer">
-    <p>
-      Real-time gravitational simulation. Stable orbit achieved via correct velocity vector.
-    </p>
+    <p>Гравитационная симуляция в реальном времени. Векторы скоростей рассчитаны по закону всемирного тяготения Ньютона.</p>
   </footer>
-
 </div>
 
-<section class="theory-section">
-  <h2>Orbital Mechanics Explained</h2>
-
-  <p>
-    Gravity is the invisible hand that shapes the dance of the cosmos. Every planet, moon, and asteroid moves
-    under the influence of the Sun’s gravitational pull. Yet, despite this invisible tug, planets do not
-    spiral into the Sun—they orbit in beautiful, stable paths. Why?
-  </p>
-
-  <p>
-    The key lies in the balance between two forces: the gravitational attraction pulling the planet inward
-    and the planet's tangential velocity trying to send it outward. When these two forces are perfectly
-    balanced, the planet traces a circular orbit. If the velocity is slightly higher, the orbit becomes
-    elliptical, swinging the planet closer and further from the Sun in a rhythmic journey.
-  </p>
-
-  <p>
-    Isaac Newton formalized this centuries ago: the force pulling the planet toward the Sun is proportional
-    to the product of their masses and inversely proportional to the square of their distance. Modern simulations
-    like this one apply these principles using discrete steps, calculating forces, velocities, and positions
-    in real time.
-  </p>
-
-  <p>
-    Notice how planets like Jupiter and Saturn, with their massive sizes, dominate the gravitational field,
-    subtly tugging smaller neighbors and even shaping the paths of distant comets. This dynamic interplay
-    ensures the stability of the solar system over billions of years.
-  </p>
-
-  <p>
-    By experimenting with parameters in this simulation—changing mass, distance, or velocity—you can witness
-    chaotic orbits, collisions, or escape trajectories. This hands-on approach mirrors the methods used by
-    astrophysicists to understand celestial mechanics, bridging the gap between mathematics and cosmic reality.
-  </p>
-
-  <p>
-    In essence, orbital mechanics is a symphony of motion, a testament to the elegance of physical laws,
-    and a reminder that even in the vastness of space, harmony emerges from the precise balance of forces.
-  </p>
-</section>
+<div class="container">
+  <section class="theory-section">
+    <h2>Механика орбитального движения</h2>
+    <div class="theory-grid">
+      <div class="theory-card">
+        <p>Гравитация — это невидимая сила, формирующая танец космоса. Каждая планета, луна и астероид движутся под влиянием притяжения Солнца. Но почему они не падают на него?</p>
+        <p>Ключ кроется в балансе двух сил: гравитационного притяжения, тянущего планету внутрь, и тангенциальной скорости, стремящейся выбросить её наружу. Когда эти силы уравновешены, планета движется по круговой орбите.</p>
+      </div>
+      <div class="theory-card highlight">
+        <p>Исаак Ньютон сформулировал это столетия назад: сила притяжения прямо пропорциональна произведению масс тел и обратно пропорциональна квадрату расстояния между ними.</p>
+      </div>
+    </div>
+  </section>
+</div>

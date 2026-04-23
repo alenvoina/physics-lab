@@ -1,45 +1,42 @@
+import { Component, ElementRef, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Pendulum } from '@physics-lab/engine';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-pendulum',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatIconModule],
   templateUrl: './pendulum.component.html',
   styleUrls: ['./pendulum.component.scss']
 })
-export class PendulumComponent implements OnInit {
+export class PendulumComponent implements OnInit, OnDestroy {
   @ViewChild('canvas', { static: true }) canvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('graphCanvas', { static: true }) graphCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('graphWrapper', { static: true }) graphWrapper!: ElementRef<HTMLDivElement>;
 
   private ctx!: CanvasRenderingContext2D;
+  private gCtx!: CanvasRenderingContext2D;
   private pendulum!: Pendulum;
-  private animationId!: number;
+  private animationId: number = 0;
+  private resizeObserver!: ResizeObserver;
 
   mode: 'earth' | 'moon' = 'earth';
-
   kineticHistory: number[] = [];
   potentialHistory: number[] = [];
-  maxPoints = 200;
+  maxPoints = 150;
 
   amplitude = 0;
-  period = 0;
   energy = 0;
-
   length = 220;
   timeScale = 1;
   isDragging = false;
-
-  private origin = { x: 0, y: 120 };
+  private origin = { x: 0, y: 40 };
 
   ngOnInit() {
-    const canvas = this.canvas.nativeElement;
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-    this.origin.x = canvas.width / 2;
-
-    this.ctx = canvas.getContext('2d')!;
+    this.ctx = this.canvas.nativeElement.getContext('2d', { alpha: false })!;
+    this.gCtx = this.graphCanvas.nativeElement.getContext('2d')!;
 
     this.pendulum = new Pendulum({
       angle: Math.PI / 4,
@@ -47,12 +44,140 @@ export class PendulumComponent implements OnInit {
       gravity: 9.81
     });
 
-    canvas.addEventListener('mousedown', (e) => this.onMouseDown(e));
-    canvas.addEventListener('mousemove', (e) => this.onMouseMove(e));
-    canvas.addEventListener('mouseup', () => this.isDragging = false);
-    canvas.addEventListener('mouseleave', () => this.isDragging = false);
+    // Следим за изменениями размера обоих контейнеров
+    this.resizeObserver = new ResizeObserver(() => this.onResize());
+    this.resizeObserver.observe(this.canvas.nativeElement);
+    this.resizeObserver.observe(this.graphWrapper.nativeElement);
 
+    this.initEvents();
     this.render(0);
+  }
+
+  private onResize() {
+    const dpr = window.devicePixelRatio || 1;
+    
+    // Ресайз основного канваса
+    const mainRect = this.canvas.nativeElement.getBoundingClientRect();
+    this.canvas.nativeElement.width = mainRect.width * dpr;
+    this.canvas.nativeElement.height = mainRect.height * dpr;
+    this.origin.x = mainRect.width / 2;
+
+    // Ресайз графического канваса
+    const graphRect = this.graphWrapper.nativeElement.getBoundingClientRect();
+    this.graphCanvas.nativeElement.width = graphRect.width * dpr;
+    this.graphCanvas.nativeElement.height = graphRect.height * dpr;
+  }
+
+  render(time: number) {
+    const dpr = window.devicePixelRatio || 1;
+    const ctx = this.ctx;
+    const w = this.canvas.nativeElement.clientWidth;
+    const h = this.canvas.nativeElement.clientHeight;
+
+    ctx.save();
+    ctx.scale(dpr, dpr);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, w, h);
+
+    // Сетка
+    ctx.strokeStyle = '#f1f5f9';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < w; i += 50) { ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, h); ctx.stroke(); }
+
+    if (!this.isDragging) {
+      this.pendulum.step(0.016 * this.timeScale, time);
+    }
+
+    const x = this.origin.x + this.pendulum.length * Math.sin(this.pendulum.angle);
+    const y = this.origin.y + this.pendulum.length * Math.cos(this.pendulum.angle);
+
+    // Отрисовка нити и груза
+    ctx.strokeStyle = '#94a3b8';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(this.origin.x, this.origin.y); ctx.lineTo(x, y); ctx.stroke();
+
+    const grad = ctx.createRadialGradient(x - 4, y - 4, 2, x, y, 20);
+    grad.addColorStop(0, '#60a5fa');
+    grad.addColorStop(1, '#2563eb');
+    ctx.fillStyle = grad;
+    ctx.shadowBlur = 10; ctx.shadowColor = 'rgba(37, 99, 235, 0.2)';
+    ctx.beginPath(); ctx.arc(x, y, 18, 0, Math.PI * 2); ctx.fill();
+    ctx.shadowBlur = 0;
+
+    this.updateData();
+    this.drawEnergyGraph();
+
+    ctx.restore();
+    this.animationId = requestAnimationFrame((t) => this.render(t));
+  }
+
+  private updateData() {
+    this.amplitude = Math.abs(this.pendulum.angle * 180 / Math.PI);
+    this.energy = this.pendulum.energy;
+
+    this.kineticHistory.push(this.pendulum.kineticEnergy);
+    this.potentialHistory.push(this.pendulum.potentialEnergy);
+    if (this.kineticHistory.length > this.maxPoints) {
+      this.kineticHistory.shift();
+      this.potentialHistory.shift();
+    }
+  }
+
+  private drawEnergyGraph() {
+    const ctx = this.gCtx;
+    const canvas = this.graphCanvas.nativeElement;
+    const dpr = window.devicePixelRatio || 1;
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+
+    ctx.save();
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, w, h);
+
+    const drawLine = (data: number[], color: string) => {
+      if (data.length < 2) return;
+      ctx.beginPath();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2.5;
+      const max = Math.max(...this.kineticHistory, ...this.potentialHistory, 0.5);
+      data.forEach((v, i) => {
+        const px = (i / (this.maxPoints - 1)) * w;
+        const py = h - (v / max) * h;
+        i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+      });
+      ctx.stroke();
+    };
+
+    drawLine(this.kineticHistory, '#10b981');
+    drawLine(this.potentialHistory, '#f43f5e');
+    ctx.restore();
+  }
+
+  // Вспомогательные методы
+  private initEvents() {
+    const canvas = this.canvas.nativeElement;
+    const getPos = (e: MouseEvent | TouchEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+      return { x: clientX - rect.left, y: clientY - rect.top };
+    };
+
+    const onStart = () => this.isDragging = true;
+    const onMove = (e: MouseEvent | TouchEvent) => {
+      if (!this.isDragging) return;
+      const pos = getPos(e);
+      this.pendulum.angle = Math.atan2(pos.x - this.origin.x, pos.y - this.origin.y);
+      this.pendulum.angularVelocity = 0;
+      e.preventDefault();
+    };
+
+    canvas.addEventListener('mousedown', onStart);
+    canvas.addEventListener('touchstart', onStart);
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('touchmove', onMove, { passive: false });
+    window.addEventListener('mouseup', () => this.isDragging = false);
+    window.addEventListener('touchend', () => this.isDragging = false);
   }
 
   setMode(mode: 'earth' | 'moon') {
@@ -61,179 +186,16 @@ export class PendulumComponent implements OnInit {
     this.reset();
   }
 
-  updateLength() {
-    this.pendulum.length = this.length;
-  }
-
-  onMouseDown(_: MouseEvent) {
-    this.isDragging = true;
-  }
-
-  onMouseMove(event: MouseEvent) {
-    if (!this.isDragging) return;
-
-    const rect = this.canvas.nativeElement.getBoundingClientRect();
-    const mx = event.clientX - rect.left;
-    const my = event.clientY - rect.top;
-
-    const dx = mx - this.origin.x;
-    const dy = my - this.origin.y;
-
-    const angle = Math.atan2(dx, dy);
-    this.pendulum.angle = angle;
-    this.pendulum.angularVelocity = 0;
-  }
-
-  render(time: number) {
-    const ctx = this.ctx;
-    const canvas = this.canvas.nativeElement;
-    this.origin.x = canvas.width / 2;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    this.drawGrid(ctx, canvas);
-    this.pendulum.step(0.016 * this.timeScale, time);
-
-    const x = this.origin.x + this.pendulum.length * Math.sin(this.pendulum.angle);
-    const y = this.origin.y + this.pendulum.length * Math.cos(this.pendulum.angle);
-
-    ctx.strokeStyle = '#64748b';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(this.origin.x, this.origin.y);
-    ctx.lineTo(x, y);
-    ctx.stroke();
-
-    ctx.fillStyle = '#0f172a';
-    ctx.beginPath();
-    ctx.arc(this.origin.x, this.origin.y, 6, 0, Math.PI * 2);
-    ctx.fill();
-
-    const grad = ctx.createRadialGradient(x, y, 5, x, y, 30);
-    grad.addColorStop(0, '#67e8f9');
-    grad.addColorStop(1, '#0284c7');
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.arc(x, y, 20, 0, Math.PI * 2);
-    ctx.fill();
-
-    const k = this.pendulum.kineticEnergy;
-    const p = this.pendulum.potentialEnergy;
-
-    this.kineticHistory.push(k);
-    this.potentialHistory.push(p);
-
-    if (this.kineticHistory.length > this.maxPoints) {
-      this.kineticHistory.shift();
-      this.potentialHistory.shift();
-    }
-
-    this.amplitude = this.pendulum.amplitude * 180 / Math.PI;
-    this.period = this.pendulum.period;
-    this.energy = this.pendulum.energy;
-
-    this.drawGraph(ctx);
-
-    this.animationId = requestAnimationFrame((t) => this.render(t));
-  }
-
-  drawGrid(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
-    const step = 40;
-    ctx.strokeStyle = '#e2e8f0';
-    ctx.lineWidth = 1;
-
-    for (let x = 0; x < canvas.width; x += step) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, canvas.height);
-      ctx.stroke();
-    }
-
-    for (let y = 0; y < canvas.height; y += step) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(canvas.width, y);
-      ctx.stroke();
-    }
-  }
-
-  drawGraph(ctx: CanvasRenderingContext2D) {
-    const x = 20;
-    const y = 360;
-    const width = 360;
-    const height = 160;
-
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(x, y, width, height);
-    ctx.strokeStyle = '#cbd5e1';
-    ctx.strokeRect(x, y, width, height);
-
-    if (this.kineticHistory.length < 2) return;
-
-    const all = [...this.kineticHistory, ...this.potentialHistory];
-    const min = Math.min(...all);
-    const max = Math.max(...all);
-    const range = max - min || 1;
-
-    ctx.strokeStyle = '#e2e8f0';
-    ctx.lineWidth = 1;
-    for (let i = 0; i <= 4; i++) {
-      const gy = y + (i / 4) * height;
-      ctx.beginPath();
-      ctx.moveTo(x, gy);
-      ctx.lineTo(x + width, gy);
-      ctx.stroke();
-    }
-
-    const drawLine = (data: number[], color: string) => {
-      ctx.beginPath();
-      data.forEach((v, i) => {
-        const px = x + (i / (this.maxPoints - 1)) * width;
-        const py = y + height - ((v - min) / range) * height;
-        if (i === 0) ctx.moveTo(px, py);
-        else ctx.lineTo(px, py);
-      });
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      const last = data.length - 1;
-      const px = x + (last / (this.maxPoints - 1)) * width;
-      const py = y + height - ((data[last] - min) / range) * height;
-      ctx.fillStyle = color;
-      ctx.beginPath();
-      ctx.arc(px, py, 4, 0, Math.PI * 2);
-      ctx.fill();
-    };
-
-    const kineticColor = this.mode === 'earth' ? '#16a34a' : '#22c55e';
-    const potentialColor = this.mode === 'earth' ? '#dc2626' : '#f43f5e';
-
-    drawLine(this.kineticHistory, kineticColor);
-    drawLine(this.potentialHistory, potentialColor);
-
-    ctx.fillStyle = '#0f172a';
-    ctx.font = '11px Arial';
-    ctx.fillText(`max: ${max.toFixed(2)}`, x + 5, y + 12);
-    ctx.fillText(`min: ${min.toFixed(2)}`, x + 5, y + height - 5);
-
-    ctx.fillStyle = kineticColor;
-    ctx.fillRect(x + 120, y - 14, 10, 3);
-    ctx.fillStyle = '#0f172a';
-    ctx.fillText('Kinetic', x + 135, y - 10);
-
-    ctx.fillStyle = potentialColor;
-    ctx.fillRect(x + 210, y - 14, 10, 3);
-    ctx.fillStyle = '#0f172a';
-    ctx.fillText('Potential', x + 225, y - 10);
-
-    ctx.font = 'bold 12px Arial';
-    ctx.fillText('Energy vs Time', x + 10, y - 25);
-  }
+  updateLength() { this.pendulum.length = this.length; }
 
   reset() {
     this.pendulum.reset(Math.PI / 4);
     this.kineticHistory = [];
     this.potentialHistory = [];
+  }
+
+  ngOnDestroy() {
+    cancelAnimationFrame(this.animationId);
+    this.resizeObserver.disconnect();
   }
 }

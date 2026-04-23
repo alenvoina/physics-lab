@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -6,12 +7,14 @@ import {
   OnDestroy,
 } from '@angular/core';
 
+
 import { QuantumTunneling } from '@physics-lab/engine';
 
 @Component({
   selector: 'app-quantum-tunneling',
   templateUrl: './quantum-tunneling.component.html',
   styleUrls: ['./quantum-tunneling.component.scss'],
+  imports: [CommonModule]
 })
 export class QuantumTunnelingComponent implements AfterViewInit, OnDestroy {
   @ViewChild('canvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
@@ -39,34 +42,72 @@ export class QuantumTunnelingComponent implements AfterViewInit, OnDestroy {
     this.animationId = requestAnimationFrame(this.loop);
   };
 
+  drawWaveFunction() {
+  const ctx = this.ctx;
+
+  ctx.beginPath();
+
+  for (let x = 0; x < 900; x++) {
+    const y = this.sim.getWave(x) * 60;
+
+    if (x === 0) ctx.moveTo(x, 200 + y);
+    else ctx.lineTo(x, 200 + y);
+  }
+
+  ctx.strokeStyle = '#38bdf8';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
+drawProbabilityCloud() {
+  const ctx = this.ctx;
+
+  for (let x = 0; x < 900; x += 2) {
+    const amp = this.sim.getWave(x);
+    const prob = amp * amp;
+
+    const alpha = Math.min(prob, 1);
+
+    ctx.fillStyle = `rgba(56,189,248,${alpha * 0.3})`;
+
+    ctx.fillRect(x, 150, 2, 100);
+  }
+}
+
   update() {
     this.sim.step(0.02);
   }
 
-  draw() {
-    const ctx = this.ctx;
+draw() {
+  const ctx = this.ctx;
 
-    ctx.fillStyle = '#020617';
-    ctx.fillRect(0, 0, 900, 400);
+  ctx.fillStyle = '#020617';
+  ctx.fillRect(0, 0, 900, 400);
 
-    this.drawBarrier();
-    this.drawParticle();
-    this.drawUI();
-  }
+  this.drawBarrier();
+  this.drawWaveFunction();
+  this.drawProbabilityCloud();
+  this.drawUI();
+}
 
-  drawBarrier() {
-    const ctx = this.ctx;
+drawBarrier() {
+  const ctx = this.ctx;
 
-    const h = this.sim.barrierHeight * 150;
+  const h = this.sim.barrierHeight * 120;
 
-    ctx.fillStyle = '#ef4444';
-    ctx.fillRect(
-      this.sim.barrierX,
-      200 - h,
-      this.sim.barrierWidth,
-      h * 2
-    );
-  }
+  const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+  gradient.addColorStop(0, '#ef4444');
+  gradient.addColorStop(1, '#7f1d1d');
+
+  ctx.fillStyle = gradient;
+
+  ctx.fillRect(
+    this.sim.barrierX,
+    200 - h,
+    this.sim.barrierWidth,
+    h * 2
+  );
+}
 
   drawParticle() {
     const ctx = this.ctx;
@@ -78,30 +119,24 @@ export class QuantumTunnelingComponent implements AfterViewInit, OnDestroy {
     ctx.fill();
   }
 
-  drawUI() {
-    const ctx = this.ctx;
+drawUI() {
+  const ctx = this.ctx;
 
-    ctx.fillStyle = 'white';
-    ctx.font = '14px monospace';
+  ctx.fillStyle = 'rgba(0,0,0,0.5)';
+  ctx.fillRect(0, 0, 300, 90);
 
-    ctx.fillText(`Energy: ${this.sim.energy.toFixed(2)}`, 10, 20);
-    ctx.fillText(`Barrier: ${this.sim.barrierHeight.toFixed(2)}`, 10, 40);
-    ctx.fillText(
-      `Probability: ${this.sim.getTunnelProbability().toFixed(2)}`,
-      10,
-      60
-    );
+  ctx.fillStyle = 'white';
+  ctx.font = '14px monospace';
 
-    if (this.sim.passed) {
-      ctx.fillStyle = '#22c55e';
-      ctx.fillText('Tunneled ✔', 10, 90);
-    }
+  ctx.fillText(`Energy: ${this.sim.energy.toFixed(2)}`, 10, 20);
+  ctx.fillText(`Barrier: ${this.sim.barrierHeight.toFixed(2)}`, 10, 40);
 
-    if (this.sim.reflected) {
-      ctx.fillStyle = '#f87171';
-      ctx.fillText('Reflected ✖', 10, 90);
-    }
-  }
+  const p = this.sim.getTunnelProbability();
+  ctx.fillText(`Probability: ${p.toFixed(2)}`, 10, 60);
+
+  ctx.fillStyle = '#94a3b8';
+  ctx.fillText(`Wave behavior visible`, 10, 80);
+}
 
   reset() {
     this.sim.reset();

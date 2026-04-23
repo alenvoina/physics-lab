@@ -1,30 +1,65 @@
-<canvas #canvas></canvas>
+<div class="layout">
+  <div class="top">
+    <div class="panel">
+      <h2>⚛ Стабильность ядра</h2>
 
-<div class="theory">
-  <h2>Nuclear Stability</h2>
+      <div class="controls">
+        <button (click)="reset()">Сброс</button>
 
-  <p>
-    Not all nuclei are created equal. Some configurations of protons and neutrons
-    are stable, others are inherently unstable and decay over time.
-  </p>
+        <label>
+          Скорость
+          <input
+            type="range"
+            min="0.2"
+            max="2"
+            step="0.1"
+            [(ngModel)]="speed"
+          />
+        </label>
+      </div>
 
-  <p>
-    Stability depends on a delicate balance. Protons repel each other electrically,
-    while the strong nuclear force binds nucleons together.
-  </p>
+      <div class="legend">
+        <div><span class="dot stable"></span> Стабильное</div>
+        <div><span class="dot unstable"></span> Нестабильное</div>
+      </div>
 
-  <p>
-    Too many or too few neutrons disrupt this balance. The nucleus becomes unstable
-    and transforms into a more stable configuration.
-  </p>
+      <p class="hint">
+        Наведи на ядро, чтобы увидеть параметры.  
+        Нестабильные ядра со временем распадаются.
+      </p>
+    </div>
 
-  <p>
-    This is why isotopes exist — same element, different neutron count,
-    and completely different stability.
-  </p>
+    <canvas #canvas (mousemove)="onMouseMove($event)"></canvas>
+  </div>
 
-  <p>
-    The concept of binding energy explains why this happens:
-    the more tightly bound a nucleus is, the more stable it becomes.
-  </p>
+  <div class="theory">
+    <h3>Что происходит?</h3>
+
+    <p>
+      Каждое ядро состоит из протонов и нейтронов. Протоны отталкиваются
+      электрически, но удерживаются вместе сильным ядерным взаимодействием.
+    </p>
+
+    <p>
+      Если баланс нарушается (слишком много или мало нейтронов),
+      ядро становится нестабильным и стремится перейти в более устойчивое состояние.
+    </p>
+
+    <p class="formula">
+      Чем ближе отношение n/p к оптимальному (~1.2), тем выше стабильность.
+    </p>
+
+    <h4>Как читать симуляцию:</h4>
+    <ul>
+      <li><b>Зелёный</b> — стабильное ядро</li>
+      <li><b>Красный</b> — нестабильное</li>
+      <li><b>Вспышка</b> — акт распада</li>
+    </ul>
+
+    <h4>Энергия связи:</h4>
+    <p>
+      Чем выше энергия связи, тем прочнее удерживаются нуклоны,
+      и тем устойчивее ядро.
+    </p>
+  </div>
 </div>

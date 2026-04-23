@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
+import { AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 
 interface LifeApplication {
   title: string;
@@ -18,56 +19,62 @@ interface LifeApplication {
 export class PhysicsInLifeComponent {
   selected: LifeApplication | null = null;
 
-  items: LifeApplication[] = [
-    {
-      title: 'GPS и спутники',
-      icon: 'public',
-      description: 'Навигация работает благодаря гравитации и теории относительности.',
-      details: `
-Спутники вращаются вокруг Земли благодаря гравитации.
-Для точности GPS учитывается даже эффект замедления времени из теории относительности.`
-    },
-    {
-      title: 'Лазеры',
-      icon: 'flash_on',
-      description: 'Используются в медицине, сканерах и технологиях.',
-      details: `
-Лазеры основаны на квантовой физике. Они создают когерентный свет,
-который применяется в хирургии, сканерах и промышленности.`
-    },
-    {
-      title: 'Ядерная энергия',
-      icon: 'bolt',
-      description: 'Источник энергии на атомных электростанциях.',
-      details: `
-Энергия выделяется при делении атомных ядер.
-Этот процесс используется для выработки электроэнергии на АЭС.`
-    },
-    {
-      title: 'Смартфоны',
-      icon: 'smartphone',
-      description: 'Работают благодаря полупроводникам и квантовой физике.',
-      details: `
-Современные чипы используют квантовые эффекты в полупроводниках,
-что позволяет создавать мощные и компактные устройства.`
-    },
-    {
-      title: 'Самолёты',
-      icon: 'flight',
-      description: 'Подъёмная сила создаётся аэродинамикой.',
-      details: `
-Крылья самолёта создают разность давления воздуха,
-что приводит к возникновению подъёмной силы.`
-    },
-    {
-      title: 'МРТ (медицина)',
-      icon: 'health_and_safety',
-      description: 'Диагностика на основе ядерной физики.',
-      details: `
-Магнитно-резонансная томография использует магнитные поля и ядерный резонанс
-для получения изображений внутренних органов.`
-    }
-  ];
+items: LifeApplication[] = [
+  {
+    title: 'GPS и спутники',
+    icon: 'public',
+    description: 'Навигация и теория относительности.',
+    details: 'Для точности GPS учитывается замедление времени.'
+  },
+  {
+    title: 'Лазеры',
+    icon: 'flash_on',
+    description: 'Квантовая физика в действии.',
+    details: 'Используются в хирургии, сканерах и промышленности.'
+  },
+  {
+    title: 'Wi-Fi и связь',
+    icon: 'wifi',
+    description: 'Электромагнитные волны вокруг нас.',
+    details: 'Передача данных происходит через радиоволны.'
+  },
+  {
+    title: 'Смартфоны',
+    icon: 'smartphone',
+    description: 'Полупроводники и квантовые эффекты.',
+    details: 'Транзисторы — основа всей электроники.'
+  },
+  {
+    title: 'Самолёты',
+    icon: 'flight',
+    description: 'Аэродинамика и давление.',
+    details: 'Подъёмная сила возникает из-за разности давления.'
+  },
+  {
+    title: 'Электромобили',
+    icon: 'electric_car',
+    description: 'Электродвигатели и энергия.',
+    details: 'Преобразование электрической энергии в движение.'
+  },
+  {
+    title: 'Микроволновка',
+    icon: 'microwave',
+    description: 'Нагрев за счёт волн.',
+    details: 'Микроволны заставляют молекулы воды колебаться.'
+  },
+  {
+    title: 'Солнечные панели',
+    icon: 'wb_sunny',
+    description: 'Фотоэффект в реальной жизни.',
+    details: 'Свет превращается в электричество.'
+  },
+  {
+    title: 'МРТ',
+    icon: 'health_and_safety',
+    description: 'Медицина и ядерная физика.',
+    details: 'Использует магнитные поля и резонанс.'
+  }
+];
 
   open(item: LifeApplication) {
     this.selected = item;

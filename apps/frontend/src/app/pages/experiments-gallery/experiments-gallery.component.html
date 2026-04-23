@@ -1,8 +1,8 @@
 <div class="gallery">
   <h1>Галерея экспериментов</h1>
-
+<input type="text" placeholder="Поиск..." [(ngModel)]="query" />
   <div class="grid">
-    <div class="card" *ngFor="let exp of experiments" (click)="open(exp)">
+    <div class="card" *ngFor="let exp of filtered" (click)="open(exp)">
       <img [src]="exp.image" alt="" />
 
       <div class="overlay">

@@ -1,32 +1,49 @@
 <div class="simulations-page">
 
   <section class="hero">
-    <div class="hero-text">
-      <h1>Добро пожаловать в Physics Lab Simulations</h1>
-      <p>Погрузитесь в мир физики: механика, квантовые эффекты и ядерные реакции — через интерактивные симуляции!</p>
-    </div>
-    <div class="hero-animation">
+    <div class="container hero-content">
+      <div class="hero-text">
+        <h1>Добро пожаловать в <span>Physics Lab</span></h1>
+        <p>Погрузитесь в мир физики: механика, квантовые эффекты и ядерные реакции — через интерактивные симуляции.</p>
+      </div>
+      <div class="hero-animation">
+        </div>
     </div>
   </section>
 
-  <section class="simulation-category" *ngFor="let category of simulationCategories">
-    <h2>{{ category.title }}</h2>
-    <div class="cards-container">
-      <mat-card class="sim-card" *ngFor="let sim of category.simulations" [ngStyle]="{'border-top': '5px solid ' + category.color}">
-        <mat-card-header>
-          <mat-card-title>{{ sim.title }}</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <p>{{ sim.description }}</p>
-          <ul>
-            <li *ngFor="let point of sim.points">{{ point }}</li>
-          </ul>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-raised-button color="primary" [routerLink]="sim.link">Start Simulation</button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
-  </section>
+  <div class="container">
+    <section class="simulation-category" *ngFor="let category of simulationCategories">
+      
+      <div class="category-header">
+        <h2 [style.--title-color]="category.color">{{ category.title }}</h2>
+      </div>
+
+      <div class="cards-container">
+        <mat-card class="sim-card" *ngFor="let sim of category.simulations" [style.--accent-color]="category.color">
+          
+          <div class="card-accent"></div> <mat-card-header>
+            <mat-card-title>{{ sim.title }}</mat-card-title>
+          </mat-card-header>
+          
+          <mat-card-content>
+            <p class="description">{{ sim.description }}</p>
+            <ul class="feature-list">
+              <li *ngFor="let point of sim.points">
+                <mat-icon class="list-icon" [style.color]="category.color">check_circle</mat-icon>
+                <span>{{ point }}</span>
+              </li>
+            </ul>
+          </mat-card-content>
+          
+          <mat-card-actions>
+            <button mat-stroked-button class="start-btn" [routerLink]="sim.link">
+              Start Simulation
+            </button>
+          </mat-card-actions>
+          
+        </mat-card>
+      </div>
+    </section>
+  </div>
 
 </div>

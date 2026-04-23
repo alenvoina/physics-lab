@@ -7,21 +7,41 @@
     </div>
   </div>
 
-  <div class="center">
+  <div class="center desktop-nav">
     <nav class="nav">
       <button mat-button routerLink="/simulations">Симуляции</button>
-      <button mat-button routerLink="/experiments">Галерея экспериментов</button>
-      <button mat-button routerLink="/physics-life">Физика в жизни</button>
-      <button mat-button routerLink="/facts">Факты</button>
+      <button mat-button routerLink="/experiments">Галерея</button>
+      <button mat-button routerLink="/physics-life">Физика</button>
       <button mat-button routerLink="/news">Новости</button>
     </nav>
   </div>
 
   <div class="right">
-    <button mat-raised-button filled class="button-black" color="accent" (click)="openLoginModal()">Login</button>
-    <button matButton class="button-black" color="accent" (click)="openLoginModal()">Sign in</button>
+    <button mat-icon-button class="burger" (click)="toggleMenu()">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <div class="auth desktop-auth">
+      <button mat-raised-button color="accent" (click)="openLoginModal()">Login</button>
+      <button mat-button (click)="openLoginModal()">Sign in</button>
+    </div>
   </div>
+
 </mat-toolbar>
+
+
+<div class="mobile-menu" *ngIf="menuOpen">
+  <button mat-button routerLink="/simulations" (click)="closeMenu()">Симуляции</button>
+  <button mat-button routerLink="/experiments" (click)="closeMenu()">Галерея</button>
+  <button mat-button routerLink="/physics-life" (click)="closeMenu()">Физика</button>
+  <button mat-button routerLink="/news" (click)="closeMenu()">Новости</button>
+
+  <div class="mobile-auth">
+    <button mat-raised-button color="accent" (click)="openLoginModal()">Login</button>
+    <button mat-button (click)="openLoginModal()">Sign in</button>
+  </div>
+</div>
+
 
 <ng-template #loginModal>
   <h2 mat-dialog-title>Coming Soon 🚀</h2>

@@ -6,7 +6,11 @@ const simulationUrls = [
   'simulation/orbital',
   'simulation/gravity',
   'simulation/quantum-system',
-  'simulation/nuclear-reaction'
+  'simulation/nuclear-reaction',
+  'simulation/quantum-tunneling',
+  'simulation/quantum-superposition',
+  'simulation/nuclear-stability',
+  'simulation/radioactive-decay',
 ];
 
 @Component({

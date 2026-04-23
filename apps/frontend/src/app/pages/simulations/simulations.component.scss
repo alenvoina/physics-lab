@@ -1,60 +1,214 @@
+/* ГЛОБАЛЬНЫЕ НАСТРОЙКИ СТРАНИЦЫ */
 .simulations-page {
-  padding: 2rem;
-
-  .hero {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-
-    .hero-text {
-      max-width: 50%;
-
-      h1 { 
-        font-size: 2.5rem; 
-        margin-bottom: 3rem; 
-        text-align: center;
-    }
-      p { 
-        font-size: 1.2rem; 
-        color: #555;
-        text-align: center;
-    }
+  background-color: #f8fafc; /* Очень легкий, дорогой серый/голубоватый фон страницы */
+  min-height: 100vh;
+  padding-bottom: 5rem;
 }
 
-    .hero-animation {
-      width: 40%;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* HERO SECTION */
+.hero {
+  padding: 6rem 0 4rem;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+  margin-bottom: 4rem;
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-text {
+    max-width: 700px;
+
+    h1 { 
+      font-size: clamp(2.5rem, 5vw, 3.5rem); /* Адаптивный огромный заголовок */
+      font-weight: 800;
+      color: #1e293b;
+      margin-bottom: 1.5rem; 
+      line-height: 1.2;
+
+      span {
+        color: #3f51b5; /* Акцентный цвет бренда */
+      }
+    }
+
+    p { 
+      font-size: clamp(1.1rem, 2vw, 1.25rem); 
+      color: #64748b;
+      line-height: 1.6;
+      margin: 0;
+    }
+  }
+}
+
+/* КАТЕГОРИИ И КАРТОЧКИ */
+.simulation-category {
+  margin-bottom: 5rem;
+
+  .category-header {
+    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: center;
+
+    h2 { 
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0;
+      position: relative;
+      padding-left: 1rem;
+
+      /* Элегантная вертикальная черта слева от заголовка */
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 10%;
+        height: 80%;
+        width: 4px;
+        background-color: var(--title-color, #3f51b5);
+        border-radius: 4px;
+      }
     }
   }
 
-  .simulation-category {
+  .cards-container {
+    /* МАГИЯ АДАПТИВНОСТИ: Автоматическая сетка без медиа-запросов */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+  }
 
-    h2 { 
-        font-size: 2rem;
-        margin-bottom: 2.5rem; 
-        text-align: center; 
+  /* СТИЛЬ КАРТОЧКИ */
+  .sim-card {
+    position: relative;
+    border-radius: 16px;
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.04);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03); /* Очень мягкая дефолтная тень */
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Чтобы линия сверху не вылезала за углы */
+    padding: 24px;
+
+    /* Та самая тонкая премиальная цветная линия сверху */
+    .card-accent {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--accent-color);
+      opacity: 0.8;
+      transition: height 0.3s ease;
     }
 
-    .cards-container {
+    &:hover {
+      transform: translateY(-8px); /* Поднимаем вверх, а не "зумим" */
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); /* Красивая глубокая тень */
+      
+      .card-accent {
+        height: 6px; /* Линия слегка утолщается при наведении */
+      }
+    }
+
+    /* Переопределяем стандартные отступы mat-card */
+    ::ng-deep .mat-mdc-card-header {
+      padding: 0 0 16px 0;
+      
+      .mat-mdc-card-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1e293b;
+      }
+    }
+
+    ::ng-deep .mat-mdc-card-content {
+      padding: 0;
+      flex-grow: 1; /* Карточка тянется, если текст разной длины */
       display: flex;
-      gap: 2rem;
-      justify-content: center;
-      flex-wrap: wrap;
+      flex-direction: column;
+    }
 
-      .sim-card {
-        width: 300px;
-        transition: transform 0.3s, box-shadow 0.3s;
-        cursor: pointer;
+    .description {
+      color: #64748b;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
 
-        &:hover {
-          transform: scale(1.05);
-          box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        }
+    /* Оформление списка */
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 24px 0;
+      flex-grow: 1;
 
-        mat-card-actions {
-          display: flex;
-          justify-content: center;
+      li {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+        font-size: 0.9rem;
+        color: #475569;
+        font-weight: 500;
+
+        .list-icon {
+          font-size: 20px;
+          height: 20px;
+          width: 20px;
+          opacity: 0.8;
         }
       }
+    }
+
+    ::ng-deep .mat-mdc-card-actions {
+      padding: 0;
+      
+      .start-btn {
+        width: 100%;
+        padding: 24px 0;
+        border-radius: 8px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        border-color: var(--accent-color);
+        color: var(--accent-color);
+        transition: all 0.3s;
+
+        &:hover {
+          background-color: var(--accent-color);
+          color: white;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    padding: 4rem 0 2rem;
+  }
+  
+  .simulation-category {
+    .category-header {
+      justify-content: center;
+      
+      h2::before {
+        display: none; /* На мобилке убираем боковую черту для центрирования */
+      }
+    }
+    
+    .cards-container {
+      grid-template-columns: 1fr; /* Одна колонка на мобилках */
     }
   }
 }

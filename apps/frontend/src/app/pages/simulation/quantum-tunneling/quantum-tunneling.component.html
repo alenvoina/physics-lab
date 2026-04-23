@@ -1,53 +1,71 @@
-<div class="container">
-  <div class="panel">
-    <h2>⚛ Quantum Tunneling</h2>
+<div class="lab-root">
 
-    <button (click)="reset()">Reset</button>
+  <header class="lab-header">
+    <h1>⚛ Quantum Tunneling Lab</h1>
+    <p>Observe how particles pass through barriers beyond classical limits</p>
+  </header>
 
-    <label>Energy</label>
-    <input type="range" min="0.1" max="2" step="0.1" (input)="setEnergy($any($event.target).value)" />
+  <div class="lab-body">
 
-    <label>Barrier Height</label>
-    <input type="range" min="0.5" max="2" step="0.1" (input)="setBarrier($any($event.target).value)" />
+    <aside class="lab-panel">
 
-    <p>
-      Particle can pass through barrier even if energy is lower.
-    </p>
+      <div class="control">
+        <label>Energy</label>
+        <input type="range" min="0.1" max="2" step="0.05"
+               (input)="setEnergy(+$any($event.target).value)" />
+      </div>
+
+      <div class="control">
+        <label>Barrier Height</label>
+        <input type="range" min="0.5" max="2" step="0.05"
+               (input)="setBarrier(+$any($event.target).value)" />
+      </div>
+
+      <button class="reset" (click)="reset()">Reset</button>
+
+      <div class="stats">
+        <h3>System</h3>
+        <p>Energy: {{ sim.energy | number:'1.2-2' }}</p>
+        <p>Barrier: {{ sim.barrierHeight | number:'1.2-2' }}</p>
+        <p>Probability: {{ sim.getTunnelProbability() | number:'1.2-2' }}</p>
+      </div>
+
+    </aside>
+
+    <section class="lab-canvas">
+      <canvas #canvas></canvas>
+    </section>
+
   </div>
 
-  <canvas #canvas></canvas>
-  <div class="theory">
-  <h2>Quantum Tunneling</h2>
+  <section class="lab-theory">
+    <h2>What is Quantum Tunneling?</h2>
 
-  <p>
-    In classical physics, a particle cannot pass through a barrier if it does not have enough energy.
-    However, in quantum mechanics, particles behave like waves.
-  </p>
+    <p>
+      In classical physics, a particle facing a barrier behaves like a ball hitting a wall:
+      if it doesn’t have enough energy, it simply bounces back.
+    </p>
 
-  <p>
-    This allows them to "leak" through barriers — a phenomenon known as tunneling.
-  </p>
+    <p>
+      But in quantum mechanics, particles are not just points — they are waves.
+      And waves don’t stop abruptly. They spread, interfere, and even penetrate barriers.
+    </p>
 
-  <h3>Potential Barrier</h3>
-  <p>
-    The red wall represents a region of high potential energy. Classically, it blocks the particle.
-  </p>
+    <p>
+      Inside the barrier, the wave doesn’t vanish — it decays.
+      If the barrier is thin enough, part of the wave emerges on the other side.
+    </p>
 
-  <h3>Probability of Transmission</h3>
-  <p>
-    The chance of passing depends on:
-  </p>
-  <ul>
-    <li>Barrier height</li>
-    <li>Barrier width</li>
-    <li>Particle energy</li>
-  </ul>
+    <p>
+      This is tunneling — not breaking the barrier, but leaking through it.
+    </p>
 
-  <h3>Applications</h3>
-  <ul>
-    <li>Scanning tunneling microscope</li>
-    <li>Nuclear fusion in stars</li>
-    <li>Semiconductors and quantum devices</li>
-  </ul>
-</div>
+    <h3>Why it matters</h3>
+    <ul>
+      <li>Electrons move through materials</li>
+      <li>Nuclear fusion happens in stars</li>
+      <li>Modern electronics rely on it</li>
+    </ul>
+  </section>
+
 </div>

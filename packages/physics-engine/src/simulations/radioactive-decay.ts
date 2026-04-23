@@ -4,6 +4,7 @@ export class Atom {
   x: number;
   y: number;
   decayed = false;
+  decayProgress = 0;
 
   constructor(x: number, y: number) {
     this.x = x;
@@ -16,15 +17,24 @@ export class RadioactiveDecaySystem {
 
   decayConstant = 0.01;
   time = 0;
-
   decayType: DecayType = 'beta';
 
+  history: { time: number; remaining: number }[] = [];
+
   constructor(count = 100) {
+    this.generateAtoms(count);
+  }
+
+  generateAtoms(count: number) {
+    this.atoms = [];
+    const centerX = 450;
+    const centerY = 200;
+
     for (let i = 0; i < count; i++) {
       this.atoms.push(
         new Atom(
-          Math.random() * 800 + 50,
-          Math.random() * 300 + 50
+          centerX + (Math.random() - 0.5) * 250,
+          centerY + (Math.random() - 0.5) * 200
         )
       );
     }
@@ -40,7 +50,13 @@ export class RadioactiveDecaySystem {
 
       if (Math.random() < p) {
         atom.decayed = true;
+        atom.decayProgress = 1;
       }
+    });
+
+    this.history.push({
+      time: this.time,
+      remaining: this.getRemaining(),
     });
   }
 
@@ -57,17 +73,9 @@ export class RadioactiveDecaySystem {
   }
 
   reset(count = 100) {
-    this.atoms = [];
     this.time = 0;
-
-    for (let i = 0; i < count; i++) {
-      this.atoms.push(
-        new Atom(
-          Math.random() * 800 + 50,
-          Math.random() * 300 + 50
-        )
-      );
-    }
+    this.history = [];
+    this.generateAtoms(count);
   }
 
   setDecayType(type: DecayType) {

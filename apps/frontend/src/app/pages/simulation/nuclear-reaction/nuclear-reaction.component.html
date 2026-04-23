@@ -1,23 +1,70 @@
-<div class="container">
-  <canvas #canvas></canvas>
+<div class="reactor-root">
 
-  <div class="panel">
-    <h2>☢ Reactor Control</h2>
+  <div class="header">
+    <h1>☢ Nuclear Reactor Simulator</h1>
+    <p>Control chain reactions and prevent meltdown</p>
+  </div>
 
-    <label>Control Rods</label>
-    <input
-      type="range"
-      min="0"
-      max="1"
-      step="0.01"
-      (input)="setControl($any($event.target).value)"
-    />
+  <div class="layout">
 
-    <button (click)="reset()">Reset</button>
+    <div class="canvas-wrap">
+      <canvas #canvas></canvas>
+    </div>
 
+    <div class="panel">
+      <h2>⚙ Reactor Control</h2>
+
+      <div class="control">
+        <label>Simulation Speed</label>
+        <input type="range" min="0.1" max="2" step="0.1"
+         (input)="setSpeed(+$any($event.target).value)" />
+      </div>
+      <div class="control">
+        <label>Control Rods</label>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          [value]="sim.controlLevel"
+          (input)="setControl(+$any($event.target).value)"
+        />
+        <div class="hint">
+          Absorb neutrons → slows reaction
+        </div>
+      </div>
+
+      <button class="reset" (click)="reset()">Reset</button>
+
+      <div class="bars">
+        <div class="bar">
+          <span>Temperature</span>
+          <div class="progress">
+            <div class="fill temp" [style.width.%]="sim.temperature / 12"></div>
+          </div>
+        </div>
+
+        <div class="bar">
+          <span>Energy</span>
+          <div class="progress">
+            <div class="fill energy" [style.width.%]="sim.energy / 50"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="status" [ngClass]="getStatusClass()">
+        {{ getStatusText() }}
+      </div>
+    </div>
+
+  </div>
+
+  <div class="theory">
+    <h3>How it works</h3>
     <p>
-      ↓ rods → runaway reaction  
-      ↑ rods → reaction stops
+      Neutrons hit nuclei → fission → more neutrons → chain reaction.
+      Control rods absorb neutrons and regulate the system.
     </p>
   </div>
+
 </div>

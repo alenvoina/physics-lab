@@ -12,6 +12,7 @@ export class Nucleus {
   energy: number;
 
   decayTimer = 0;
+  flash = 0;
 
   constructor({
     position,
@@ -26,7 +27,7 @@ export class Nucleus {
     this.protons = protons;
     this.neutrons = neutrons;
 
-    this.radius = 5 + Math.sqrt(protons + neutrons);
+    this.radius = 6 + Math.sqrt(protons + neutrons);
 
     this.energy = this.calcBindingEnergy();
     this.stability = this.calcStability();
@@ -34,25 +35,22 @@ export class Nucleus {
 
   calcBindingEnergy(): number {
     const A = this.protons + this.neutrons;
-
     return A - Math.pow(this.protons - this.neutrons, 2) / A;
   }
 
-  
   calcStability(): number {
     const ratio = this.neutrons / this.protons;
-
     const diff = Math.abs(ratio - 1.2);
-
     return Math.max(0, 1 - diff);
   }
 
   step() {
-    if (this.stability < 0.5) {
+    if (this.stability < 0.6) {
       this.decayTimer++;
 
-      if (this.decayTimer > 100) {
+      if (this.decayTimer > 120) {
         this.decay();
+        this.flash = 1;
         this.decayTimer = 0;
       }
     }
@@ -77,9 +75,7 @@ export class NuclearStabilitySystem {
     this.nuclei.push(n);
   }
 
-  
-
-  step() {
+  step(dt = 1) {
     this.nuclei.forEach(n => n.step());
   }
 
@@ -88,7 +84,7 @@ export class NuclearStabilitySystem {
 
     for (let i = 0; i < 8; i++) {
       sim.add(new Nucleus({
-        position: new Vector(150 + i * 80, 300),
+        position: new Vector(150 + i * 90, 300),
         protons: 6,
         neutrons: 4 + i
       }));

@@ -1,11 +1,86 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: white;
+}
+
+.top {
+  display: flex;
+  gap: 20px;
+}
+
+.panel {
+  flex: 1;
+  background: #020617;
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  padding: 16px;
+}
+
 canvas {
-  width: 100%;
+  flex: 3;
   height: 600px;
+  border-radius: 16px;
+  border: 1px solid #1e293b;
   background: #020617;
 }
 
+.controls {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+button {
+  background: #7f1d1d;
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.legend {
+  margin-top: 10px;
+
+  .dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 5px;
+  }
+
+  .stable {
+    background: #22c55e;
+  }
+
+  .unstable {
+    background: #f87171;
+  }
+}
+
+.hint {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
 .theory {
-  padding: 40px;
-  background: #0f172a;
-  color: #e2e8f0;
+  background: #020617;
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  padding: 20px;
+  color: #cbd5f5;
+  line-height: 1.6;
+}
+
+.formula {
+  background: #020617;
+  border: 1px solid #1e293b;
+  padding: 8px;
+  border-radius: 8px;
+  text-align: center;
+  margin: 10px 0;
+  font-family: monospace;
 }

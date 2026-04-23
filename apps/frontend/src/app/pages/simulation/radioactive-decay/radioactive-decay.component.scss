@@ -1,0 +1,98 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: white;
+}
+
+.top {
+  display: flex;
+  gap: 20px;
+}
+
+.panel {
+  flex: 1;
+  background: #020617;
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+canvas {
+  flex: 3;
+  height: 400px;
+  border-radius: 16px;
+  border: 1px solid #1e293b;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0;
+  flex-wrap: wrap;
+}
+
+button {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &.active {
+    background: #2563eb;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.reset {
+  background: #7f1d1d;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.stat {
+  background: #020617;
+  border: 1px solid #1e293b;
+  padding: 10px;
+  border-radius: 12px;
+
+  span {
+    font-size: 12px;
+    color: #94a3b8;
+  }
+
+  strong {
+    display: block;
+    font-size: 16px;
+  }
+}
+
+.theory {
+  background: #020617;
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  padding: 16px;
+  font-size: 14px;
+  color: #cbd5f5;
+  line-height: 1.5;
+}
+
+.formula {
+  background: #020617;
+  border: 1px solid #1e293b;
+  padding: 10px;
+  border-radius: 8px;
+  font-family: monospace;
+  text-align: center;
+  margin: 10px 0;
+}

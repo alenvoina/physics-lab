@@ -1,67 +1,123 @@
 .gallery {
-  padding: 20px;
+  padding: 40px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
 
   h1 {
     text-align: center;
-    margin-bottom: 30px;
+    color: #fff;
+    font-size: 36px;
+    margin-bottom: 40px;
   }
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
 }
 
 .card {
   position: relative;
   cursor: pointer;
   overflow: hidden;
-  border-radius: 16px;
+  border-radius: 20px;
+
+  backdrop-filter: blur(10px);
+  background: rgba(255,255,255,0.05);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+
+  transition: all 0.4s ease;
 
   img {
     width: 100%;
-    height: 200px;
+    height: 220px;
     object-fit: cover;
-    transition: 0.3s;
+    transition: 0.5s;
+  }
+
+  &:hover {
+    transform: translateY(-10px) scale(1.02);
+  }
+
+  &:hover img {
+    transform: scale(1.2);
   }
 
   .overlay {
     position: absolute;
-    bottom: 0;
-    width: 100%;
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.6);
-    color: white;
-    transform: translateY(100%);
-    transition: 0.3s;
-  }
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 
-  &:hover img {
-    transform: scale(1.1);
+    padding: 20px;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+
+    color: white;
+    transform: translateY(40%);
+    transition: 0.4s;
   }
 
   &:hover .overlay {
     transform: translateY(0);
   }
+
+  h3 {
+    margin: 0;
+    font-size: 20px;
+  }
+
+  p {
+    font-size: 14px;
+    opacity: 0.8;
+  }
 }
 
-/* МОДАЛКА */
 .modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.7);
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  backdrop-filter: blur(8px);
+
+  animation: fadeIn 0.3s ease;
 }
 
 .modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 16px;
-  max-width: 500px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px);
+
+  padding: 30px;
+  border-radius: 20px;
+  max-width: 600px;
+  width: 90%;
+
+  color: white;
+
+  transform: scale(0.9);
+  animation: pop 0.3s ease forwards;
+
+  h2 {
+    margin-bottom: 15px;
+  }
+
+  button {
+    margin-top: 20px;
+  }
+}
+
+@keyframes pop {
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to { opacity: 1 }
 }

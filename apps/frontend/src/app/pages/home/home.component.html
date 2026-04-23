@@ -1,11 +1,14 @@
 <section class="hero">
   <div class="container hero-content">
-
     <div class="text">
       <h1>Physics Lab</h1>
       <p>Interactive simulations of quantum and nuclear physics</p>
 
-      <button mat-raised-button color="primary" [routerLink]="['/simulations']">
+      <button
+        mat-raised-button
+        color="primary"
+        [routerLink]="['/simulations']"
+      >
         Start Simulation
       </button>
     </div>
@@ -17,18 +20,28 @@
 </section>
 
 <section class="timeline">
-  <div class="timeline-container">
-    <div class="timeline-line"></div>
+  <div class="container">
+    <div class="timeline-wrapper">
+      <div class="timeline-container">
+        <div class="timeline-line"></div>
 
-    <div class="timeline-events">
-      <div class="event" *ngFor="let event of timelineEvents">
-        <div class="dot"></div>
-        <div class="label">{{ event.year }}</div>
+        <div class="timeline-events">
+          <div class="event" *ngFor="let event of timelineEvents">
+            <div class="dot"></div>
 
-        <div class="event-card">
-          <img *ngIf="event.icon" [src]="event.icon" alt="{{event.title}}" class="event-icon">
-          <h4>{{ event.title }}</h4>
-          <p>{{ event.description }}</p>
+            <div class="label">{{ event.year }}</div>
+
+            <div class="event-card">
+              <img
+                *ngIf="event.icon"
+                [src]="event.icon"
+                [alt]="event.title"
+                class="event-icon"
+              />
+              <h4>{{ event.title }}</h4>
+              <p>{{ event.description }}</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -39,10 +52,14 @@
   <div class="container">
     <div class="cards">
       <div class="card" *ngFor="let news of newsList">
-        <img [src]="news.image" alt="news image" class="news-image" />
+        <img [src]="news.image" class="news-image" alt="news image" />
+
         <h3>{{ news.title }}</h3>
         <p>{{ news.content }}</p>
-        <button mat-stroked-button color="primary">Read More</button>
+
+        <button mat-stroked-button color="primary">
+          Read More
+        </button>
       </div>
     </div>
   </div>

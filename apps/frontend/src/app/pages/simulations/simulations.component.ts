@@ -3,21 +3,23 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-
+import { MatIconModule } from '@angular/material/icon'; // Добавили иконки
 
 @Component({
   selector: 'app-simulations',
-    imports: [
+  standalone: true,
+  imports: [
     CommonModule,
     RouterModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    MatIconModule // Не забудь добавить сюда
   ],
   templateUrl: './simulations.component.html',
   styleUrl: './simulations.component.scss',
 })
 export class SimulationsComponent {
-    simulationCategories = [
+  simulationCategories = [
     {
       title: 'Механика и орбиты',
       color: '#2196F3',
@@ -45,6 +47,5 @@ export class SimulationsComponent {
         { title: 'Стабильность ядер', description: 'Наблюдайте, какие ядра стабильны, а какие нет', points: ['Изотопы', 'Энергия связи', 'Применение'], link: '/simulation/nuclear-stability' },
       ]
     }
-  ]
-
+  ];
 }

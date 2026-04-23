@@ -1,67 +1,65 @@
+<div class="sim-root light-theme">
   <header class="sim-header">
     <div class="title">
-      <span>Orbital Simulation</span>
+      <mat-icon>science</mat-icon>
+      <span class="desktop-only">Lab:</span> <span>Pendulum Pro</span>
+    </div>
+    <div class="mode-switcher">
+      <button [class.active]="mode === 'earth'" (click)="setMode('earth')">🌍 Земля</button>
+      <button [class.active]="mode === 'moon'" (click)="setMode('moon')">🌙 Луна</button>
     </div>
   </header>
 
-<canvas #canvas class="canvas"></canvas>
+  <main class="main-layout">
+    <section class="viewport-container">
+      <canvas #canvas></canvas>
+      
+      <div class="hud-metrics">
+        <div class="metric-card">
+          <span class="label">Амплитуда</span>
+          <span class="value">{{ amplitude | number:'1.1-1' }}°</span>
+        </div>
+        <div class="metric-card highlight">
+          <span class="label">Энергия</span>
+          <span class="value">{{ energy | number:'1.2-2' }} Дж</span>
+        </div>
+      </div>
+    </section>
 
-<div class="panel">
-  <div class="title">Pendulum Lab</div>
+    <section class="dashboard">
+      <div class="dashboard-card graph-area">
+        <div class="card-header">
+          <h3>Динамика энергии</h3>
+          <div class="legend">
+            <div class="legend-item kin"><span class="dot"></span> Кинет.</div>
+            <div class="legend-item pot"><span class="dot"></span> Потенц.</div>
+          </div>
+        </div>
+        <div class="canvas-wrapper" #graphWrapper>
+          <canvas #graphCanvas></canvas>
+        </div>
+      </div>
 
-  <div class="row">Amplitude: {{ amplitude | number:'1.0-1' }}°</div>
-  <div class="row">Period: {{ period | number:'1.00-2' }}</div>
-  <div class="row">Energy: {{ energy | number:'1.00-2' }}</div>
+      <div class="dashboard-card settings-area">
+        <h3>Параметры</h3>
+        <div class="control-group">
+          <div class="label-row">
+            <span>Длина нити</span>
+            <span class="accent">{{ length }} см</span>
+          </div>
+          <input type="range" min="100" max="400" [(ngModel)]="length" (input)="updateLength()" />
+        </div>
 
-  <div class="row">
-    Length: {{ length }}
-    <input type="range" min="100" max="400" [(ngModel)]="length" (input)="updateLength()" />
-  </div>
+        <div class="control-group">
+          <div class="label-row">
+            <span>Темп времени</span>
+            <span class="accent">{{ timeScale.toFixed(1) }}x</span>
+          </div>
+          <input type="range" min="0.1" max="2" step="0.1" [(ngModel)]="timeScale" />
+        </div>
 
-  <div class="row">
-    Speed: {{ timeScale.toFixed(1) }}
-    <input type="range" min="0.2" max="3" step="0.1" [(ngModel)]="timeScale" />
-  </div>
-
-  <div class="buttons">
-    <button (click)="setMode('earth')">🌍 Earth</button>
-    <button (click)="setMode('moon')">🌙 Moon</button>
-    <button (click)="reset()">Reset</button>
-  </div>
+        <button class="btn-reset" (click)="reset()">Сброс</button>
+      </div>
+    </section>
+  </main>
 </div>
-
-<section class="pendulum-theory">
-  <h2>The Physics Behind the Pendulum</h2>
-
-  <p>
-    A simple pendulum is one of the most elegant demonstrations of nature's rhythms. Despite its
-    apparent simplicity, it embodies the principles of energy transformation and harmonic motion.
-  </p>
-
-  <p>
-    As the pendulum swings, energy constantly shifts between kinetic and potential forms. At the
-    highest point, all the energy is potential — the pendulum is momentarily still, storing energy
-    like a coiled spring. At the lowest point, potential energy has converted fully into kinetic,
-    and the pendulum moves at its fastest.
-  </p>
-
-  <p>
-    Changing the length of the pendulum or the gravitational environment — for example, simulating
-    the Moon instead of Earth — alters its rhythm and period. Shorter lengths lead to quicker swings,
-    while lower gravity slows them down. This demonstrates how physical parameters govern motion in
-    a predictable, yet visually mesmerizing way.
-  </p>
-
-  <p>
-    Watching the energy graph over time reveals the perfect symmetry of energy exchange. Even though
-    the pendulum seems to move chaotically to the eye, its energy cycles are precise and repeatable,
-    a beautiful example of nature's hidden order.
-  </p>
-
-  <p>
-    Interacting with the pendulum by dragging it adds another layer of intuition: small pushes or
-    shifts instantly change amplitude and energy, letting you feel the responsiveness of a dynamic
-    system. This hands-on approach helps build a real sense of how forces, energy, and motion
-    intertwine in the physical world.
-  </p>
-</section>

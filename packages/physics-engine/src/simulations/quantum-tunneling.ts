@@ -1,50 +1,52 @@
 export class QuantumTunneling {
   x = 0;
-  velocity = 2;
+  time = 0;
+
   barrierX = 400;
-  barrierWidth = 40;
+  barrierWidth = 80;
   barrierHeight = 1;
 
   energy = 0.8;
 
-  passed = false;
-  reflected = false;
+  wavelength = 40;
+  amplitude = 1;
 
   step(dt: number) {
-    if (this.passed || this.reflected) return;
-
-    this.x += this.velocity * dt * 100;
-
-    if (this.x >= this.barrierX && this.x <= this.barrierX + this.barrierWidth) {
-      const p = this.getTunnelProbability();
-
-      if (Math.random() < p) {
-        this.passed = true;
-      } else {
-        this.velocity *= -1;
-        this.reflected = true;
-      }
-    }
+    this.time += dt;
+    this.x += 100 * dt;
   }
 
   getTunnelProbability(): number {
     const diff = this.barrierHeight - this.energy;
-
     if (diff <= 0) return 1;
 
-    return Math.exp(-diff * this.barrierWidth * 0.05);
+    return Math.exp(-diff * this.barrierWidth * 0.04);
+  }
+
+  getWave(x: number): number {
+    const k = 2 * Math.PI / this.wavelength;
+
+    if (x < this.barrierX) {
+      return Math.sin(k * x - this.time * 5);
+    }
+
+    if (x >= this.barrierX && x <= this.barrierX + this.barrierWidth) {
+      const decay = Math.exp(-(x - this.barrierX) * 0.03 * (this.barrierHeight - this.energy + 0.5));
+      return Math.sin(k * x - this.time * 5) * decay;
+    }
+
+    const transmission = this.getTunnelProbability();
+    return Math.sin(k * x - this.time * 5) * transmission;
   }
 
   reset() {
-    this.x = 50;
-    this.velocity = 2;
-    this.passed = false;
-    this.reflected = false;
+    this.x = 0;
+    this.time = 0;
   }
 
-  setBarrier(height: number, width: number) {
-    this.barrierHeight = height;
-    this.barrierWidth = width;
+  setBarrier(h: number, w: number) {
+    this.barrierHeight = h;
+    this.barrierWidth = w;
   }
 
   setEnergy(e: number) {

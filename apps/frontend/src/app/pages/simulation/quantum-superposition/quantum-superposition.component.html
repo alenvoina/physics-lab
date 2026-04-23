@@ -2,25 +2,35 @@
   <div class="panel">
     <h2>⚛ Superposition Lab</h2>
 
-    <button (click)="setMode('states')">States</button>
-    <button (click)="setMode('probability')">Probabilities</button>
-    <button (click)="setMode('measurement')">Measurement</button>
-
     <button (click)="addState()">+ State</button>
     <button (click)="measure()">Measure</button>
 
-    <p *ngIf="mode === 'states'">
-      Multiple quantum states exist simultaneously.
-    </p>
-
-    <p *ngIf="mode === 'probability'">
-      Probability is determined by amplitude squared.
-    </p>
-
-    <p *ngIf="mode === 'measurement'">
-      Measurement collapses the system into one state.
+    <p>
+      Multiple quantum states exist simultaneously. Their amplitudes interfere
+      to form a single wave.
     </p>
   </div>
 
   <canvas #canvas></canvas>
+</div>
+
+<div class="theory">
+  <h3>⚛ Quantum Superposition</h3>
+
+  <p>
+    A quantum system does not choose one state — it exists in all possible states at once.
+  </p>
+
+  <p>
+    Each state contributes like a wave. When combined, they interfere,
+    creating a new pattern.
+  </p>
+
+  <p>
+    The height of the wave represents probability.
+  </p>
+
+  <p>
+    When you measure the system, it collapses into a single state.
+  </p>
 </div>
