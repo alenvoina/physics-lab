@@ -1,15 +1,18 @@
-import { Vector } from "../vector";
+import { Vector } from "../index";
 
 export interface ElectronState {
   n: number;
-  radius: number;
   energy: number;
+  offsetAngle: number;
 }
 
 export class QuantumSystem {
   electrons: ElectronState[] = [];
   time = 0;
-  stepCount: any;
+  stepCount = 0;
+
+  width = 800;
+  height = 600;
 
   constructor() {
     this.generateLevels(3);
@@ -17,31 +20,39 @@ export class QuantumSystem {
 
   generateLevels(count: number) {
     this.electrons = [];
-
     for (let n = 1; n <= count; n++) {
-      this.electrons.push({
-        n,
-        radius: 40 * n,
-        energy: -13.6 / (n * n),
-      });
+      const maxElectrons = n === 1 ? 2 : n === 2 ? 8 : 6;
+      for (let i = 0; i < maxElectrons; i++) {
+        this.electrons.push({
+          n,
+          energy: -13.6 / (n * n),
+          offsetAngle: ((Math.PI * 2) / maxElectrons) * i,
+        });
+      }
     }
   }
 
   step(dt: number) {
     this.time += dt;
+    this.stepCount++;
   }
 
-  getElectronPosition(e: ElectronState, index: number): Vector {
-    const angle = this.time * (0.5 / e.n) + index;
+  getElectronPosition(e: ElectronState): Vector {
+    const cx = this.width / 2;
+    const cy = this.height / 2;
+    const baseRadius = Math.min(cx, cy) / 4;
+    const radius = baseRadius * e.n;
+
+    const angle = this.time * (1.5 / e.n) + e.offsetAngle;
 
     return new Vector(
-      450 + Math.cos(angle) * e.radius,
-      300 + Math.sin(angle) * e.radius
+      cx + Math.cos(angle) * radius,
+      cy + Math.sin(angle) * radius,
     );
   }
 
-  getWaveAmplitude(r: number, n: number): number {
-    const a = 40;
-    return Math.exp(-r / (n * a)) * Math.sin(r / 20);
+  getWaveAmplitude(r: number, maxRadius: number): number {
+    const scale = maxRadius / 15;
+    return Math.exp(-r / (scale * 3)) * Math.sin(r / scale - this.time * 5);
   }
 }

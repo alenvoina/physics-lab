@@ -1,63 +1,377 @@
-.container {
+@import 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600&display=swap';
+
+$bg-color: #020617;
+$panel-bg: rgb(15 23 42 / 70%);
+$primary: #38bdf8;
+$purple: #c084fc;
+$text: #f8fafc;
+$text-muted: #94a3b8;
+
+.quantum-root {
+  min-height: 100vh;
+  width: 100%;
   display: flex;
-  height: 100%;
-  background: #000;
-  color: white;
+  flex-direction: column;
+  background: radial-gradient(circle at center top, #0f172a, $bg-color);
+  color: $text;
+  font-family: Inter, sans-serif;
 }
 
-canvas {
+.header {
+  padding: 1rem 2rem;
+  background: rgb(0 0 0 / 50%);
+  border-bottom: 1px solid rgba($primary, 0.2);
+  backdrop-filter: blur(10px);
+
+  .title-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .logo-icon {
+      font-size: 2.2rem;
+      color: $purple;
+      text-shadow: 0 0 15px rgba($purple, 0.6);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+      color: $primary;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.8rem;
+      color: $text-muted;
+    }
+  }
+}
+
+.glass-panel {
+  background: $panel-bg;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgb(255 255 255 / 5%);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 50%);
+}
+
+.layout {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
   flex: 1;
-  display: block;
+  min-height: 500px;
 }
 
 .panel {
-  width: 250px;
-  padding: 20px;
-  background: #020617;
+  width: 320px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 
   h2 {
-    margin-bottom: 10px;
+    margin: 0;
+    font-size: 1.1rem;
+    color: #fff;
+    font-family: 'JetBrains Mono', sans-serif;
+    border-bottom: 1px solid rgba($primary, 0.3);
+    padding-bottom: 10px;
   }
+}
+
+.mode-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 
   button {
-    display: block;
-    margin: 10px 0;
-    padding: 8px;
-    width: 100%;
-    background: #1e293b;
-    color: white;
-    border: none;
+    background: rgb(0 0 0 / 40%);
+    border: 1px solid #1e293b;
+    color: $text-muted;
+    padding: 12px 15px;
     border-radius: 8px;
     cursor: pointer;
+    transition: 0.3s ease;
+    font-size: 0.9rem;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .icon {
+      font-size: 1.2rem;
+    }
 
     &:hover {
-      background: #38bdf8;
-      color: black;
+      background: rgba($primary, 0.1);
+      border-color: $primary;
+      color: #fff;
+    }
+
+    &.active {
+      background: rgba($primary, 0.2);
+      border-color: $primary;
+      color: $primary;
+      box-shadow: 0 0 15px rgba($primary, 0.3);
+    }
+  }
+}
+
+.mode-info {
+  background: rgb(0 0 0 / 30%);
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 3px solid $purple;
+  margin-top: auto;
+
+  h3 {
+    margin: 0 0 8px;
+    font-size: 0.95rem;
+    color: #fff;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #94a3b8;
+    line-height: 1.5;
+  }
+}
+
+.canvas-wrap {
+  flex: 1;
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba($primary, 0.2);
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hud-corner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba($primary, 0.5);
+    pointer-events: none;
+
+    &.top-left {
+      top: 10px;
+      left: 10px;
+      border-right: none;
+      border-bottom: none;
+    }
+
+    &.top-right {
+      top: 10px;
+      right: 10px;
+      border-left: none;
+      border-bottom: none;
+    }
+
+    &.bottom-left {
+      bottom: 10px;
+      left: 10px;
+      border-right: none;
+      border-top: none;
+    }
+
+    &.bottom-right {
+      bottom: 10px;
+      right: 10px;
+      border-left: none;
+      border-top: none;
     }
   }
 }
 
 .quantum-theory {
-  padding: 30px 40px;
-  background: #0b0c17;
-  color: #e2e8f0;
-  max-width: 1000px;
-  margin: 20px auto;
-  font-family: 'Roboto', sans-serif;
-  line-height: 1.6;
-  font-size: 15px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  margin: 0 20px 20px;
+  padding: 1.5rem;
+}
 
-  h2 {
-    color: #3b82f6;
-    font-size: 22px;
-    margin-bottom: 18px;
+.theory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+
+  .theory-col {
+    h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.1rem;
+      color: $primary;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+      text-align: justify;
+    }
+
+    &.highlight {
+      background: rgb(192 132 252 / 5%);
+      padding: 1rem;
+      border-radius: 8px;
+      border-left: 3px solid $purple;
+
+      h4 {
+        margin: 0 0 10px;
+        color: #fff;
+      }
+    }
+  }
+}
+
+@media (width <= 850px) {
+  .layout {
+    flex-direction: column;
+    padding: 10px;
+    gap: 10px;
+    min-height: auto;
   }
 
-  p {
-    margin-bottom: 14px;
-    text-align: justify;
-    color: #cbd5e1;
+  .panel {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .canvas-wrap {
+    height: 350px;
+    flex: none;
+  }
+
+  .quantum-theory {
+    margin: 10px;
+  }
+
+  .theory-grid {
+    gap: 1rem;
+  }
+}
+
+.quantum-explainer {
+  max-width: 1100px;
+  margin: 50px auto;
+  padding: 40px;
+  background: radial-gradient(circle at top left, #0f172a, #020617);
+  border-radius: 30px;
+  border: 1px solid rgb(192 132 252 / 30%);
+  color: #f8fafc;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  .explainer-header {
+    text-align: center;
+    margin-bottom: 40px;
+
+    h2 {
+      font-size: 2.5rem;
+      color: #facc15;
+      text-shadow: 0 0 20px rgb(250 204 21 / 40%);
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #94a3b8;
+      font-size: 1.1rem;
+    }
+  }
+
+  .explainer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+  }
+
+  .q-card {
+    display: flex;
+    padding: 25px;
+    background: rgb(30 41 59 / 50%);
+    border-radius: 20px;
+    border: 1px solid rgb(255 255 255 / 5%);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    backdrop-filter: blur(10px);
+
+    &:hover {
+      transform: translateY(-10px) scale(1.02);
+      background: rgb(30 41 59 / 80%);
+    }
+
+    .q-icon {
+      font-size: 3rem;
+      margin-right: 20px;
+      filter: drop-shadow(0 0 10px rgb(255 255 255 / 20%));
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+      color: #38bdf8;
+    }
+
+    p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+
+      b {
+        color: #facc15;
+        font-weight: 600;
+      }
+
+      i {
+        color: #c084fc;
+        font-style: normal;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .glow-purple {
+    border-color: rgb(192 132 252 / 40%);
+
+    &:hover {
+      box-shadow: 0 0 30px rgb(192 132 252 / 20%);
+    }
+  }
+
+  .glow-cyan {
+    border-color: rgb(56 189 248 / 40%);
+
+    &:hover {
+      box-shadow: 0 0 30px rgb(56 189 248 / 20%);
+    }
+  }
+
+  .wide {
+    grid-column: 1 / -1;
+    background: linear-gradient(
+      90deg,
+      rgb(30 41 59 / 50%),
+      rgb(56 189 248 / 10%)
+    );
+  }
+}
+
+@media (width <= 768px) {
+  .quantum-explainer {
+    padding: 20px;
+
+    .q-card {
+      flex-direction: column;
+      text-align: center;
+
+      .q-icon {
+        margin: 0 0 15px;
+      }
+    }
   }
 }

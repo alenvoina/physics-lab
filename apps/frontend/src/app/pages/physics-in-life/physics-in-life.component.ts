@@ -1,6 +1,6 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { MatIcon } from '@angular/material/icon';
+import { Component, Renderer2, Inject } from '@angular/core';
+import { CommonModule, DOCUMENT } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 
 interface LifeApplication {
   title: string;
@@ -11,75 +11,72 @@ interface LifeApplication {
 
 @Component({
   selector: 'app-physics-in-life',
+  standalone: true,
+  imports: [CommonModule, MatIconModule],
   templateUrl: './physics-in-life.component.html',
   styleUrls: ['./physics-in-life.component.scss'],
-  imports: [CommonModule, MatIcon]
 })
 export class PhysicsInLifeComponent {
   selected: LifeApplication | null = null;
+  isOpen = false;
 
-items: LifeApplication[] = [
-  {
-    title: 'GPS и спутники',
-    icon: 'public',
-    description: 'Навигация и теория относительности.',
-    details: 'Для точности GPS учитывается замедление времени.'
-  },
-  {
-    title: 'Лазеры',
-    icon: 'flash_on',
-    description: 'Квантовая физика в действии.',
-    details: 'Используются в хирургии, сканерах и промышленности.'
-  },
-  {
-    title: 'Wi-Fi и связь',
-    icon: 'wifi',
-    description: 'Электромагнитные волны вокруг нас.',
-    details: 'Передача данных происходит через радиоволны.'
-  },
-  {
-    title: 'Смартфоны',
-    icon: 'smartphone',
-    description: 'Полупроводники и квантовые эффекты.',
-    details: 'Транзисторы — основа всей электроники.'
-  },
-  {
-    title: 'Самолёты',
-    icon: 'flight',
-    description: 'Аэродинамика и давление.',
-    details: 'Подъёмная сила возникает из-за разности давления.'
-  },
-  {
-    title: 'Электромобили',
-    icon: 'electric_car',
-    description: 'Электродвигатели и энергия.',
-    details: 'Преобразование электрической энергии в движение.'
-  },
-  {
-    title: 'Микроволновка',
-    icon: 'microwave',
-    description: 'Нагрев за счёт волн.',
-    details: 'Микроволны заставляют молекулы воды колебаться.'
-  },
-  {
-    title: 'Солнечные панели',
-    icon: 'wb_sunny',
-    description: 'Фотоэффект в реальной жизни.',
-    details: 'Свет превращается в электричество.'
-  },
-  {
-    title: 'МРТ',
-    icon: 'health_and_safety',
-    description: 'Медицина и ядерная физика.',
-    details: 'Использует магнитные поля и резонанс.'
-  }
-];
+  items: LifeApplication[] = [
+    {
+      title: 'GPS навигация',
+      icon: 'explore',
+      description: 'Эффекты теории относительности.',
+      details:
+        'Спутники GPS движутся быстро и находятся далеко от Земли. Без поправок на замедление времени ошибка навигации росла бы на 10 км каждый день.',
+    },
+    {
+      title: 'МРТ сканеры',
+      icon: 'biotech',
+      description: 'Ядерный магнитный резонанс.',
+      details:
+        'МРТ использует мощные магниты, чтобы выстроить протоны в теле человека, позволяя видеть внутренние органы без рентгена.',
+    },
+    {
+      title: 'Беспроводная зарядка',
+      icon: 'battery_charging_full',
+      description: 'Индукция Фарадея.',
+      details:
+        'Переменный ток в катушке зарядки создает магнитное поле, которое наводит ток в катушке вашего телефона.',
+    },
+    {
+      title: 'Оптоволокно',
+      icon: 'router',
+      description: 'Полное внутреннее отражение.',
+      details:
+        'Весь интернет работает на тонких стеклянных нитях, внутри которых свет отражается от стенок, передавая гигабайты данных.',
+    },
+    {
+      title: 'Авиация',
+      icon: 'flight_takeoff',
+      description: 'Уравнение Бернулли.',
+      details:
+        'Крыло самолета создано так, что давление сверху меньше, чем снизу. Эта разница буквально выталкивает многотонную машину в небо.',
+    },
+    {
+      title: 'Солнечная энергия',
+      icon: 'light_mode',
+      description: 'Фотоэлектрический эффект.',
+      details:
+        'Частицы света (фотоны) выбивают электроны из кремниевых пластин, создавая чистый электрический ток.',
+    },
+  ];
+
+  constructor(
+    private renderer: Renderer2,
+    @Inject(DOCUMENT) private document: Document,
+  ) {}
 
   open(item: LifeApplication) {
     this.selected = item;
+    this.isOpen = true;
   }
 
   close() {
     this.selected = null;
+    this.renderer.removeStyle(this.document.body, 'overflow');
   }
 }

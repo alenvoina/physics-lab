@@ -14,20 +14,16 @@ export class World {
   }
 
 step(dt: number) {
-  // 1. обнуляем силы
   this.bodies.forEach(body => body.force = new Vector(0, 0));
 
-  // 2. вычисляем силы
   for (let i = 0; i < this.bodies.length; i++) {
     for (let j = i + 1; j < this.bodies.length; j++) {
       applyGravity(this.bodies[i], this.bodies[j]);
     }
   }
 
-  // 3. обновляем позиции
   this.bodies.forEach(body => body.update(dt));
 
-  // 4. коллизии между телами
   for (let i = 0; i < this.bodies.length; i++) {
     for (let j = i + 1; j < this.bodies.length; j++) {
       this.resolveCollision(this.bodies[i], this.bodies[j]);

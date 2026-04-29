@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
-  standalone: false
+  standalone: false,
 })
 export class HeaderComponent {
   @Input() darkTheme = false;
@@ -26,7 +26,7 @@ export class HeaderComponent {
 
   openLoginModal() {
     this.dialog.open(this.loginModal, {
-      width: '300px'
+      width: '300px',
     });
   }
 }

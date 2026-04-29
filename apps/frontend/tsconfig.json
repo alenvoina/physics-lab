@@ -2,11 +2,9 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "rootDir": "../../",
     "paths": {
-      "@physics-lab/engine": [
-        "../../packages/physics-engine/src/index.ts"
-      ]
+      "@physics-lab/engine": ["../../packages/physics-engine/src/index.ts"]
     },
     "outDir": "./dist/out-tsc",
     "esModuleInterop": true,

@@ -4,8 +4,9 @@ import { Component, Input } from '@angular/core';
   selector: 'app-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
-  standalone: false
+  standalone: false,
 })
 export class FooterComponent {
   @Input() darkTheme = false;
+   isAboutOpen = false; 
 }

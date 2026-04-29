@@ -1,55 +1,56 @@
 export class QuantumTunneling {
-  x = 0;
+  energy = 1.0;
+  barrierHeight = 1.5;
+  barrierWidth = 80;
+  barrierX = 400;
   time = 0;
 
-  barrierX = 400;
-  barrierWidth = 80;
-  barrierHeight = 1;
-
-  energy = 0.8;
-
-  wavelength = 40;
-  amplitude = 1;
-
   step(dt: number) {
-    this.time += dt;
-    this.x += 100 * dt;
-  }
-
-  getTunnelProbability(): number {
-    const diff = this.barrierHeight - this.energy;
-    if (diff <= 0) return 1;
-
-    return Math.exp(-diff * this.barrierWidth * 0.04);
-  }
-
-  getWave(x: number): number {
-    const k = 2 * Math.PI / this.wavelength;
-
-    if (x < this.barrierX) {
-      return Math.sin(k * x - this.time * 5);
-    }
-
-    if (x >= this.barrierX && x <= this.barrierX + this.barrierWidth) {
-      const decay = Math.exp(-(x - this.barrierX) * 0.03 * (this.barrierHeight - this.energy + 0.5));
-      return Math.sin(k * x - this.time * 5) * decay;
-    }
-
-    const transmission = this.getTunnelProbability();
-    return Math.sin(k * x - this.time * 5) * transmission;
-  }
-
-  reset() {
-    this.x = 0;
-    this.time = 0;
-  }
-
-  setBarrier(h: number, w: number) {
-    this.barrierHeight = h;
-    this.barrierWidth = w;
+    this.time += dt * Math.sqrt(this.energy) * 6;
   }
 
   setEnergy(e: number) {
     this.energy = e;
+  }
+  setBarrier(h: number) {
+    this.barrierHeight = h;
+  }
+
+  getTunnelProbability(): number {
+    if (this.energy >= this.barrierHeight) return 1.0;
+
+    const kappa = Math.sqrt(this.barrierHeight - this.energy);
+    const prob = Math.exp(-2 * kappa * (this.barrierWidth / 25));
+    return Math.max(0.0001, Math.min(1, prob));
+  }
+
+  getWave(x: number): number {
+    const k = Math.sqrt(this.energy) * 0.05;
+    const T = this.getTunnelProbability();
+    const R = 1 - T;
+
+    if (x < this.barrierX) {
+      const incident = Math.sin(k * (x - this.barrierX) - this.time);
+      const reflected = R * Math.sin(-k * (x - this.barrierX) - this.time);
+      return incident + reflected;
+    } else if (x > this.barrierX + this.barrierWidth) {
+      return (
+        T * Math.sin(k * (x - this.barrierX - this.barrierWidth) - this.time)
+      );
+    } else {
+      const progress = (x - this.barrierX) / this.barrierWidth;
+      let envelope = 1;
+
+      if (this.energy < this.barrierHeight) {
+        envelope = Math.pow(Math.max(T, 0.0001), progress);
+      }
+      return envelope * Math.sin(k * (x - this.barrierX) - this.time);
+    }
+  }
+
+  reset() {
+    this.time = 0;
+    this.energy = 1.0;
+    this.barrierHeight = 1.5;
   }
 }

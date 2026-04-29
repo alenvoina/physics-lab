@@ -3,185 +3,195 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  ViewChild,
-  OnDestroy
+  OnDestroy,
+  ViewChild
 } from '@angular/core';
 
-import { NuclearReactorSystem, Particle } from '@physics-lab/engine';
+import { NuclearReactorSystem } from '@physics-lab/engine';
 
 @Component({
   selector: 'app-reactor',
   templateUrl: './nuclear-reaction.component.html',
   styleUrls: ['./nuclear-reaction.component.scss'],
+  standalone: true,
   imports: [CommonModule]
 })
 export class NuclearReactorComponent implements AfterViewInit, OnDestroy {
+  @ViewChild('canvasWrap', { static: true }) canvasWrapRef!: ElementRef<HTMLDivElement>;
   @ViewChild('canvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
 
   ctx!: CanvasRenderingContext2D;
-  sim = NuclearReactorSystem.create();
+
+  sim = NuclearReactorSystem.create(800, 600);
 
   animationId = 0;
-  energyHistory: number[] = [];
-  tempHistory: number[] = [];
-  maxHistory = 120;
   speed = 1;
 
-setSpeed(v: number) {
-  this.speed = v;
-}
+  private resizeObserver!: ResizeObserver;
+  private lastTime = 0;
+
+  setSpeed(v: string) {
+    this.speed = parseFloat(v);
+  }
+
+  setControl(v: string) {
+    this.sim.setControlLevel(parseFloat(v));
+  }
 
   ngAfterViewInit() {
-    const canvas = this.canvasRef.nativeElement;
-    canvas.width = 900;
-    canvas.height = 600;
+    this.ctx = this.canvasRef.nativeElement.getContext('2d', { alpha: false })!;
 
-    this.ctx = canvas.getContext('2d')!;
-    this.loop();
+    this.resizeObserver = new ResizeObserver(entries => {
+      for (let entry of entries) {
+        const { width, height } = entry.contentRect;
+
+        this.canvasRef.nativeElement.width = width;
+        this.canvasRef.nativeElement.height = height;
+
+        this.sim.setBounds(width, height);
+      }
+    });
+
+    this.resizeObserver.observe(this.canvasWrapRef.nativeElement);
+
+    this.lastTime = performance.now();
+    this.loop(this.lastTime);
   }
 
-  loop = () => {
-  this.sim.step(0.016 * this.speed);
-  this.energyHistory.push(this.sim.energy);
-  this.tempHistory.push(this.sim.temperature);
+  loop = (time: number) => {
+    const dt = Math.min((time - this.lastTime) / 1000, 0.05) * this.speed;
+    this.lastTime = time;
 
-  if (this.energyHistory.length > this.maxHistory) {
-    this.energyHistory.shift();
-    this.tempHistory.shift();
-  }
+    this.sim.step(dt);
 
-  this.draw();
-  this.animationId = requestAnimationFrame(this.loop);
-};
+    this.draw();
+
+    this.animationId = requestAnimationFrame(this.loop);
+  };
 
   draw() {
     const ctx = this.ctx;
-    const heat = Math.min(this.sim.temperature / 1200, 1);
+    const w = this.sim.width;
+    const h = this.sim.height;
 
-    const bg = ctx.createRadialGradient(450, 300, 50, 450, 300, 500);
-    bg.addColorStop(0, `rgba(${255}, ${200 - heat * 150}, 50, 0.5)`);
-    bg.addColorStop(1, '#020617');
+    ctx.fillStyle = 'rgba(2, 6, 23, 0.4)';
+    ctx.fillRect(0, 0, w, h);
 
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, 900, 600);
+    const rodHeight = h * this.sim.controlLevel;
+    const numRods = 10;
+    const rodWidth = w / (numRods * 2);
 
-    this.sim.particles.forEach(p => this.drawParticle(p));
+    for (let i = 0; i < numRods; i++) {
+      const rx = (i * 2 + 0.5) * rodWidth;
 
-    if (Math.random() < this.sim.reactions * 0.0005) {
-      ctx.fillStyle = 'rgba(255,255,255,0.05)';
-      ctx.fillRect(0, 0, 900, 600);
+      ctx.fillStyle = 'rgba(71, 85, 105, 0.3)';
+      ctx.fillRect(rx, 0, rodWidth, rodHeight);
+
+      ctx.fillStyle = 'rgba(56, 189, 248, 0.8)';
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = '#38bdf8';
+      ctx.fillRect(rx, rodHeight - 4, rodWidth, 4);
+      ctx.shadowBlur = 0;
     }
 
-    this.drawUI();
-    this.drawGraphs();
+    if (this.sim.meltdown) {
+      ctx.fillStyle = `rgba(239, 68, 68, ${Math.random() * 0.4 + 0.1})`;
+      ctx.fillRect(0, 0, w, h);
+    }
+
+    this.sim.particles.forEach(p => {
+      let color = '#fff';
+      let glow = 0;
+
+      if (p.type === 'neutron') { color = '#38bdf8'; glow = 6; }
+      else if (p.type === 'nucleus') { color = '#facc15'; glow = 15; }
+      else if (p.type === 'fragment') { color = '#ef4444'; glow = 8; }
+
+      ctx.beginPath();
+      ctx.arc(p.position.x, p.position.y, p.radius * (glow / 2), 0, Math.PI * 2);
+      ctx.fillStyle = `${color}22`;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(p.position.x, p.position.y, p.radius, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.fill();
+    });
+
+    this.drawHUD();
   }
 
-  drawGraphs() {
-  const ctx = this.ctx;
-
-  const x = 10;
-  const y = 500;
-  const width = 250;
-  const height = 80;
-
-  // фон
-  ctx.fillStyle = 'rgba(0,0,0,0.5)';
-  ctx.fillRect(x, y, width, height);
-
-  // ENERGY (желтая)
-  ctx.beginPath();
-  ctx.strokeStyle = '#facc15';
-
-  this.energyHistory.forEach((val, i) => {
-    const px = x + (i / this.maxHistory) * width;
-    const py = y + height - Math.min(val / 200, 1) * height;
-
-    if (i === 0) ctx.moveTo(px, py);
-    else ctx.lineTo(px, py);
-  });
-
-  ctx.stroke();
-
-  // TEMP (красная)
-  ctx.beginPath();
-  ctx.strokeStyle = '#ef4444';
-
-  this.tempHistory.forEach((val, i) => {
-    const px = x + (i / this.maxHistory) * width;
-    const py = y + height - Math.min(val / 1200, 1) * height;
-
-    if (i === 0) ctx.moveTo(px, py);
-    else ctx.lineTo(px, py);
-  });
-
-  ctx.stroke();
-
-  // подписи
-  ctx.fillStyle = 'white';
-  ctx.font = '10px monospace';
-  ctx.fillText('Energy', x + 5, y + 12);
-  ctx.fillText('Temp', x + 70, y + 12);
-}
-
-  drawParticle(p: Particle) {
+  drawHUD() {
     const ctx = this.ctx;
+    const w = this.sim.width;
+    const h = this.sim.height;
 
-    const color = p.type === 'neutron' ? '#38bdf8' : '#facc15';
+    const historyE = this.sim.telemetry.energyHistory;
+    const historyT = this.sim.telemetry.tempHistory;
+    const maxHistory = this.sim.telemetry.max;
 
-    const glow = ctx.createRadialGradient(
-      p.position.x,
-      p.position.y,
-      0,
-      p.position.x,
-      p.position.y,
-      p.radius * 6
-    );
+    const graphW = Math.min(220, w * 0.4);
+    const graphH = 60;
+    const gx = 20;
+    const gy = h - graphH - 20;
 
-    glow.addColorStop(0, color + 'cc');
-    glow.addColorStop(1, 'transparent');
-
-    ctx.fillStyle = glow;
-    ctx.beginPath();
-    ctx.arc(p.position.x, p.position.y, p.radius * 6, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.7)';
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.fillRect(gx, gy, graphW, graphH);
+    ctx.strokeRect(gx, gy, graphW, graphH);
 
     ctx.beginPath();
-    ctx.arc(p.position.x, p.position.y, p.radius, 0, Math.PI * 2);
-    ctx.fillStyle = color;
-    ctx.fill();
-  }
+    ctx.strokeStyle = '#ef4444';
+    ctx.lineWidth = 2;
 
-  drawUI() {
-    const ctx = this.ctx;
+    historyT.forEach((val, i) => {
+      const px = gx + (i / maxHistory) * graphW;
+      const py = gy + graphH - Math.min(val / 1200, 1) * graphH;
+      i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+    });
 
-    ctx.fillStyle = 'white';
-    ctx.fillText(`Reactions: ${this.sim.reactions}`, 10, 20);
-    ctx.fillText(`Temp: ${this.sim.temperature.toFixed(0)}`, 10, 40);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.strokeStyle = '#facc15';
+
+    historyE.forEach((val, i) => {
+      const px = gx + (i / maxHistory) * graphW;
+      const py = gy + graphH - Math.min(val / 100, 1) * graphH;
+      i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+    });
+
+    ctx.stroke();
+
+    ctx.fillStyle = '#fff';
+    ctx.font = '12px monospace';
+
+    ctx.fillText(`REACTIONS: ${this.sim.reactions}`, 20, 30);
+
+    ctx.fillStyle = this.sim.temperature > 800 ? '#ef4444' : '#fff';
+    ctx.fillText(`TEMP: ${this.sim.temperature.toFixed(0)} K`, 20, 50);
   }
 
   getStatusClass() {
-    if (this.sim.meltdown) return 'danger';
+    if (this.sim.meltdown) return 'danger-glow';
     if (this.sim.temperature > 800) return 'danger';
     if (this.sim.temperature > 400) return 'warning';
     return 'stable';
   }
 
   getStatusText() {
-    if (this.sim.meltdown) return '💥 MELTDOWN';
-    if (this.sim.temperature > 800) return 'Critical';
-    if (this.sim.temperature > 400) return 'Heating';
-    return 'Stable';
-  }
-
-  setControl(value: number) {
-    this.sim.controlLevel = value;
+    if (this.sim.meltdown) return '⚠️ CORE MELTDOWN';
+    if (this.sim.temperature > 800) return 'CRITICAL';
+    if (this.sim.temperature > 400) return 'HEATING';
+    return 'NOMINAL';
   }
 
   reset() {
-    this.sim = NuclearReactorSystem.create();
+    this.sim.reset();
   }
 
   ngOnDestroy() {
     cancelAnimationFrame(this.animationId);
+    if (this.resizeObserver) this.resizeObserver.disconnect();
   }
 }

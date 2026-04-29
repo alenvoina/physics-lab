@@ -1,29 +1,59 @@
+/* stylelint-disable selector-class-pattern */
+$dark-bg: #1e1f2e;
+$dark-text: #f8fafc;
+$dark-border: rgb(255 255 255 / 6%);
+$dark-hover-bg: rgb(255 255 255 / 8%);
+
 .header {
   position: sticky;
   top: 0;
   z-index: 1000;
-
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-
   padding: 0 20px;
-
-  background: #ffffff;
+  background: #fff;
   color: #1e1f2e;
-
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgb(0 0 0 / 10%);
 }
 
-
 .header.dark-theme {
-  background: #1e1f2e !important;
-  color: #f8fafc !important;
+  background-color: $dark-bg;
+  color: $dark-text;
+  border-bottom: 1px solid $dark-border;
+  box-shadow: 0 4px 20px rgb(0 0 0 / 20%);
+  transition: background-color 0.3s ease;
 
-  .mat-toolbar-row,
+  /* stylelint-disable-next-line selector-pseudo-element-no-unknown */
+  ::ng-deep .mat-toolbar-row,
   button,
   a {
-    color: #f8fafc !important;
+    color: $dark-text;
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  a:hover {
+    color: #fff;
+    opacity: 0.8;
+  }
+
+  button {
+    &:hover {
+      background-color: $dark-hover-bg;
+      color: #fff;
+    }
+
+    &:active {
+      background-color: rgb(255 255 255 / 12%);
+    }
+  }
+
+  /* stylelint-disable-next-line selector-pseudo-element-no-unknown */
+  ::ng-deep mat-icon {
+    color: $dark-text;
   }
 }
 
@@ -65,12 +95,10 @@
   top: 64px;
   left: 0;
   width: 100%;
-
   background: #1e1f2e;
   display: flex;
   flex-direction: column;
-  padding: 15px;
-
+  padding-top: 15px;
   gap: 10px;
   z-index: 999;
 }
@@ -82,7 +110,7 @@
   gap: 10px;
 }
 
-@media (max-width: 900px) {
+@media (width <= 900px) {
   .desktop-nav {
     display: none;
   }

@@ -1,65 +1,138 @@
-<div class="layout">
-  <div class="top">
-    <div class="panel">
-      <h2>⚛ Стабильность ядра</h2>
-
-      <div class="controls">
-        <button (click)="reset()">Сброс</button>
-
-        <label>
-          Скорость
-          <input
-            type="range"
-            min="0.2"
-            max="2"
-            step="0.1"
-            [(ngModel)]="speed"
-          />
-        </label>
+<div class="stability-root">
+  <div class="header">
+    <div class="title-group">
+      <div class="logo-icon">⚛</div>
+      <div>
+        <h1>Nuclear Stability Engine</h1>
+        <p>Isotope Decay & Binding Energy Simulation</p>
       </div>
-
-      <div class="legend">
-        <div><span class="dot stable"></span> Стабильное</div>
-        <div><span class="dot unstable"></span> Нестабильное</div>
-      </div>
-
-      <p class="hint">
-        Наведи на ядро, чтобы увидеть параметры.  
-        Нестабильные ядра со временем распадаются.
-      </p>
     </div>
-
-    <canvas #canvas (mousemove)="onMouseMove($event)"></canvas>
   </div>
 
-  <div class="theory">
-    <h3>Что происходит?</h3>
+  <div class="layout">
+    <div class="top-section">
+      <div class="panel glass-panel">
+        <h2>System Parameters</h2>
 
-    <p>
-      Каждое ядро состоит из протонов и нейтронов. Протоны отталкиваются
-      электрически, но удерживаются вместе сильным ядерным взаимодействием.
-    </p>
+        <div class="controls">
+          <div class="control-group">
+            <label>Time Dialation (Speed)</label>
+            <div class="slider-wrapper">
+              <input
+                type="range"
+                min="0.1"
+                max="3"
+                step="0.1"
+                value="1"
+                (input)="setSpeed($any($event.target).value)"
+              />
+              <span class="value-display">{{ speed.toFixed(1) }}x</span>
+            </div>
+          </div>
 
-    <p>
-      Если баланс нарушается (слишком много или мало нейтронов),
-      ядро становится нестабильным и стремится перейти в более устойчивое состояние.
-    </p>
+          <button class="btn-primary" (click)="reset()">
+            <span class="icon">↻</span> Reseed Isotopes
+          </button>
+        </div>
 
-    <p class="formula">
-      Чем ближе отношение n/p к оптимальному (~1.2), тем выше стабильность.
-    </p>
+        <div class="legend">
+          <h3>Visual Legend</h3>
+          <div class="legend-item">
+            <span class="dot stable"></span> Optimal Binding (Stable)
+          </div>
+          <div class="legend-item">
+            <span class="dot unstable"></span> Unstable N/Z Ratio
+          </div>
+          <div class="legend-item">
+            <span class="dot flash"></span> Radiation Burst (Decay)
+          </div>
+        </div>
 
-    <h4>Как читать симуляцию:</h4>
-    <ul>
-      <li><b>Зелёный</b> — стабильное ядро</li>
-      <li><b>Красный</b> — нестабильное</li>
-      <li><b>Вспышка</b> — акт распада</li>
-    </ul>
+        <p class="hint">
+          <b>Hover</b> over nuclei to inspect nucleon count. Unstable isotopes
+          will spontaneously undergo Alpha or Beta decay.
+        </p>
+      </div>
 
-    <h4>Энергия связи:</h4>
-    <p>
-      Чем выше энергия связи, тем прочнее удерживаются нуклоны,
-      и тем устойчивее ядро.
-    </p>
+      <div class="canvas-wrap" #canvasWrap>
+        <canvas
+          #canvas
+          (mousemove)="onMouseMove($event)"
+          (mouseleave)="onMouseLeave()"
+        ></canvas>
+
+        <div class="hud-corner top-left"></div>
+        <div class="hud-corner top-right"></div>
+        <div class="hud-corner bottom-left"></div>
+        <div class="hud-corner bottom-right"></div>
+      </div>
+    </div>
+
+    <div class="stability-guide">
+      <div class="guide-header">
+        <h2>⚖️ Архитектура ядра: Поиск равновесия</h2>
+        <p>Почему природа не любит излишеств и как работает ядерный клей</p>
+      </div>
+
+      <div class="guide-grid">
+        <div class="guide-card blue-glow">
+          <div class="card-icon">🧲</div>
+          <div class="card-content">
+            <h3>Ядерный клей</h3>
+            <p>
+              Протоны ненавидят друг друга из-за положительного заряда. Их
+              удерживает только <b>Сильное ядерное взаимодействие</b>. Нейтроны
+              здесь выступают в роли «клея»: они добавляют притяжения, но не
+              добавляют электрического расталкивания.
+            </p>
+          </div>
+        </div>
+
+        <div class="guide-card valley-glow">
+          <div class="card-icon">🏔️</div>
+          <div class="card-content">
+            <h3>Долина стабильности</h3>
+            <p>
+              Для каждого химического элемента существует «золотая середина» —
+              идеальное соотношение нейтронов к протонам ($N/Z$). Если
+              отклониться слишком далеко, ядро становится тяжелым или
+              перенапряженным и «сбрасывает» лишнее через распад.
+            </p>
+          </div>
+        </div>
+
+        <div class="guide-card wide mechanism-card">
+          <div class="card-icon">🛠️</div>
+          <div class="card-content">
+            <h3>Как ядро исправляет себя:</h3>
+            <div class="mechanism-flex">
+              <div class="mech-item">
+                <span class="badge alpha">Alpha</span>
+                <p>
+                  Выброс целого блока из 2p и 2n. Самый быстрый способ похудеть
+                  для тяжелых ядер.
+                </p>
+              </div>
+              <div class="mech-item">
+                <span class="badge beta">Beta</span>
+                <p>
+                  Трансформация! Нейтрон превращается в протон (или наоборот),
+                  чтобы выровнять баланс внутри системы.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pro-tip">
+        <p>
+          💡 <b>Задание исследователя:</b> Найди в симуляторе ядро с самой
+          низкой стабильностью (красное свечение). Наведи на него курсор и
+          проследи, какой параметр ($N$ или $Z$) изменится после «вспышки»
+          распада.
+        </p>
+      </div>
+    </div>
   </div>
 </div>

@@ -1,49 +1,81 @@
 <div class="simulations-page">
+  <div class="bg-glow"></div>
 
   <section class="hero">
-    <div class="container hero-content">
-      <div class="hero-text">
-        <h1>Добро пожаловать в <span>Physics Lab</span></h1>
-        <p>Погрузитесь в мир физики: механика, квантовые эффекты и ядерные реакции — через интерактивные симуляции.</p>
-      </div>
-      <div class="hero-animation">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <span class="badge">Интерактивная среда</span>
+          <h1>
+            Добро пожаловать в <span class="gradient-text">Physics Lab</span>
+          </h1>
+          <p>
+            Погрузитесь в мир физики через высокоточные симуляции: от
+            классической механики до квантовых явлений.
+          </p>
+          <div class="hero-actions">
+            <button class="primary-btn">Начать обучение</button>
+            <button class="secondary-btn">Посмотреть демо</button>
+          </div>
         </div>
+        <div class="hero-visual">
+          <div class="orbit">
+            <div class="electron"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <div class="container">
-    <section class="simulation-category" *ngFor="let category of simulationCategories">
-      
+  <div class="container main-content">
+    <section
+      class="simulation-category"
+      *ngFor="let category of simulationCategories"
+      [id]="category.id"
+    >
       <div class="category-header">
-        <h2 [style.--title-color]="category.color">{{ category.title }}</h2>
+        <div class="title-wrapper">
+          <div
+            class="category-dot"
+            [style.background-color]="category.color"
+          ></div>
+          <h2>{{ category.title }}</h2>
+        </div>
+        <div class="category-line"></div>
       </div>
 
-      <div class="cards-container">
-        <mat-card class="sim-card" *ngFor="let sim of category.simulations" [style.--accent-color]="category.color">
-          
-          <div class="card-accent"></div> <mat-card-header>
-            <mat-card-title>{{ sim.title }}</mat-card-title>
-          </mat-card-header>
-          
-          <mat-card-content>
+      <div class="cards-grid">
+        <div
+          class="premium-card"
+          *ngFor="let sim of category.simulations"
+          [style.--accent]="category.color"
+        >
+          <div class="card-inner">
+            <div class="card-top">
+              <div class="icon-wrapper">
+                <mat-icon>science</mat-icon>
+              </div>
+              <span class="sim-tag">Simulation</span>
+            </div>
+
+            <h3>{{ sim.title }}</h3>
             <p class="description">{{ sim.description }}</p>
+
             <ul class="feature-list">
               <li *ngFor="let point of sim.points">
-                <mat-icon class="list-icon" [style.color]="category.color">check_circle</mat-icon>
+                <mat-icon class="check">done</mat-icon>
                 <span>{{ point }}</span>
               </li>
             </ul>
-          </mat-card-content>
-          
-          <mat-card-actions>
-            <button mat-stroked-button class="start-btn" [routerLink]="sim.link">
-              Start Simulation
+
+            <button class="start-sim-btn" [routerLink]="sim.link">
+              <span>Запустить симуляцию</span>
+              <mat-icon>arrow_forward</mat-icon>
             </button>
-          </mat-card-actions>
-          
-        </mat-card>
+          </div>
+          <div class="card-bg-shape"></div>
+        </div>
       </div>
     </section>
   </div>
-
 </div>

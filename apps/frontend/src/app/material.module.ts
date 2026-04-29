@@ -5,11 +5,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
-  exports: [
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatDialogModule,
-  ]
+  exports: [MatToolbarModule, MatButtonModule, MatIconModule, MatDialogModule],
 })
 export class MaterialModule {}

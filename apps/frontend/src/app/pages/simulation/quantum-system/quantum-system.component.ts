@@ -1,70 +1,68 @@
+import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
   ElementRef,
-  ViewChild,
   OnDestroy,
+  ViewChild,
 } from '@angular/core';
 import { QuantumSystem } from '@physics-lab/engine';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-quantum',
   templateUrl: './quantum-system.component.html',
   styleUrls: ['./quantum-system.component.scss'],
-  imports: [CommonModule]
+  standalone: true,
+  imports: [CommonModule],
 })
 export class QuantumComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('canvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('canvasWrap', { static: true })
+  canvasWrapRef!: ElementRef<HTMLDivElement>;
+  @ViewChild('canvas', { static: true })
+  canvasRef!: ElementRef<HTMLCanvasElement>;
+
   ctx!: CanvasRenderingContext2D;
-  system = new QuantumSystem();
+  sim = new QuantumSystem();
+
   animationId = 0;
-  stepCounter = 0;
-
+  lastTime = 0;
   mode: 'levels' | 'wave' | 'states' = 'levels';
-
-  ngAfterViewInit() {
-   const canvas = this.canvasRef.nativeElement;
-const ctx = canvas.getContext('2d')!;
-const dpr = window.devicePixelRatio || 1;
-const width = 900;
-const height = 600;
-
-canvas.width = width * dpr;
-canvas.height = height * dpr;
-canvas.style.width = width + 'px';
-canvas.style.height = height + 'px';
-
-    this.ctx = canvas.getContext('2d')!;
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.resetTransform?.();
-    ctx.scale(dpr, dpr);
-
-    this.ctx = ctx;
-
-    this.loop();
-  }
-
-  loop = () => {
-    this.update();
-    this.draw();
-    this.animationId = requestAnimationFrame(this.loop);
-  };
-
-  update() {
-    this.system.step(0.02);
-    this.stepCounter++;
-  }
+  private resizeObserver!: ResizeObserver;
 
   setMode(mode: 'levels' | 'wave' | 'states') {
     this.mode = mode;
   }
 
+  ngAfterViewInit() {
+    this.ctx = this.canvasRef.nativeElement.getContext('2d', { alpha: false })!;
+
+    this.resizeObserver = new ResizeObserver((entries) => {
+      const { width, height } = entries[0].contentRect;
+      this.canvasRef.nativeElement.width = width;
+      this.canvasRef.nativeElement.height = height;
+      this.sim.width = width;
+      this.sim.height = height;
+    });
+    this.resizeObserver.observe(this.canvasWrapRef.nativeElement);
+
+    this.lastTime = performance.now();
+    this.loop(this.lastTime);
+  }
+
+  loop = (time: number) => {
+    const dt = Math.min((time - this.lastTime) / 1000, 0.05);
+    this.lastTime = time;
+
+    this.sim.step(dt);
+    this.draw();
+    this.animationId = requestAnimationFrame(this.loop);
+  };
+
   draw() {
     const ctx = this.ctx;
 
-    ctx.fillStyle = '#020617';
-    ctx.fillRect(0, 0, 900, 600);
+    ctx.fillStyle = 'rgba(2, 6, 23, 0.3)';
+    ctx.fillRect(0, 0, this.sim.width, this.sim.height);
 
     switch (this.mode) {
       case 'levels':
@@ -78,81 +76,128 @@ canvas.style.height = height + 'px';
         break;
     }
 
-    this.drawUI();
+    this.drawHUD();
   }
 
   drawLevels() {
     const ctx = this.ctx;
+    const cx = this.sim.width / 2;
+    const cy = this.sim.height / 2;
+    const baseRadius = Math.min(cx, cy) / 4;
 
-    this.system.electrons.forEach((e, i) => {
+    ctx.beginPath();
+    ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+    ctx.fillStyle = '#facc15';
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = '#facc15';
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    for (let n = 1; n <= 3; n++) {
       ctx.beginPath();
-      ctx.arc(450, 300, e.radius, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+      ctx.arc(cx, cy, baseRadius * n, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(56, 189, 248, 0.15)`;
+      ctx.lineWidth = 1;
       ctx.stroke();
+    }
 
-      const pos = this.system.getElectronPosition(e, i);
+    this.sim.electrons.forEach((e) => {
+      const pos = this.sim.getElectronPosition(e);
+
       ctx.beginPath();
-      ctx.arc(pos.x, pos.y, 6, 0, Math.PI * 2);
+      ctx.arc(pos.x, pos.y, 4, 0, Math.PI * 2);
       ctx.fillStyle = '#38bdf8';
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = '#38bdf8';
       ctx.fill();
+      ctx.shadowBlur = 0;
     });
   }
 
   drawWave() {
     const ctx = this.ctx;
+    const cx = this.sim.width / 2;
+    const cy = this.sim.height / 2;
+    const maxR = Math.min(cx, cy) * 0.9;
 
-    for (let r = 0; r < 300; r += 2) {
-      const amp = this.system.getWaveAmplitude(r, 1);
+    for (let r = maxR; r > 0; r -= 2) {
+      const amp = this.sim.getWaveAmplitude(r, maxR);
+      const intensity = Math.min(Math.abs(amp), 1);
 
       ctx.beginPath();
-      ctx.arc(450, 300, r, 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(56,189,248,${Math.min(Math.abs(amp), 1)})`;
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+
+      if (amp > 0) {
+        ctx.strokeStyle = `rgba(56, 189, 248, ${intensity})`;
+      } else {
+        ctx.strokeStyle = `rgba(192, 132, 252, ${intensity})`;
+      }
+      ctx.lineWidth = 2.5;
       ctx.stroke();
     }
   }
 
-drawUI() {
-  const ctx = this.ctx;
+  drawStates() {
+    const ctx = this.ctx;
+    const w = this.sim.width;
+    const h = this.sim.height;
 
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-  ctx.fillRect(0, 0, 900, 80);
+    const startX = w * 0.2;
+    const endX = w * 0.8;
 
-  ctx.fillStyle = 'white';
-  ctx.font = `14px monospace`;
-  ctx.textBaseline = 'top';
-  ctx.textAlign = 'left';
+    for (let n = 1; n <= 4; n++) {
+      const energy = -13.6 / (n * n);
+      const y = h * 0.1 + ((energy - -13.6) / 13.6) * (h * 0.7);
 
-  const lines = [
-    `Mode: ${this.mode}`,
-    `Electrons: ${this.system.electrons.length}`,
-    `Step: ${this.system.stepCount?.toFixed(0) || 0}`
-  ];
+      ctx.beginPath();
+      ctx.moveTo(startX, y);
+      ctx.lineTo(endX, y);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
 
-  lines.forEach((line, i) => {
-    ctx.fillText(line, 10, 10 + i * 20);
-  });
-}
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '12px "JetBrains Mono", monospace';
+      ctx.fillText(`n=${n}`, startX - 35, y + 4);
+      ctx.fillText(`${energy.toFixed(2)} eV`, endX + 10, y + 4);
+    }
 
-drawStates() {
-  const ctx = this.ctx;
+    const counts = [0, 0, 0, 0, 0];
+    this.sim.electrons.forEach((e) => {
+      const y = h * 0.1 + ((e.energy - -13.6) / 13.6) * (h * 0.7);
 
-  ctx.fillStyle = 'white';
-  ctx.font = `14px monospace`;
-  ctx.textBaseline = 'top';
-  ctx.textAlign = 'left';
+      const offset = counts[e.n] * 25;
+      counts[e.n]++;
+      const ex = startX + 50 + offset;
 
-  const startY = 100;
+      ctx.beginPath();
+      ctx.arc(ex, y, 6, 0, Math.PI * 2);
+      ctx.fillStyle = '#38bdf8';
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = '#38bdf8';
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    });
+  }
 
-  this.system.electrons.forEach((e, i) => {
-    ctx.fillText(
-      `n=${e.n}  E=${e.energy.toFixed(2)} eV`,
-      10,
-      startY + i * 20
-    );
-  });
-}
+  drawHUD() {
+    const ctx = this.ctx;
+
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.8)';
+    ctx.strokeStyle = 'rgba(56, 189, 248, 0.3)';
+    ctx.fillRect(10, 10, 200, 75);
+    ctx.strokeRect(10, 10, 200, 75);
+
+    ctx.fillStyle = '#38bdf8';
+    ctx.font = '12px "JetBrains Mono", monospace';
+    ctx.fillText(`MODE: ${this.mode.toUpperCase()}`, 20, 30);
+    ctx.fillStyle = '#f8fafc';
+    ctx.fillText(`ELECTRONS: ${this.sim.electrons.length}`, 20, 50);
+    ctx.fillText(`TICKS: ${this.sim.stepCount}`, 20, 70);
+  }
 
   ngOnDestroy() {
     cancelAnimationFrame(this.animationId);
+    if (this.resizeObserver) this.resizeObserver.disconnect();
   }
 }

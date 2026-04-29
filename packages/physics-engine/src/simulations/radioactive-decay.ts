@@ -1,5 +1,31 @@
 export type DecayType = 'alpha' | 'beta' | 'gamma';
 
+export class Emission {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  type: DecayType;
+  life = 1.0;
+
+  constructor(x: number, y: number, type: DecayType) {
+    this.x = x;
+    this.y = y;
+    this.type = type;
+    const angle = Math.random() * Math.PI * 2;
+    const speed = type === 'alpha' ? 20 : type === 'beta' ? 80 : 0;
+    this.vx = Math.cos(angle) * speed;
+    this.vy = Math.sin(angle) * speed;
+  }
+
+  step(dt: number) {
+    this.x += this.vx * dt;
+    this.y += this.vy * dt;
+    this.life -=
+      dt * (this.type === 'gamma' ? 1.5 : this.type === 'beta' ? 3 : 1);
+  }
+}
+
 export class Atom {
   x: number;
   y: number;
@@ -14,79 +40,82 @@ export class Atom {
 
 export class RadioactiveDecaySystem {
   atoms: Atom[] = [];
+  emissions: Emission[] = [];
 
-  decayConstant = 0.01;
   time = 0;
-  decayType: DecayType = 'beta';
+  decayType: DecayType = 'alpha';
+  width = 800;
+  height = 400;
 
-  history: { time: number; remaining: number }[] = [];
+  lambdas = {
+    alpha: 0.15,
+    beta: 0.05,
+    gamma: 0.015,
+  };
 
-  constructor(count = 100) {
-    this.generateAtoms(count);
+  constructor(public initialCount: number) {}
+
+  get lambda() {
+    return this.lambdas[this.decayType];
+  }
+  getRemaining() {
+    return this.atoms.filter((a) => !a.decayed).length;
+  }
+  getDecayed() {
+    return this.initialCount - this.getRemaining();
+  }
+  getHalfLife() {
+    return Math.LN2 / this.lambda;
   }
 
-  generateAtoms(count: number) {
-    this.atoms = [];
-    const centerX = 450;
-    const centerY = 200;
+  setDecayType(type: DecayType) {
+    this.decayType = type;
+    this.reset();
+  }
 
-    for (let i = 0; i < count; i++) {
-      this.atoms.push(
-        new Atom(
-          centerX + (Math.random() - 0.5) * 250,
-          centerY + (Math.random() - 0.5) * 200
-        )
-      );
+  reset() {
+    this.time = 0;
+    this.atoms = [];
+    this.emissions = [];
+
+    const cols = Math.ceil(
+      Math.sqrt(this.initialCount * (this.width / this.height)),
+    );
+    const rows = Math.ceil(this.initialCount / cols);
+    const paddingX = this.width * 0.1;
+    const paddingY = this.height * 0.1;
+    const stepX = (this.width - paddingX * 2) / cols;
+    const stepY = (this.height - paddingY * 2) / rows;
+
+    let count = 0;
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < cols; j++) {
+        if (count++ >= this.initialCount) break;
+        const x = paddingX + j * stepX + (Math.random() - 0.5) * stepX * 0.8;
+        const y = paddingY + i * stepY + (Math.random() - 0.5) * stepY * 0.8;
+        this.atoms.push(new Atom(x, y));
+      }
     }
   }
 
   step(dt: number) {
     this.time += dt;
 
-    this.atoms.forEach(atom => {
-      if (atom.decayed) return;
+    const decayProb = 1 - Math.exp(-this.lambda * dt);
 
-      const p = this.getDecayProbability(dt);
+    this.atoms.forEach((a) => {
+      if (!a.decayed && Math.random() < decayProb) {
+        a.decayed = true;
+        a.decayProgress = 1.0;
+        this.emissions.push(new Emission(a.x, a.y, this.decayType));
+      }
 
-      if (Math.random() < p) {
-        atom.decayed = true;
-        atom.decayProgress = 1;
+      if (a.decayed && a.decayProgress > 0) {
+        a.decayProgress = Math.max(0, a.decayProgress - dt * 2);
       }
     });
 
-    this.history.push({
-      time: this.time,
-      remaining: this.getRemaining(),
-    });
-  }
-
-  getDecayProbability(dt: number): number {
-    return 1 - Math.exp(-this.decayConstant * dt);
-  }
-
-  getRemaining(): number {
-    return this.atoms.filter(a => !a.decayed).length;
-  }
-
-  getDecayed(): number {
-    return this.atoms.filter(a => a.decayed).length;
-  }
-
-  reset(count = 100) {
-    this.time = 0;
-    this.history = [];
-    this.generateAtoms(count);
-  }
-
-  setDecayType(type: DecayType) {
-    this.decayType = type;
-
-    if (type === 'alpha') this.decayConstant = 0.02;
-    if (type === 'beta') this.decayConstant = 0.01;
-    if (type === 'gamma') this.decayConstant = 0.005;
-  }
-
-  getHalfLife(): number {
-    return Math.log(2) / this.decayConstant;
+    this.emissions.forEach((e) => e.step(dt));
+    this.emissions = this.emissions.filter((e) => e.life > 0);
   }
 }

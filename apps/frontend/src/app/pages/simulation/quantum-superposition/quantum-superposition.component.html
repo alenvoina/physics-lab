@@ -1,36 +1,145 @@
-<div class="container">
-  <div class="panel">
-    <h2>⚛ Superposition Lab</h2>
-
-    <button (click)="addState()">+ State</button>
-    <button (click)="measure()">Measure</button>
-
-    <p>
-      Multiple quantum states exist simultaneously. Their amplitudes interfere
-      to form a single wave.
-    </p>
+<div class="superposition-root">
+  <div class="header">
+    <div class="title-group">
+      <div class="logo-icon">ψ</div>
+      <div>
+        <h1>Quantum Superposition Lab</h1>
+        <p>Interference, Phase, and Wavefunction Collapse</p>
+      </div>
+    </div>
   </div>
 
-  <canvas #canvas></canvas>
-</div>
+  <div class="layout">
+    <div class="panel glass-panel">
+      <h2>Simulation Controls</h2>
 
-<div class="theory">
-  <h3>⚛ Quantum Superposition</h3>
+      <div class="system-stats">
+        <div class="stat-box">
+          <span>Active States</span>
+          <strong>{{ system.states.length }} / 8</strong>
+        </div>
+        <div
+          class="stat-box"
+          [ngClass]="{ collapsed: lastMeasurement !== null }"
+        >
+          <span>System Status</span>
+          <strong>{{
+            lastMeasurement !== null ? 'MEASURED' : 'SUPERPOSITION'
+          }}</strong>
+        </div>
+      </div>
 
-  <p>
-    A quantum system does not choose one state — it exists in all possible states at once.
-  </p>
+      <div class="controls">
+        <button
+          class="btn-action"
+          (click)="addState()"
+          [disabled]="system.states.length >= 8"
+        >
+          <span class="icon">+</span> Inject State
+        </button>
+        <button class="btn-measure" (click)="measure()">
+          <span class="icon">👁</span> Measure (Observe)
+        </button>
+        <button class="btn-reset" (click)="reset()">
+          <span class="icon">↻</span> Reset System
+        </button>
+      </div>
 
-  <p>
-    Each state contributes like a wave. When combined, they interfere,
-    creating a new pattern.
-  </p>
+      <div class="info-box" *ngIf="lastMeasurement !== null">
+        System collapsed into State <b>|{{ lastMeasurement }}⟩</b>. <br />
+        All other probability amplitudes have been reduced to zero.
+      </div>
 
-  <p>
-    The height of the wave represents probability.
-  </p>
+      <p class="hint">
+        Multiple quantum states exist simultaneously. Their complex amplitudes
+        interfere to form a single continuous probability wave.
+      </p>
+    </div>
 
-  <p>
-    When you measure the system, it collapses into a single state.
-  </p>
+    <div class="canvas-wrap glass-panel" #canvasWrap>
+      <canvas #canvas></canvas>
+
+      <div class="hud-corner top-left"></div>
+      <div class="hud-corner top-right"></div>
+      <div class="hud-corner bottom-left"></div>
+      <div class="hud-corner bottom-right"></div>
+
+      <div class="hud-label phasor-label">PHASOR DIAGRAM</div>
+      <div class="hud-label wave-label">PROBABILITY DENSITY WAVE</div>
+    </div>
+  </div>
+
+  <div class="superposition-guide">
+    <div class="guide-header">
+      <h2>🌀 Лаборатория Суперпозиции: Гид по Реальности</h2>
+      <p>Узнай, как частицы умудряются делать несколько дел одновременно</p>
+    </div>
+
+    <div class="guide-grid">
+      <div class="guide-card primary">
+        <div class="card-icon">🌀</div>
+        <div class="card-content">
+          <h3>Многоликая частица</h3>
+          <p>
+            В обычном мире монетка лежит либо орлом, либо решкой. В квантовом
+            мире, пока монетка крутится, она — и орел, и решка
+            <b>одновременно</b>. Это и есть суперпозиция. Мы описываем это
+            состояние уравнением: $$\psi = \alpha|0\rangle + \beta|1\rangle$$
+            Где $\alpha$ и $\beta$ — это не просто шансы, а «амплитуды», которые
+            могут быть даже отрицательными!
+          </p>
+        </div>
+      </div>
+
+      <div class="guide-card interference">
+        <div class="card-icon">🌊</div>
+        <div class="card-content">
+          <h3>Танец Волн</h3>
+          <p>
+            Когда ты добавляешь новое состояние (Inject State), ты добавляешь
+            новую волну. Если пик одной волны встречается с пиком другой — они
+            усиливаются (**конструктивная интерференция**). Если пик встречается
+            с ямой — они гасят друг друга (**деструктивная интерференция**).
+            Твой график плотности вероятности показывает результат этого
+            сражения волн.
+          </p>
+        </div>
+      </div>
+
+      <div class="guide-card collapse">
+        <div class="card-icon">👁️</div>
+        <div class="card-content">
+          <h3>Взгляд, меняющий всё</h3>
+          <p>
+            Как только ты нажимаешь кнопку <b>Measure</b>, магия исчезает.
+            Природа «пугается» наблюдателя и моментально выбирает один вариант.
+            Это называется <b>Коллапсом волновой функции</b>. Вероятность того,
+            какой вариант выберет система, равна квадрату амплитуды: $P =
+            |\alpha|^2$.
+          </p>
+        </div>
+      </div>
+
+      <div class="guide-card info">
+        <div class="card-icon">🧭</div>
+        <div class="card-content">
+          <h3>Зачем нужен Фазор?</h3>
+          <p>
+            Желтые стрелочки слева (Phasor Diagram) — это часы квантового мира.
+            Длина стрелки — это «сила» состояния, а её угол — это <b>фаза</b>.
+            Именно разница в углах решает, будут ли состояния дружить
+            (складываться) или воевать (вычитаться).
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pro-tip">
+      <p>
+        💡 <b>Совет исследователя:</b> Попробуй добавить 3-4 состояния и
+        посмотри на график. Видишь, как меняется узор? Это квантовый компьютер в
+        миниатюре вычисляет результат интерференции!
+      </p>
+    </div>
+  </div>
 </div>

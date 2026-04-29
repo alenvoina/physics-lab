@@ -5,7 +5,9 @@
 
 .dark-theme {
   background-color: #0b0c17 !important;
-  color: #f8fafc;            
-  transition: background 1s, color 0.3s;
-  margin-bottom: 0; 
+  color: #f8fafc;
+  transition:
+    background 1s,
+    color 0.3s;
+  margin-bottom: 0;
 }

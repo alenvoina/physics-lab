@@ -1,22 +1,75 @@
-<div class="gallery">
-  <h1>Галерея экспериментов</h1>
-<input type="text" placeholder="Поиск..." [(ngModel)]="query" />
-  <div class="grid">
-    <div class="card" *ngFor="let exp of filtered" (click)="open(exp)">
-      <img [src]="exp.image" alt="" />
+<div class="gallery-root">
+  <header class="hero">
+    <div class="hero-content">
+      <span class="eyebrow">Virtual Laboratory</span>
+      <h1>Архив Экспериментов</h1>
+      <p>
+        Исследуйте ключевые открытия, изменившие наше понимание Вселенной — от
+        квантовой запутанности до искривления пространства-времени.
+      </p>
 
-      <div class="overlay">
-        <h3>{{ exp.title }}</h3>
-        <p>{{ exp.short }}</p>
+      <div class="search-bar">
+        <svg
+          class="search-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          />
+        </svg>
+        <input
+          type="text"
+          placeholder="Найти эксперимент или категорию..."
+          (input)="onSearch($event)"
+        />
       </div>
     </div>
-  </div>
-</div>
+  </header>
 
-<div class="modal" *ngIf="selected" (click)="close()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-    <h2>{{ selected.title }}</h2>
-    <p>{{ selected.full }}</p>
-    <button mat-raised-button color="accent" (click)="close()">Закрыть</button>
+  <main class="grid-container">
+    <div class="grid">
+      <div class="card" *ngFor="let exp of filtered" (click)="open(exp)">
+        <div class="card-image-wrap">
+          <img [src]="exp.image" [alt]="exp.title" loading="lazy" />
+          <div class="category-badge">{{ exp.category }}</div>
+        </div>
+
+        <div class="card-content">
+          <h3>{{ exp.title }}</h3>
+          <p>{{ exp.short }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="no-results" *ngIf="filtered.length === 0">
+      <p>По вашему запросу ничего не найдено.</p>
+    </div>
+  </main>
+
+  <div class="modal-backdrop" *ngIf="selected" (click)="close()">
+    <div class="modal-window" (click)="$event.stopPropagation()">
+      <button class="btn-close" (click)="close()" aria-label="Закрыть">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <div class="modal-image">
+        <img [src]="selected.image" [alt]="selected.title" />
+        <span class="modal-tag">{{ selected.category }}</span>
+      </div>
+
+      <div class="modal-body">
+        <h2>{{ selected.title }}</h2>
+        <p class="modal-short">{{ selected.short }}</p>
+        <div class="divider"></div>
+        <p class="modal-full">{{ selected.full }}</p>
+      </div>
+    </div>
   </div>
 </div>

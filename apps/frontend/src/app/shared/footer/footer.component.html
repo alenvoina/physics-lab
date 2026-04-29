@@ -1,20 +1,23 @@
 <footer class="footer" [class.dark-theme]="darkTheme">
   <div class="container">
-
     <div class="left">
       <span class="copy">© 2026 Alen Voina ♥ NASA</span>
     </div>
 
     <div class="center">
-      <a routerLink="/simulation">Classical</a>
-      <a routerLink="/quantum">Quantum</a>
-      <a routerLink="/nuclear">Nuclear</a>
+      <a [routerLink]="['simulations']" fragment="mechanics">Classical</a>
+      <a [routerLink]="['simulations']" fragment="quantum">Quantum</a>
+      <a [routerLink]="['simulations']" fragment="nuclear">Nuclear</a>
     </div>
 
     <div class="right">
-      <button mat-button>About</button>
-      <button mat-button>Contact</button>
+      <button class="premium-btn" (click)="isAboutOpen = true">
+        <mat-icon>fingerprint</mat-icon>
+        <span>About Creator</span>
+      </button>
     </div>
 
+    <app-about-overlay *ngIf="isAboutOpen" (closeOverlay)="isAboutOpen = false">
+    </app-about-overlay>
   </div>
 </footer>

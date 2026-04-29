@@ -16,9 +16,6 @@ import { NuclearReactorComponent } from './pages/simulation/nuclear-reaction/nuc
 import { NuclearStabilityComponent } from './pages/simulation/nuclear-stability/nuclear-stability.component';
 import { PhysicsInLifeComponent } from './pages/physics-in-life/physics-in-life.component';
 import { ExperimentsGalleryComponent } from './pages/experiments-gallery/experiments-gallery.component';
-import { PhysicsFactsComponent } from './pages/physics-facts/physics-facts.component';
-
-
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -36,12 +33,13 @@ const routes: Routes = [
   { path: 'simulation/nuclear-stability', component: NuclearStabilityComponent },
   { path: 'physics-life', component: PhysicsInLifeComponent },
   { path: 'experiments', component: ExperimentsGalleryComponent },
-  { path: 'facts', component: PhysicsFactsComponent },
-
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {
+      anchorScrolling: 'enabled',
+      scrollPositionRestoration: 'enabled'
+    })],
   exports: [RouterModule]
 })
 export class AppRoutingModule {}

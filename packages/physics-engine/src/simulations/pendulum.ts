@@ -1,7 +1,7 @@
 export class Pendulum {
   angle: number;
-  angularVelocity: number = 0;
-  angularAcceleration: number = 0;
+  angularVelocity = 0;
+  angularAcceleration = 0;
 
   length: number;
   gravity: number;
@@ -10,11 +10,17 @@ export class Pendulum {
   private lastCrossTime = 0;
   private prevAngle: number;
 
+  kineticHistory: number[] = [];
+  potentialHistory: number[] = [];
+  maxHistory = 150;
+
+  private _period = 0;
+
   constructor({
     angle = Math.PI / 4,
     length = 200,
     gravity = 9.81,
-    mass = 1
+    mass = 1,
   }: {
     angle?: number;
     length?: number;
@@ -29,7 +35,9 @@ export class Pendulum {
   }
 
   step(dt: number, time: number) {
-    this.angularAcceleration = -(this.gravity / this.length) * Math.sin(this.angle);
+    this.angularAcceleration =
+      -(this.gravity / this.length) * Math.sin(this.angle);
+
     this.angularVelocity += this.angularAcceleration * dt;
     this.angle += this.angularVelocity * dt;
     this.angle = this.normalizeAngle(this.angle);
@@ -40,7 +48,20 @@ export class Pendulum {
       }
       this.lastCrossTime = time;
     }
+
     this.prevAngle = this.angle;
+
+    this.pushHistory();
+  }
+
+  private pushHistory() {
+    this.kineticHistory.push(this.kineticEnergy);
+    this.potentialHistory.push(this.potentialEnergy);
+
+    if (this.kineticHistory.length > this.maxHistory) {
+      this.kineticHistory.shift();
+      this.potentialHistory.shift();
+    }
   }
 
   reset(angle: number) {
@@ -49,6 +70,17 @@ export class Pendulum {
     this.prevAngle = angle;
     this.lastCrossTime = 0;
     this._period = 0;
+
+    this.kineticHistory = [];
+    this.potentialHistory = [];
+  }
+
+  setLength(length: number) {
+    this.length = length;
+  }
+
+  setGravity(g: number) {
+    this.gravity = g;
   }
 
   get kineticEnergy() {
@@ -69,7 +101,6 @@ export class Pendulum {
     return Math.abs(this.angle);
   }
 
-  private _period = 0;
   get period() {
     return this._period || 2 * Math.PI * Math.sqrt(this.length / this.gravity);
   }

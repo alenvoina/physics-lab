@@ -1,70 +1,168 @@
 <div class="reactor-root">
-
   <div class="header">
-    <h1>☢ Nuclear Reactor Simulator</h1>
-    <p>Control chain reactions and prevent meltdown</p>
+    <div class="title-group">
+      <div class="logo-icon">☢</div>
+      <div>
+        <h1>Reactor Core Terminal</h1>
+        <p>Chain Reaction Simulation v2.0</p>
+      </div>
+    </div>
+    <div class="system-status" [ngClass]="getStatusClass()">
+      {{ getStatusText() }}
+    </div>
   </div>
 
   <div class="layout">
-
-    <div class="canvas-wrap">
+    <div class="canvas-wrap" #canvasWrap>
       <canvas #canvas></canvas>
+
+      <div class="hud-corner top-left"></div>
+      <div class="hud-corner top-right"></div>
+      <div class="hud-corner bottom-left"></div>
+      <div class="hud-corner bottom-right"></div>
     </div>
 
-    <div class="panel">
-      <h2>⚙ Reactor Control</h2>
+    <div class="panel glass-panel">
+      <h2>⚙ Control Panel</h2>
 
-      <div class="control">
-        <label>Simulation Speed</label>
-        <input type="range" min="0.1" max="2" step="0.1"
-         (input)="setSpeed(+$any($event.target).value)" />
-      </div>
-      <div class="control">
-        <label>Control Rods</label>
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          [value]="sim.controlLevel"
-          (input)="setControl(+$any($event.target).value)"
-        />
-        <div class="hint">
-          Absorb neutrons → slows reaction
+      <div class="control-group">
+        <label>Time Dialation (Speed)</label>
+        <div class="slider-wrapper">
+          <input
+            type="range"
+            min="0.1"
+            max="3"
+            step="0.1"
+            value="1"
+            (input)="setSpeed($any($event.target).value)"
+          />
+          <span class="value-display">{{ speed.toFixed(1) }}x</span>
         </div>
       </div>
 
-      <button class="reset" (click)="reset()">Reset</button>
+      <div class="control-group">
+        <label>Control Rods Insertion</label>
+        <div class="slider-wrapper">
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            [value]="sim.controlLevel"
+            (input)="setControl($any($event.target).value)"
+          />
+          <span class="value-display"
+            >{{ (sim.controlLevel * 100).toFixed(0) }}%</span
+          >
+        </div>
+        <div class="hint">Graphite rods absorb neutrons.</div>
+      </div>
 
-      <div class="bars">
-        <div class="bar">
-          <span>Temperature</span>
+      <div class="telemetry">
+        <div class="bar-container">
+          <div class="bar-label">
+            <span>Temperature</span>
+            <span>{{ sim.temperature.toFixed(0) }} / 1200K</span>
+          </div>
           <div class="progress">
-            <div class="fill temp" [style.width.%]="sim.temperature / 12"></div>
+            <div
+              class="fill temp"
+              [style.width.%]="(sim.temperature / 1200) * 100"
+            ></div>
           </div>
         </div>
 
-        <div class="bar">
-          <span>Energy</span>
+        <div class="bar-container">
+          <div class="bar-label">
+            <span>Power Output</span>
+            <span>{{ sim.energy.toFixed(0) }} MW</span>
+          </div>
           <div class="progress">
-            <div class="fill energy" [style.width.%]="sim.energy / 50"></div>
+            <div
+              class="fill energy"
+              [style.width.%]="(sim.energy / 100) * 100"
+            ></div>
           </div>
         </div>
       </div>
 
-      <div class="status" [ngClass]="getStatusClass()">
-        {{ getStatusText() }}
+      <button class="btn-reset" (click)="reset()">
+        <span class="icon">↻</span> EMERGENCY SCRAM
+      </button>
+
+      <div class="theory-box">
+        <h3>System Manual</h3>
+        <p>
+          Neutrons strike <b>U-235</b> triggering fission. Drop the control rods
+          to absorb free neutrons and prevent thermal meltdown.
+        </p>
       </div>
     </div>
+  </div>
+</div>
 
+<div class="reactor-guide">
+  <div class="guide-header">
+    <h2>⚛️ Анатомия цепной реакции</h2>
+    <p>Как удержать энергию звезд внутри стального бака</p>
   </div>
 
-  <div class="theory">
-    <h3>How it works</h3>
+  <div class="guide-grid">
+    <div class="guide-card cyan-border">
+      <div class="card-icon">🎯</div>
+      <div class="card-content">
+        <h3>Ядерное деление</h3>
+        <p>
+          Всё начинается, когда свободный <b>нейтрон</b> попадает в ядро
+          <b>Урана-235</b>. Ядро становится нестабильным и разлетается на два
+          осколка, попутно выбрасывая 2-3 новых нейтрона.
+        </p>
+      </div>
+    </div>
+
+    <div class="guide-card yellow-border">
+      <div class="card-icon">⛓️</div>
+      <div class="card-content">
+        <h3>Геометрическая прогрессия</h3>
+        <p>
+          Если каждый новый нейтрон попадет в соседнее ядро, количество делений
+          будет расти взрывообразно: 1 → 2 → 4 → 8... В реакторе мы стремимся к
+          <b>Критическому состоянию</b>, когда ровно один нейтрон от каждого
+          деления вызывает новое.
+        </p>
+      </div>
+    </div>
+
+    <div class="guide-card red-border wide">
+      <div class="card-icon">🕹️</div>
+      <div class="card-content">
+        <div class="flex-row">
+          <div class="text">
+            <h3>Управляющие стержни</h3>
+            <p>
+              Чтобы реактор не превратился в бомбу, мы используем
+              <b>поглотители</b> (например, бор или графит). Опуская стержни в
+              зону (Rod Insertion), ты буквально «ловишь» лишние нейтроны,
+              замедляя реакцию.
+            </p>
+          </div>
+          <div class="scram-info">
+            <div class="scram-label">Кнопка SCRAM</div>
+            <p>
+              Это экстренный сброс всех стержней в зону под действием силы
+              тяжести. Полная остановка за секунды.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pro-tip">
     <p>
-      Neutrons hit nuclei → fission → more neutrons → chain reaction.
-      Control rods absorb neutrons and regulate the system.
+      💡 <b>Миссия оператора:</b> Попробуй поднять температуру до <b>900K</b>,
+      удерживая её стабильной. Как только увидишь статус <code>CRITICAL</code>,
+      быстро опускай стержни на 70%, чтобы избежать расплавления (Meltdown)!
     </p>
   </div>
-
 </div>

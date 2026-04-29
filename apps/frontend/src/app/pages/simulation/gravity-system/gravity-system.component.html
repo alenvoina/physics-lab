@@ -1,101 +1,139 @@
-<div class="container">
-  <div class="sidebar">
-    <h2>🌌 Gravity Lab</h2>
+<div class="app-container">
+  <div class="main-layout">
+    <aside class="sidebar">
+      <header class="sidebar-header">
+        <h1 class="logo">🌌 Gravity<span>Lab</span></h1>
+        <p class="subtitle">Physics Simulation v2.0</p>
+      </header>
 
-    <p class="description">
-      Bodies attract each other via gravity. Change modes to explore different systems.
-    </p>
+      <div class="control-section">
+        <label class="section-label">Выберите режим</label>
+        <div class="mode-buttons">
+          <button (click)="setMode('orbit')" [class.active]="mode === 'orbit'">
+            <span class="icon">🪐</span> Orbit
+          </button>
+          <button
+            (click)="setMode('galaxy')"
+            [class.active]="mode === 'galaxy'"
+          >
+            <span class="icon">🌀</span> Galaxy
+          </button>
+          <button (click)="setMode('chaos')" [class.active]="mode === 'chaos'">
+            <span class="icon">🌪</span> Chaos
+          </button>
+        </div>
+      </div>
 
-    <div class="buttons">
-      <button (click)="setMode('orbit')" [class.active]="mode === 'orbit'">
-        🪐 Orbit
-      </button>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-label">Кинетическая</span>
+          <span class="stat-value">{{ kinetic | number: '1.0-1' }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Потенциальная</span>
+          <span class="stat-value">{{ potential | number: '1.0-1' }}</span>
+        </div>
+        <div class="stat-item highlight">
+          <span class="stat-label">Полная энергия</span>
+          <span class="stat-value">{{ total | number: '1.0-1' }}</span>
+        </div>
+      </div>
 
-      <button (click)="setMode('galaxy')" [class.active]="mode === 'galaxy'">
-        🌌 Galaxy
-      </button>
+      <div class="info-card">
+        <h3>О текущем режиме</h3>
+        <p [ngSwitch]="mode">
+          <span *ngSwitchCase="'orbit'"
+            >Стабильная система: центробежная сила уравновешивает
+            гравитацию.</span
+          >
+          <span *ngSwitchCase="'galaxy'"
+            >Сложное взаимодействие множества тел вокруг массивного
+            центра.</span
+          >
+          <span *ngSwitchCase="'chaos'"
+            >Демонстрация чувствительности системы к начальным условиям.</span
+          >
+        </p>
+      </div>
+    </aside>
 
-      <button (click)="setMode('chaos')" [class.active]="mode === 'chaos'">
-        🌪 Chaos
-      </button>
+    <main class="canvas-area" #container>
+      <canvas #canvas></canvas>
+      <div class="canvas-overlay">
+        <div class="badge">{{ mode | uppercase }} MODE</div>
+      </div>
+    </main>
+  </div>
+  <div class="space-guide-container">
+    <div class="guide-header">
+      <h2>🚀 Дневник космического исследователя</h2>
+      <p>Узнай, как управляется твоя собственная Вселенная!</p>
     </div>
 
-    <div class="info">
-      <h3>Info</h3>
-      <p *ngIf="mode === 'orbit'">
-        A stable orbit: velocity balances gravity.
-      </p>
-      <p *ngIf="mode === 'galaxy'">
-        Multiple bodies rotating around a massive center.
-      </p>
-      <p *ngIf="mode === 'chaos'">
-        Random motion with gravitational interaction.
-      </p>
-    </div>
+    <div class="guide-grid">
+      <div class="guide-card main-feature">
+        <div class="guide-icon">🧲</div>
+        <div class="guide-content">
+          <h3>Космические обнимашки</h3>
+          <p>
+            Представь, что у каждого предмета во Вселенной есть невидимые руки.
+            Чем тяжелее предмет, тем эти руки сильнее! Солнце такое огромное,
+            что оно «обнимает» своими силами все планеты вокруг, не давая им
+            разлететься. Это и есть <b>гравитация</b>.
+          </p>
+        </div>
+      </div>
 
-    <div class="energy">
-      <h3>Energy</h3>
-      <p>Kinetic: {{ kinetic | number:'1.0-2' }}</p>
-      <p>Potential: {{ potential | number:'1.0-2' }}</p>
-      <p>Total: {{ total | number:'1.0-2' }}</p>
+      <div class="guide-card">
+        <div class="guide-icon">🪐</div>
+        <div class="guide-content">
+          <h3>Режим «Орбита»: Идеальный баланс</h3>
+          <p>
+            Это как езда на велосипеде по кругу. Гравитация тянет планету
+            внутрь, а скорость толкает её наружу. Если они договорятся, планета
+            будет летать по кругу вечно!
+          </p>
+        </div>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-icon">🌀</div>
+        <div class="guide-content">
+          <h3>Режим «Галактика»: Большой хоровод</h3>
+          <p>
+            В центре галактики обычно живет очень тяжелый «босс» (черная дыра
+            или скопление звезд). Все остальные звезды кружатся вокруг него, как
+            тысячи танцоров в огромном космическом вальсе.
+          </p>
+        </div>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-icon">🌪</div>
+        <div class="guide-content">
+          <h3>Режим «Хаос»: Эффект бабочки</h3>
+          <p>
+            Здесь всё непредсказуемо! Стоит одной звездочке чуть-чуть изменить
+            путь, и всё движение системы ломается. Это показывает, как сильно
+            маленькое событие может изменить всё будущее космоса.
+          </p>
+        </div>
+      </div>
+
+      <div class="guide-card highlight-energy">
+        <div class="guide-icon">🔋</div>
+        <div class="guide-content">
+          <h3>Где прячется энергия?</h3>
+          <p>
+            У твоих звезд есть два «кошелька» с энергией:
+            <br />• 🏃 <b>Кинетическая</b> — это энергия бега (чем быстрее летит
+            звезда, тем её больше). <br />• 🏰 <b>Потенциальная</b> — это
+            энергия высоты (чем дальше звезда от центра, тем больше её «запас»).
+            Вместе они составляют <b>Полную энергию</b>, которая в космосе
+            никогда не пропадает зря!
+          </p>
+        </div>
+      </div>
     </div>
   </div>
-
-  <canvas #canvas></canvas>
-</div>
-
-
-<div class="simulation-theory">
-  <h2>Gravity Lab – Theory</h2>
-
-  <p>
-    This simulation visualizes how bodies interact via <strong>gravity</strong>. 
-    Every object with mass attracts every other object with a force proportional to their masses 
-    and inversely proportional to the square of the distance between them (Newton's Law of Gravitation):
-  </p>
-
-  <p class="formula">
-    F = G * (m₁ * m₂) / r²
-  </p>
-
-  <h3>Modes of the Simulation:</h3>
-
-  <ul>
-    <li>
-      <strong>Orbit:</strong> Bodies move in stable orbits where the gravitational pull is balanced 
-      by their tangential velocity. This demonstrates circular and elliptical motion, centripetal force, 
-      and energy conservation (kinetic + potential energy remains roughly constant).
-    </li>
-
-    <li>
-      <strong>Galaxy:</strong> Many bodies rotate around a central massive body, forming spiral patterns. 
-      This shows collective gravitational interactions, angular momentum conservation, and how structures like galaxies form.
-    </li>
-
-    <li>
-      <strong>Chaos:</strong> Bodies start with random positions and velocities. Small differences in initial conditions 
-      lead to very different trajectories over time, illustrating the concept of chaotic dynamics in N-body gravitational systems.
-    </li>
-  </ul>
-
-  <h3>Energy Visualization:</h3>
-  <p>
-    The graphs show <strong>kinetic energy</strong> (energy of motion) and <strong>potential energy</strong> 
-    (energy stored in gravitational fields). Total energy helps track how the system conserves energy over time.
-  </p>
-
-  <h3>Physics Behind the Simulation:</h3>
-  <p>
-    Each body in the system is modeled with:
-  </p>
-  <ul>
-    <li>Mass (m) – determines the gravitational pull it exerts.</li>
-    <li>Position and velocity – updated every step using Newton's second law (F = m * a).</li>
-    <li>Gravitational interaction – every pair of bodies exerts forces on each other, summed to find acceleration.</li>
-  </ul>
-
-  <p>
-    By exploring different modes, you can see real physics in action: from predictable orbits to 
-    chaotic interactions, all governed by fundamental laws of motion and gravitation.
-  </p>
 </div>

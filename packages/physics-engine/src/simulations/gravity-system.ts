@@ -48,7 +48,6 @@ export class GravitySystem {
     return this.getKineticEnergy() + this.getPotentialEnergy();
   }
 
-
   static createOrbitSystem(): GravitySystem {
     const sim = new GravitySystem();
 
@@ -62,7 +61,7 @@ export class GravitySystem {
     sim.addBody(center);
 
     const r = 150;
-    const v = Math.sqrt(G * center.mass / r);
+    const v = Math.sqrt((G * center.mass) / r);
 
     sim.addBody(
       new Body({
@@ -70,7 +69,7 @@ export class GravitySystem {
         velocity: new Vector(0, v),
         mass: 5,
         radius: 5,
-      })
+      }),
     );
 
     return sim;
@@ -95,7 +94,7 @@ export class GravitySystem {
       const x = 450 + Math.cos(angle) * radius;
       const y = 300 + Math.sin(angle) * radius;
 
-      const speed = Math.sqrt(G * center.mass / radius);
+      const speed = Math.sqrt((G * center.mass) / radius);
 
       const vx = -Math.sin(angle) * speed;
       const vy = Math.cos(angle) * speed;
@@ -106,7 +105,7 @@ export class GravitySystem {
           velocity: new Vector(vx, vy),
           mass: 2,
           radius: 3,
-        })
+        }),
       );
     }
 
@@ -119,17 +118,14 @@ export class GravitySystem {
     for (let i = 0; i < 6; i++) {
       sim.addBody(
         new Body({
-          position: new Vector(
-            Math.random() * 800,
-            Math.random() * 600
-          ),
+          position: new Vector(Math.random() * 800, Math.random() * 600),
           velocity: new Vector(
             (Math.random() - 0.5) * 1,
-            (Math.random() - 0.5) * 1
+            (Math.random() - 0.5) * 1,
           ),
           mass: 5 + Math.random() * 5,
           radius: 4,
-        })
+        }),
       );
     }
 

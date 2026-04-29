@@ -15,7 +15,7 @@ const sun = new Body({
 
 const r = 150;
 
-const v = Math.sqrt(G * sun.mass / r);
+const v = Math.sqrt((G * sun.mass) / r);
 
 const planet = new Body({
   position: center.add(new Vector(r, 0)),

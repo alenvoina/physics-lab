@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './shared/header/header.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { OrbitalComponent } from './pages/simulation/orbital/orbital.component';
+import { AboutOverlayComponent } from './shared/about-overlay/about-overlay.component'
 
 @NgModule({
   declarations: [
@@ -15,12 +16,8 @@ import { OrbitalComponent } from './pages/simulation/orbital/orbital.component';
     FooterComponent,
     OrbitalComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    MaterialModule,
-  ],
+  imports: [BrowserModule, AppRoutingModule, MaterialModule, AboutOverlayComponent],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

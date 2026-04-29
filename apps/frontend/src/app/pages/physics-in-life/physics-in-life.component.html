@@ -1,24 +1,53 @@
-<div class="life">
-  <h1>Физика в жизни</h1>
-  <p class="subtitle">
-    Как физические законы работают в реальном мире и технологиях
-  </p>
+<div class="life-container">
+  <div class="content-wrapper">
+    <header class="header">
+      <span class="badge">Наука в действии</span>
+      <h1>Физика в жизни</h1>
+      <p class="subtitle">
+        Как фундаментальные законы вселенной определяют комфорт и возможности
+        современного мира
+      </p>
+    </header>
 
-  <div class="grid">
-    <div class="card" *ngFor="let item of items" (click)="open(item)">
-      <mat-icon class="icon">{{ item.icon }}</mat-icon>
-      <h3>{{ item.title }}</h3>
-      <p>{{ item.description }}</p>
-      <div class="hint">Подробнее →</div>
+    <div class="grid">
+      <div
+        class="card"
+        *ngFor="let item of items; let i = index"
+        (click)="open(item)"
+      >
+        <div class="icon-box">
+          <mat-icon>{{ item.icon }}</mat-icon>
+        </div>
+        <div class="card-body">
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.description }}</p>
+        </div>
+        <div class="card-footer">
+          <span>Подробнее</span>
+          <mat-icon>chevron_right</mat-icon>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="modal" *ngIf="selected" (click)="close()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-    <mat-icon class="modal-icon">{{ selected.icon }}</mat-icon>
-    <h2>{{ selected.title }}</h2>
-    <p>{{ selected.details }}</p>
-    <button mat-raised-button color="accent" (click)="close()">Закрыть</button>
+<div class="modal-overlay" *ngIf="selected" (click)="close()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <div class="modal-header">
+      <div class="modal-icon">
+        <mat-icon>{{ selected.icon }}</mat-icon>
+      </div>
+      <h2>{{ selected.title }}</h2>
+    </div>
+
+    <div class="modal-content">
+      <p>{{ selected.details }}</p>
+    </div>
+
+    <button class="action-btn" (click)="close()">Закрыть</button>
   </div>
 </div>

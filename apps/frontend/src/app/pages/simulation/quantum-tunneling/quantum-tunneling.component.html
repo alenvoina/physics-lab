@@ -1,71 +1,167 @@
-<div class="lab-root">
-
-  <header class="lab-header">
-    <h1>⚛ Quantum Tunneling Lab</h1>
-    <p>Observe how particles pass through barriers beyond classical limits</p>
+<div class="tunneling-root">
+  <header class="header">
+    <div class="title-group">
+      <div class="logo-icon">🧱</div>
+      <div>
+        <h1>Quantum Tunneling Lab</h1>
+        <p>Wave Packet Penetration Beyond Classical Limits</p>
+      </div>
+    </div>
   </header>
 
-  <div class="lab-body">
+  <div class="layout">
+    <aside class="panel glass-panel">
+      <h2>Simulation Parameters</h2>
 
-    <aside class="lab-panel">
+      <div class="controls-container">
+        <div class="control-group">
+          <label>Particle Energy (E)</label>
+          <div class="slider-wrapper">
+            <input
+              type="range"
+              min="0.1"
+              max="2"
+              step="0.05"
+              [value]="sim.energy"
+              (input)="setEnergy($any($event.target).value)"
+            />
+            <span
+              class="value-display"
+              [class.text-success]="sim.energy >= sim.barrierHeight"
+              >{{ sim.energy | number: '1.2-2' }}</span
+            >
+          </div>
+        </div>
 
-      <div class="control">
-        <label>Energy</label>
-        <input type="range" min="0.1" max="2" step="0.05"
-               (input)="setEnergy(+$any($event.target).value)" />
+        <div class="control-group">
+          <label>Potential Barrier (V)</label>
+          <div class="slider-wrapper">
+            <input
+              type="range"
+              min="0.5"
+              max="2"
+              step="0.05"
+              [value]="sim.barrierHeight"
+              (input)="setBarrier($any($event.target).value)"
+            />
+            <span class="value-display text-danger">{{
+              sim.barrierHeight | number: '1.2-2'
+            }}</span>
+          </div>
+        </div>
       </div>
 
-      <div class="control">
-        <label>Barrier Height</label>
-        <input type="range" min="0.5" max="2" step="0.05"
-               (input)="setBarrier(+$any($event.target).value)" />
+      <button class="btn-reset" (click)="reset()">
+        <span class="icon">↻</span> Reset Defaults
+      </button>
+
+      <div class="stats-box">
+        <h3>System Telemetry</h3>
+
+        <div class="stat-row">
+          <span>State</span>
+          <strong
+            [class.text-success]="sim.energy >= sim.barrierHeight"
+            [class.text-warning]="sim.energy < sim.barrierHeight"
+          >
+            {{
+              sim.energy >= sim.barrierHeight ? 'CLASSICAL PASS' : 'TUNNELING'
+            }}
+          </strong>
+        </div>
+
+        <div class="stat-row">
+          <span>Tunneling Prob. (T)</span>
+          <strong class="text-primary"
+            >{{ sim.getTunnelProbability() * 100 | number: '1.1-1' }}%</strong
+          >
+        </div>
+
+        <div class="stat-row">
+          <span>Reflection Prob. (R)</span>
+          <strong class="text-danger"
+            >{{
+              (1 - sim.getTunnelProbability()) * 100 | number: '1.1-1'
+            }}%</strong
+          >
+        </div>
       </div>
-
-      <button class="reset" (click)="reset()">Reset</button>
-
-      <div class="stats">
-        <h3>System</h3>
-        <p>Energy: {{ sim.energy | number:'1.2-2' }}</p>
-        <p>Barrier: {{ sim.barrierHeight | number:'1.2-2' }}</p>
-        <p>Probability: {{ sim.getTunnelProbability() | number:'1.2-2' }}</p>
-      </div>
-
     </aside>
 
-    <section class="lab-canvas">
+    <section class="canvas-wrap glass-panel" #canvasWrap>
       <canvas #canvas></canvas>
-    </section>
 
+      <div class="hud-corner top-left"></div>
+      <div class="hud-corner top-right"></div>
+      <div class="hud-corner bottom-left"></div>
+      <div class="hud-corner bottom-right"></div>
+
+      <div class="hud-label left-label">INCIDENT WAVE ψ(x)</div>
+      <div class="hud-label right-label">TRANSMITTED WAVE</div>
+    </section>
   </div>
 
-  <section class="lab-theory">
-    <h2>What is Quantum Tunneling?</h2>
+  <div class="tunneling-guide">
+    <div class="guide-header">
+      <h2>🚀 Квантовое туннелирование: Как проходить сквозь стены</h2>
+      <p>Инструкция по нарушению законов классической логики</p>
+    </div>
 
-    <p>
-      In classical physics, a particle facing a barrier behaves like a ball hitting a wall:
-      if it doesn’t have enough energy, it simply bounces back.
-    </p>
+    <div class="guide-grid">
+      <div class="guide-card">
+        <div class="card-icon">🧱</div>
+        <div class="card-content">
+          <h3>Мячик или Волна?</h3>
+          <p>
+            Представь, что частица — это мячик. Если высота барьера $V$ больше
+            энергии мячика $E$, он всегда отскочит назад. Но квантовая частица —
+            это **волна** $\psi(x)$. Когда волна ударяется о тонкую стену, она
+            не исчезает мгновенно, а «просачивается» внутрь.
+          </p>
+        </div>
+      </div>
 
-    <p>
-      But in quantum mechanics, particles are not just points — they are waves.
-      And waves don’t stop abruptly. They spread, interfere, and even penetrate barriers.
-    </p>
+      <div class="guide-card special">
+        <div class="card-icon">👻</div>
+        <div class="card-content">
+          <h3>Эффект призрака</h3>
+          <p>
+            Внутри барьера амплитуда частицы затухает очень быстро
+            (экспоненциально). Если барьер достаточно тонкий, «хвост» волны
+            успевает выйти с другой стороны. Там частица снова становится
+            «нормальной», и мы говорим, что она <b>туннелировала</b>.
+          </p>
+        </div>
+      </div>
 
-    <p>
-      Inside the barrier, the wave doesn’t vanish — it decays.
-      If the barrier is thin enough, part of the wave emerges on the other side.
-    </p>
+      <div class="guide-card info">
+        <div class="card-icon">💾</div>
+        <div class="card-content">
+          <h3>Технологии будущего</h3>
+          <p>
+            Без этого эффекта твоя USB-флешка или SSD-диск не смогли бы
+            записывать данные — электроны буквально «прошивают» изолятор. Даже
+            Солнце светит благодаря туннелированию: протонам не хватает энергии,
+            чтобы столкнуться «честно», поэтому они просто туннелируют друг в
+            друга!
+          </p>
+        </div>
+      </div>
+    </div>
 
-    <p>
-      This is tunneling — not breaking the barrier, but leaking through it.
-    </p>
-
-    <h3>Why it matters</h3>
-    <ul>
-      <li>Electrons move through materials</li>
-      <li>Nuclear fusion happens in stars</li>
-      <li>Modern electronics rely on it</li>
-    </ul>
-  </section>
-
+    <div class="experiment-box">
+      <h4>🧪 Попробуй в симуляторе:</h4>
+      <ul>
+        <li>
+          Установи <b>Particle Energy (E)</b> чуть меньше, чем
+          <b>Barrier (V)</b>. Видишь, как маленькая часть волны проходит
+          насквозь?
+        </li>
+        <li>
+          Сделай барьер выше. Заметил, как вероятность туннелирования (T)
+          стремительно падает?
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>

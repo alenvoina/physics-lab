@@ -1,4 +1,3 @@
-
 // Include theming for Angular Material with `mat.theme()`.
 // This Sass mixin will define CSS variables that are used for styling Angular Material
 // components according to the Material 3 design spec.
@@ -7,14 +6,16 @@
 @use '@angular/material' as mat;
 
 html {
-  @include mat.theme((
-    color: (
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
 }
 
 body {
@@ -33,9 +34,11 @@ body {
   // Reset the user agent margin.
 }
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
+  scroll-behavior: smooth;
 }
 
 app-root {
@@ -46,16 +49,4 @@ app-root {
 
 .content {
   flex: 1;
-}
-/* You can add global styles to this file, and also import other style files */
-
-
-body.sim-dark-theme ::ng-deep app-header,
-body.sim-dark-theme ::ng-deep app-footer {
-  background-color: #1e1f2e !important;
-  color: #f8fafc !important;
-
-  button, a, span {
-    color: #f8fafc !important;
-  }
 }

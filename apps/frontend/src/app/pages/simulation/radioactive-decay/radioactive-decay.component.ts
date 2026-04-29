@@ -3,121 +3,128 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  ViewChild,
   OnDestroy,
+  ViewChild,
 } from '@angular/core';
-
-import { FormsModule } from '@angular/forms';
-import { RadioactiveDecaySystem } from '@physics-lab/engine';
+import { RadioactiveDecaySystem, DecayType } from '@physics-lab/engine';
 
 @Component({
   selector: 'app-radioactive-decay',
   templateUrl: './radioactive-decay.component.html',
   styleUrls: ['./radioactive-decay.component.scss'],
-  imports: [CommonModule, FormsModule]
+  standalone: true,
+  imports: [CommonModule],
 })
 export class RadioactiveDecayComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('canvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
-
+  @ViewChild('canvasWrap', { static: true })
+  canvasWrapRef!: ElementRef<HTMLDivElement>;
+  @ViewChild('canvas', { static: true })
+  canvasRef!: ElementRef<HTMLCanvasElement>;
+  decayFormula = 'Математически: N(t) = N₀ · 2^{-t/T_{1/2}}';
   ctx!: CanvasRenderingContext2D;
-  sim = new RadioactiveDecaySystem(150);
+
+  sim = new RadioactiveDecaySystem(400);
 
   animationId = 0;
   speed = 1;
-
   lastTime = 0;
+  private resizeObserver!: ResizeObserver;
 
-  ngAfterViewInit() {
-    const canvas = this.canvasRef.nativeElement;
-
-    canvas.width = 900;
-    canvas.height = 400;
-
-    this.ctx = canvas.getContext('2d')!;
-    this.loop();
+  setSpeed(v: string) {
+    this.speed = parseFloat(v);
   }
 
-  loop = (time = 0) => {
-    const delta = time - this.lastTime;
+  ngAfterViewInit() {
+    this.ctx = this.canvasRef.nativeElement.getContext('2d', { alpha: false })!;
 
-    if (delta > 16) {
-      this.update();
-      this.draw();
-      this.lastTime = time;
-    }
+    this.resizeObserver = new ResizeObserver((entries) => {
+      const { width, height } = entries[0].contentRect;
+      this.canvasRef.nativeElement.width = width;
+      this.canvasRef.nativeElement.height = height;
+      this.sim.width = width;
+      this.sim.height = height;
 
+      if (this.sim.time === 0) this.sim.reset();
+    });
+    this.resizeObserver.observe(this.canvasWrapRef.nativeElement);
+
+    this.lastTime = performance.now();
+    this.loop(this.lastTime);
+  }
+
+  loop = (time: number) => {
+    const dt = Math.min((time - this.lastTime) / 1000, 0.05) * this.speed;
+    this.lastTime = time;
+
+    this.sim.step(dt);
+    this.draw();
     this.animationId = requestAnimationFrame(this.loop);
   };
 
-  update() {
-    this.sim.step(0.1 * this.speed);
-  }
-
   draw() {
     const ctx = this.ctx;
+    const w = this.sim.width;
+    const h = this.sim.height;
 
-    ctx.fillStyle = '#020617';
-    ctx.fillRect(0, 0, 900, 400);
+    ctx.fillStyle = 'rgba(2, 6, 23, 0.5)';
+    ctx.fillRect(0, 0, w, h);
 
-    this.sim.atoms.forEach(a => {
-      // атом
+    this.sim.atoms.forEach((a) => {
       ctx.beginPath();
       ctx.arc(a.x, a.y, 4, 0, Math.PI * 2);
 
-      ctx.fillStyle = a.decayed
-        ? `rgba(248,113,113,${1 - a.decayProgress})`
-        : '#22c55e';
-
+      if (!a.decayed) {
+        ctx.fillStyle = '#22c55e';
+        ctx.shadowBlur = 5;
+        ctx.shadowColor = '#22c55e';
+      } else {
+        ctx.shadowBlur = 0;
+        if (a.decayProgress > 0) {
+          ctx.fillStyle = `rgba(239, 68, 68, ${a.decayProgress})`;
+        } else {
+          ctx.fillStyle = '#334155';
+        }
+      }
       ctx.fill();
+      ctx.shadowBlur = 0;
 
-      // вспышка
       if (a.decayProgress > 0) {
         ctx.beginPath();
-        ctx.arc(a.x, a.y, 10 * a.decayProgress, 0, Math.PI * 2);
-        ctx.strokeStyle = '#fbbf24';
+        ctx.arc(a.x, a.y, 15 * (1 - a.decayProgress), 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(250, 204, 21, ${a.decayProgress})`;
+        ctx.lineWidth = 2;
         ctx.stroke();
-
-        a.decayProgress *= 0.85;
       }
+    });
 
-      // эффекты типа распада
-      if (a.decayed && a.decayProgress > 0.2) {
-        if (this.sim.decayType === 'alpha') {
-          ctx.fillStyle = '#fb923c';
-          ctx.fillRect(a.x + 5, a.y, 4, 4);
-        }
-
-        if (this.sim.decayType === 'beta') {
-          ctx.strokeStyle = '#60a5fa';
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.lineTo(
-            a.x + (Math.random() - 0.5) * 20,
-            a.y + (Math.random() - 0.5) * 20
-          );
-          ctx.stroke();
-        }
-
-        if (this.sim.decayType === 'gamma') {
-          ctx.beginPath();
-          ctx.arc(a.x, a.y, 15 * a.decayProgress, 0, Math.PI * 2);
-          ctx.strokeStyle = '#c084fc';
-          ctx.stroke();
-        }
+    this.sim.emissions.forEach((e) => {
+      ctx.beginPath();
+      if (e.type === 'alpha') {
+        ctx.arc(e.x, e.y, 3, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(251, 146, 60, ${e.life})`;
+        ctx.fill();
+      } else if (e.type === 'beta') {
+        ctx.arc(e.x, e.y, 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(96, 165, 250, ${e.life})`;
+        ctx.fill();
+      } else if (e.type === 'gamma') {
+        ctx.arc(e.x, e.y, 40 * (1 - e.life), 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(192, 132, 252, ${e.life})`;
+        ctx.lineWidth = 2;
+        ctx.stroke();
       }
     });
   }
 
-  reset() {
-    this.sim.reset(150);
-  }
-
-  setType(type: any) {
+  setType(type: DecayType) {
     this.sim.setDecayType(type);
-    this.reset();
+  }
+  reset() {
+    this.sim.reset();
   }
 
   ngOnDestroy() {
     cancelAnimationFrame(this.animationId);
+    if (this.resizeObserver) this.resizeObserver.disconnect();
   }
 }

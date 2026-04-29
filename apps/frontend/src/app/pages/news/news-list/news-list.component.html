@@ -1,12 +1,29 @@
-<section class="news-list">
-  <div class="cards">
-    <div class="card" *ngFor="let news of newsList">
-      <img [src]="news.image" alt="news image" class="news-image"/>
-      <h3>{{ news.title }}</h3>
-      <p [innerHTML]="news.summary"></p>
-      <button matButton color="primary" class="news-button" [routerLink]="['/news', news.id]">
-        Read More
-      </button>
-    </div>
+<section class="premium-news-section">
+  <div class="news-grid">
+    <article class="news-card" *ngFor="let news of newsList">
+      <div class="card-image-wrapper">
+        <img
+          [src]="news.image"
+          [alt]="news.title"
+          class="news-image"
+          loading="lazy"
+        />
+      </div>
+
+      <div class="card-content">
+        <h3 class="card-title">{{ news.title }}</h3>
+        <div class="card-summary" [innerHTML]="news.summary"></div>
+      </div>
+
+      <div class="card-footer">
+        <button
+          mat-button
+          class="premium-button"
+          [routerLink]="['/news', news.id]"
+        >
+          Read More <span class="arrow">→</span>
+        </button>
+      </div>
+    </article>
   </div>
 </section>

@@ -3,7 +3,7 @@ import {
   Component,
   ElementRef,
   ViewChild,
-  OnDestroy
+  OnDestroy,
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -26,44 +26,144 @@ interface News {
     MatButtonModule,
     RouterModule,
     MatTooltipModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements AfterViewInit, OnDestroy {
-
   @ViewChild('atomCanvas', { static: true })
   canvasRef!: ElementRef<HTMLCanvasElement>;
 
   timelineEvents = [
-    { year: 1609, title: 'Галилео Галилей', description: 'Наблюдает Луны Юпитера и строит телескоп', icon: 'assets/Galilei.webp' },
-    { year: 1687, title: 'Исаак Ньютон', description: 'Публикует Principia, законы движения и гравитации', icon: 'assets/Newton.jpg' },
-    { year: 1865, title: 'Джеймс Клерк Максвелл', description: 'Формулирует уравнения электромагнетизма', icon: 'assets/Maxwell.jpg' },
-    { year: 1905, title: 'Альберт Эйнштейн', description: 'Специальная теория относительности', icon: 'assets/Einstein.jpg' },
-    { year: 1926, title: 'Эрвин Шредингер', description: 'Волновая функция и квантовая механика', icon: 'assets/Srhedinger.jpg' },
-    { year: 1932, title: 'Джеймс Чедвик', description: 'Открытие нейтрона', icon: 'assets/Chedwik.jpg' },
-    { year: 1942, title: 'Проект Манхэттен', description: 'Разработка атомной бомбы', icon: 'assets/Einstein.jpg' },
-    { year: 1964, title: 'Кварки', description: 'Появляется квантовая хромодинамика', icon: 'assets/Einstein.jpg' },
-    { year: 1984, title: 'Лазерное охлаждение', description: 'Разработка лазерных охлаждений атомов', icon: 'assets/Einstein.jpg' },
-    { year: 2001, title: 'Квантовые компьютеры', description: 'Первые прототипы квантовых вычислений', icon: 'assets/Einstein.jpg' },
-    { year: 2002, title: 'Нейтрино', description: 'Обнаружение космических нейтрино', icon: 'assets/Einstein.jpg' },
-    { year: 2012, title: 'Бозон Хиггса', description: 'Открыт бозон Хиггса в CERN', icon: 'assets/Einstein.jpg' },
-    { year: 2015, title: 'Такааки Кадзита', description: 'Нейтрино имеют массу', icon: 'assets/Einstein.jpg' },
-    { year: 2016, title: 'Райнер Вайс', description: 'Регистрация гравитационных волн', icon: 'assets/Einstein.jpg' },
-    { year: 2020, title: 'Роджер Пенроуз', description: 'Сверхмассивная чёрная дыра в центре галактики', icon: 'assets/Einstein.jpg' },
-    { year: 2025, title: 'Джон Кларк', description: 'Квантовые эффекты в цепях', icon: 'assets/Einstein.jpg' },
+    {
+      year: 1609,
+      title: 'Галилео Галилей',
+      description: 'Наблюдает Луны Юпитера и строит телескоп',
+      icon: 'assets/Galilei.webp',
+    },
+    {
+      year: 1687,
+      title: 'Исаак Ньютон',
+      description: 'Публикует Principia, законы движения и гравитации',
+      icon: 'assets/Newton.jpg',
+    },
+    {
+      year: 1865,
+      title: 'Джеймс Клерк Максвелл',
+      description: 'Формулирует уравнения электромагнетизма',
+      icon: 'assets/Maxwell.jpg',
+    },
+    {
+      year: 1905,
+      title: 'Альберт Эйнштейн',
+      description: 'Специальная теория относительности',
+      icon: 'assets/Einstein.jpg',
+    },
+    {
+      year: 1926,
+      title: 'Эрвин Шредингер',
+      description: 'Волновая функция и квантовая механика',
+      icon: 'assets/Srhedinger.jpg',
+    },
+    {
+      year: 1932,
+      title: 'Джеймс Чедвик',
+      description: 'Открытие нейтрона',
+      icon: 'assets/Chedwik.jpg',
+    },
+    {
+      year: 1942,
+      title: 'Проект Манхэттен',
+      description: 'Разработка атомной бомбы',
+      icon: 'assets/Einstein.jpg',
+    },
+    {
+      year: 1964,
+      title: 'Кварки',
+      description: 'Появляется квантовая хромодинамика',
+      icon: 'assets/Einstein.jpg',
+    },
+    {
+      year: 1984,
+      title: 'Лазерное охлаждение',
+      description: 'Разработка лазерных охлаждений атомов',
+      icon: 'assets/Einstein.jpg',
+    },
+    {
+      year: 2001,
+      title: 'Квантовые компьютеры',
+      description: 'Первые прототипы квантовых вычислений',
+      icon: 'assets/Einstein.jpg',
+    },
+    {
+      year: 2002,
+      title: 'Нейтрино',
+      description: 'Обнаружение космических нейтрино',
+      icon: 'assets/Einstein.jpg',
+    },
+    {
+      year: 2012,
+      title: 'Бозон Хиггса',
+      description: 'Открыт бозон Хиггса в CERN',
+      icon: 'assets/Einstein.jpg',
+    },
+    {
+      year: 2015,
+      title: 'Такааки Кадзита',
+      description: 'Нейтрино имеют массу',
+      icon: 'assets/Einstein.jpg',
+    },
+    {
+      year: 2016,
+      title: 'Райнер Вайс',
+      description: 'Регистрация гравитационных волн',
+      icon: 'assets/Einstein.jpg',
+    },
+    {
+      year: 2020,
+      title: 'Роджер Пенроуз',
+      description: 'Сверхмассивная чёрная дыра в центре галактики',
+      icon: 'assets/Einstein.jpg',
+    },
+    {
+      year: 2025,
+      title: 'Джон Кларк',
+      description: 'Квантовые эффекты в цепях',
+      icon: 'assets/Einstein.jpg',
+    },
   ];
 
   newsList: News[] = [];
   private animationId!: number;
 
   private allNews: News[] = [
-    { title: 'Quantum Entanglement Breakthrough', content: 'Scientists achieved record distances for entangled particles.', image: 'assets/quantum.jpg' },
-    { title: 'Black Hole Imaging Updated', content: 'The EHT released a new image of a black hole with unprecedented detail.', image: 'assets/blackhole.jpeg' },
-    { title: 'Fusion Energy Milestone', content: 'Net energy gain achieved in fusion reaction.', image: 'assets/fusion.jpg' },
-    { title: 'Gravitational Waves Detected', content: 'LIGO detected waves from a binary neutron star merger.', image: 'assets/gravity.jpg' },
-    { title: 'Dark Matter Clues', content: 'Experiments hint at dark matter interactions.', image: 'assets/dark-matter.webp' }
+    {
+      title: 'Quantum Entanglement Breakthrough',
+      content: 'Scientists achieved record distances for entangled particles.',
+      image: 'assets/quantum.jpg',
+    },
+    {
+      title: 'Black Hole Imaging Updated',
+      content:
+        'The EHT released a new image of a black hole with unprecedented detail.',
+      image: 'assets/blackhole.jpeg',
+    },
+    {
+      title: 'Fusion Energy Milestone',
+      content: 'Net energy gain achieved in fusion reaction.',
+      image: 'assets/fusion.jpg',
+    },
+    {
+      title: 'Gravitational Waves Detected',
+      content: 'LIGO detected waves from a binary neutron star merger.',
+      image: 'assets/gravity.jpg',
+    },
+    {
+      title: 'Dark Matter Clues',
+      content: 'Experiments hint at dark matter interactions.',
+      image: 'assets/dark-matter.webp',
+    },
   ];
 
   ngAfterViewInit() {
@@ -81,12 +181,14 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
     canvas.width = size * dpr;
     canvas.height = size * dpr;
-    
+
     ctx.scale(dpr, dpr);
 
     const center = { x: size / 2, y: size / 2 };
 
-    let a1 = 0, a2 = 0, a3 = 0;
+    let a1 = 0,
+      a2 = 0,
+      a3 = 0;
 
     const draw = () => {
       ctx.clearRect(0, 0, size, size);

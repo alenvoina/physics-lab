@@ -1,160 +1,242 @@
-.life {
-  padding: 50px 20px;
+$bg-main: #fcfcfd;
+$bg-card: #fff;
+$accent: #2563eb;
+$text-dark: #0f172a;
+$text-light: #64748b;
+$border: #f1f5f9;
+$shadow-soft:
+  0 10px 25px -5px rgb(0 0 0 / 4%),
+  0 8px 10px -6px rgb(0 0 0 / 4%);
+$shadow-hover:
+  0 20px 25px -5px rgb(0 0 0 / 8%),
+  0 10px 10px -5px rgb(0 0 0 / 4%);
+
+.life-container {
+  background-color: $bg-main;
   min-height: 100vh;
+  padding: 60px 20px;
+  color: $text-dark;
+  font-family:
+    Inter,
+    -apple-system,
+    sans-serif;
 
-  background: radial-gradient(circle at 20% 20%, #1a2a3a, #0b0f14);
+  .content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
 
+.header {
   text-align: center;
+  margin-bottom: 80px;
+
+  .badge {
+    background: rgba($accent, 0.1);
+    color: $accent;
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
 
   h1 {
-    color: white;
-    font-size: 36px;
-    margin-bottom: 10px;
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 800;
+    margin: 20px 0;
+    letter-spacing: -1px;
   }
 
   .subtitle {
-    color: rgba(255,255,255,0.6);
-    margin-bottom: 40px;
+    font-size: 18px;
+    color: $text-light;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
   }
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  padding: 10px;
 }
 
 .card {
-  position: relative;
-  border-radius: 20px;
-  padding: 25px;
-
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(12px);
-
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: 24px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
-  overflow: hidden;
-
-  transition: 0.4s;
-
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-
-  .icon {
-    font-size: 42px;
-    margin-bottom: 15px;
-
-    color: #4fc3f7;
-    transition: 0.4s;
-  }
-
-  h3 {
-    color: white;
-    margin-bottom: 10px;
-  }
-
-  p {
-    color: rgba(255,255,255,0.7);
-    font-size: 14px;
-  }
+  position: relative;
 
   &:hover {
-    transform: translateY(-10px) scale(1.03);
-    box-shadow: 0 0 40px rgba(79,195,247,0.4);
+    transform: translateY(-8px);
+    box-shadow: $shadow-hover;
+    border-color: rgba($accent, 0.2);
+
+    .icon-box {
+      background: $accent;
+      color: white;
+      transform: scale(1.1);
+    }
+
+    .card-footer {
+      color: $accent;
+      gap: 12px;
+    }
   }
 
-  &:hover .icon {
-    transform: scale(1.2) rotate(5deg);
-    color: #81d4fa;
+  .icon-box {
+    width: 56px;
+    height: 56px;
+    background: $bg-main;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    color: $accent;
+    transition: all 0.3s ease;
+
+    mat-icon {
+      font-size: 28px;
+      height: 28px;
+      width: 28px;
+    }
   }
 
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle, rgba(79,195,247,0.2), transparent);
-    opacity: 0;
-    transition: 0.4s;
+  .card-body {
+    flex-grow: 1;
+
+    h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: $text-light;
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
   }
 
-  &:hover::before {
-    opacity: 1;
+  .card-footer {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: $text-light;
+    transition: all 0.3s ease;
   }
 }
 
-.modal {
+.modal-overlay {
   position: fixed;
   inset: 0;
-
-  background: rgba(0,0,0,0.8);
-  backdrop-filter: blur(10px);
-
+  background: rgba($text-dark, 0.4);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  animation: fadeIn 0.3s ease;
+  padding: 20px;
 }
 
-.modal-content {
-  background: rgba(255,255,255,0.07);
-  backdrop-filter: blur(25px);
+.modal-card {
+  background: white;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 32px;
+  padding: 40px;
+  position: relative;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 25%);
 
-  border-radius: 20px;
-  padding: 30px;
-  max-width: 600px;
-  width: 90%;
-
-  color: white;
-  text-align: center;
-
-  transform: scale(0.9);
-  animation: pop 0.3s forwards;
-
-  .modal-icon {
-    font-size: 60px;
-    margin-bottom: 15px;
-    color: #4fc3f7;
+  .close-btn {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    background: $bg-main;
+    border: none;
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: $text-light;
   }
 
-  h2 {
-    margin-bottom: 15px;
+  .modal-header {
+    text-align: center;
+    margin-bottom: 24px;
+
+    .modal-icon {
+      width: 80px;
+      height: 80px;
+      background: rgba($accent, 0.1);
+      color: $accent;
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+
+      mat-icon {
+        font-size: 40px;
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    h2 {
+      font-size: 26px;
+      font-weight: 800;
+    }
   }
 
-  p {
-    opacity: 0.8;
+  .modal-content {
+    text-align: center;
+    color: $text-light;
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 32px;
   }
 
-  button {
-    margin-top: 20px;
+  .action-btn {
+    width: 100%;
+    background: $text-dark;
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 0.9;
+    }
   }
 }
 
-@keyframes pop {
-  to { transform: scale(1); }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0 }
-  to { opacity: 1 }
-}
-
-.hint {
-  margin-top: 10px;
-  font-size: 12px;
-  opacity: 0.5;
-}
-
-.card {
-  animation: fadeUp 0.6s ease;
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
+@media (width <= 600px) {
+  .life-container {
+    padding: 40px 16px;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  .header {
+    margin-bottom: 40px;
+  }
+
+  .card {
+    padding: 24px;
   }
 }

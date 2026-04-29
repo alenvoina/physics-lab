@@ -5,23 +5,27 @@
       <span class="desktop-only">Lab:</span> <span>Pendulum Pro</span>
     </div>
     <div class="mode-switcher">
-      <button [class.active]="mode === 'earth'" (click)="setMode('earth')">🌍 Земля</button>
-      <button [class.active]="mode === 'moon'" (click)="setMode('moon')">🌙 Луна</button>
+      <button [class.active]="mode === 'earth'" (click)="setMode('earth')">
+        🌍 Земля
+      </button>
+      <button [class.active]="mode === 'moon'" (click)="setMode('moon')">
+        🌙 Луна
+      </button>
     </div>
   </header>
 
   <main class="main-layout">
     <section class="viewport-container">
       <canvas #canvas></canvas>
-      
+
       <div class="hud-metrics">
         <div class="metric-card">
           <span class="label">Амплитуда</span>
-          <span class="value">{{ amplitude | number:'1.1-1' }}°</span>
+          <span class="value">{{ amplitude | number: '1.1-1' }}°</span>
         </div>
         <div class="metric-card highlight">
           <span class="label">Энергия</span>
-          <span class="value">{{ energy | number:'1.2-2' }} Дж</span>
+          <span class="value">{{ energy | number: '1.2-2' }} Дж</span>
         </div>
       </div>
     </section>
@@ -47,7 +51,13 @@
             <span>Длина нити</span>
             <span class="accent">{{ length }} см</span>
           </div>
-          <input type="range" min="100" max="400" [(ngModel)]="length" (input)="updateLength()" />
+          <input
+            type="range"
+            min="100"
+            max="400"
+            [(ngModel)]="length"
+            (input)="updateLength()"
+          />
         </div>
 
         <div class="control-group">
@@ -55,11 +65,73 @@
             <span>Темп времени</span>
             <span class="accent">{{ timeScale.toFixed(1) }}x</span>
           </div>
-          <input type="range" min="0.1" max="2" step="0.1" [(ngModel)]="timeScale" />
+          <input
+            type="range"
+            min="0.1"
+            max="2"
+            step="0.1"
+            [(ngModel)]="timeScale"
+          />
         </div>
 
         <button class="btn-reset" (click)="reset()">Сброс</button>
       </div>
     </section>
   </main>
+</div>
+
+<div class="kids-theory-container light-mode">
+  <div class="theory-header">
+    <h2>🎢 Секреты обычных качелей</h2>
+    <p>Физика маятника на примере детской площадки</p>
+  </div>
+
+  <div class="cards-grid">
+    <div class="fun-card">
+      <div class="card-icon">🎡</div>
+      <h3>Как это работает?</h3>
+      <p>
+        Маятник — это просто <b>качели</b>. Когда ты отводишь его в сторону и
+        отпускаешь, земное притяжение тянет его вниз. Он разгоняется, пролетает
+        самую нижнюю точку и по привычке (ученые называют это инерцией) взлетает
+        наверх с другой стороны!
+      </p>
+    </div>
+
+    <div class="fun-card highlight-card">
+      <div class="card-icon">🔋</div>
+      <h3>Танец двух энергий</h3>
+      <p>
+        Посмотри на график! У маятника есть две "суперсилы".
+        <b>Энергия высоты</b> (потенциальная) — она огромна, когда качели на
+        секунду замирают на самом верху. И
+        <b>энергия скорости</b> (кинетическая) — она включается, когда качели со
+        свистом пролетают над самой землей. Они постоянно переливаются друг в
+        друга, как вода между двумя стаканами.
+      </p>
+    </div>
+
+    <div class="fun-card">
+      <div class="card-icon">🌙</div>
+      <h3>Качели на Луне</h3>
+      <p>
+        Попробуй переключить режим на "Луну"! Луна намного легче Земли, поэтому
+        ее "гравитационный магнит" слабее. Если бы ты качался на лунных качелях,
+        ты бы опускался вниз очень плавно и медленно, словно плаваешь под водой
+        или находишься в кино с замедленной съемкой.
+      </p>
+    </div>
+
+    <div class="fun-card">
+      <div class="card-icon">🧵</div>
+      <h3>Секрет длины нитки</h3>
+      <p>
+        Сдвинь ползунок "Длина нити". Заметил разницу? Короткий маятник суетится
+        и бегает быстро-быстро: <i>тик-так, тик-так!</i> А длинный маятник
+        никуда не торопится, он качается лениво и важно:
+        <i>тиииииик... таааааак</i>. Именно эту хитрость используют в старинных
+        часах с кукушкой!
+      </p>
+    </div>
+  </div>
 </div>

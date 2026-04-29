@@ -1,4 +1,4 @@
-import { Body } from '../body.js'
+import { Body } from "../body.js";
 
 const G = 1;
 const SOFTENING = 0.1;

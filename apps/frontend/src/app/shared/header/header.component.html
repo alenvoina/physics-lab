@@ -1,5 +1,4 @@
 <mat-toolbar class="header" [class.dark-theme]="darkTheme">
-
   <div class="left">
     <div class="logo" routerLink="/">
       <mat-icon>science</mat-icon>
@@ -22,26 +21,33 @@
     </button>
 
     <div class="auth desktop-auth">
-      <button mat-raised-button color="accent" (click)="openLoginModal()">Login</button>
-      <button mat-button (click)="openLoginModal()">Sign in</button>
+      <button mat-stroked-button color="accent" (click)="openLoginModal()">
+        Войти
+      </button>
+      <button mat-button (click)="openLoginModal()">Зарегистрироваться</button>
     </div>
   </div>
-
 </mat-toolbar>
 
-
 <div class="mobile-menu" *ngIf="menuOpen">
-  <button mat-button routerLink="/simulations" (click)="closeMenu()">Симуляции</button>
-  <button mat-button routerLink="/experiments" (click)="closeMenu()">Галерея</button>
-  <button mat-button routerLink="/physics-life" (click)="closeMenu()">Физика</button>
+  <button mat-button routerLink="/simulations" (click)="closeMenu()">
+    Симуляции
+  </button>
+  <button mat-button routerLink="/experiments" (click)="closeMenu()">
+    Галерея
+  </button>
+  <button mat-button routerLink="/physics-life" (click)="closeMenu()">
+    Физика
+  </button>
   <button mat-button routerLink="/news" (click)="closeMenu()">Новости</button>
 
   <div class="mobile-auth">
-    <button mat-raised-button color="accent" (click)="openLoginModal()">Login</button>
-    <button mat-button (click)="openLoginModal()">Sign in</button>
+    <button mat-stroked-button color="accent" (click)="openLoginModal()">
+      Войти
+    </button>
+    <button mat-button (click)="openLoginModal()">Зарегистрироваться</button>
   </div>
 </div>
-
 
 <ng-template #loginModal>
   <h2 mat-dialog-title>Coming Soon 🚀</h2>

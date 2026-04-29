@@ -3,154 +3,180 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  ViewChild,
   OnDestroy,
+  ViewChild,
 } from '@angular/core';
-
-
 import { QuantumTunneling } from '@physics-lab/engine';
+
 
 @Component({
   selector: 'app-quantum-tunneling',
   templateUrl: './quantum-tunneling.component.html',
   styleUrls: ['./quantum-tunneling.component.scss'],
-  imports: [CommonModule]
+  standalone: true,
+  imports: [CommonModule],
 })
 export class QuantumTunnelingComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('canvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('canvasWrap', { static: true })
+  canvasWrapRef!: ElementRef<HTMLDivElement>;
+  @ViewChild('canvas', { static: true })
+  canvasRef!: ElementRef<HTMLCanvasElement>;
 
   ctx!: CanvasRenderingContext2D;
   sim = new QuantumTunneling();
 
   animationId = 0;
+  lastTime = 0;
+
+  width = 800;
+  height = 400;
+  private resizeObserver!: ResizeObserver;
 
   ngAfterViewInit() {
-    const canvas = this.canvasRef.nativeElement;
+    this.ctx = this.canvasRef.nativeElement.getContext('2d', { alpha: false })!;
 
-    canvas.width = 900;
-    canvas.height = 400;
+    this.resizeObserver = new ResizeObserver((entries) => {
+      const { width, height } = entries[0].contentRect;
+      this.width = width;
+      this.height = height;
+      this.canvasRef.nativeElement.width = width;
+      this.canvasRef.nativeElement.height = height;
 
-    this.ctx = canvas.getContext('2d')!;
+      this.sim.barrierX = (width - this.sim.barrierWidth) / 2;
+    });
+    this.resizeObserver.observe(this.canvasWrapRef.nativeElement);
+
     this.sim.reset();
-
-    this.loop();
+    this.lastTime = performance.now();
+    this.loop(this.lastTime);
   }
 
-  loop = () => {
-    this.update();
+  loop = (time: number) => {
+    const dt = Math.min((time - this.lastTime) / 1000, 0.05);
+    this.lastTime = time;
+
+    this.sim.step(dt);
     this.draw();
     this.animationId = requestAnimationFrame(this.loop);
   };
 
-  drawWaveFunction() {
-  const ctx = this.ctx;
-
-  ctx.beginPath();
-
-  for (let x = 0; x < 900; x++) {
-    const y = this.sim.getWave(x) * 60;
-
-    if (x === 0) ctx.moveTo(x, 200 + y);
-    else ctx.lineTo(x, 200 + y);
+  setEnergy(e: string) {
+    this.sim.setEnergy(parseFloat(e));
   }
-
-  ctx.strokeStyle = '#38bdf8';
-  ctx.lineWidth = 2;
-  ctx.stroke();
-}
-
-drawProbabilityCloud() {
-  const ctx = this.ctx;
-
-  for (let x = 0; x < 900; x += 2) {
-    const amp = this.sim.getWave(x);
-    const prob = amp * amp;
-
-    const alpha = Math.min(prob, 1);
-
-    ctx.fillStyle = `rgba(56,189,248,${alpha * 0.3})`;
-
-    ctx.fillRect(x, 150, 2, 100);
+  setBarrier(h: string) {
+    this.sim.setBarrier(parseFloat(h));
   }
-}
-
-  update() {
-    this.sim.step(0.02);
-  }
-
-draw() {
-  const ctx = this.ctx;
-
-  ctx.fillStyle = '#020617';
-  ctx.fillRect(0, 0, 900, 400);
-
-  this.drawBarrier();
-  this.drawWaveFunction();
-  this.drawProbabilityCloud();
-  this.drawUI();
-}
-
-drawBarrier() {
-  const ctx = this.ctx;
-
-  const h = this.sim.barrierHeight * 120;
-
-  const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-  gradient.addColorStop(0, '#ef4444');
-  gradient.addColorStop(1, '#7f1d1d');
-
-  ctx.fillStyle = gradient;
-
-  ctx.fillRect(
-    this.sim.barrierX,
-    200 - h,
-    this.sim.barrierWidth,
-    h * 2
-  );
-}
-
-  drawParticle() {
-    const ctx = this.ctx;
-
-    ctx.beginPath();
-    ctx.arc(this.sim.x, 200, 8, 0, Math.PI * 2);
-
-    ctx.fillStyle = '#38bdf8';
-    ctx.fill();
-  }
-
-drawUI() {
-  const ctx = this.ctx;
-
-  ctx.fillStyle = 'rgba(0,0,0,0.5)';
-  ctx.fillRect(0, 0, 300, 90);
-
-  ctx.fillStyle = 'white';
-  ctx.font = '14px monospace';
-
-  ctx.fillText(`Energy: ${this.sim.energy.toFixed(2)}`, 10, 20);
-  ctx.fillText(`Barrier: ${this.sim.barrierHeight.toFixed(2)}`, 10, 40);
-
-  const p = this.sim.getTunnelProbability();
-  ctx.fillText(`Probability: ${p.toFixed(2)}`, 10, 60);
-
-  ctx.fillStyle = '#94a3b8';
-  ctx.fillText(`Wave behavior visible`, 10, 80);
-}
-
   reset() {
     this.sim.reset();
   }
 
-  setEnergy(e: number) {
-    this.sim.setEnergy(e);
+  draw() {
+    const ctx = this.ctx;
+
+    ctx.fillStyle = 'rgba(2, 6, 23, 0.5)';
+    ctx.fillRect(0, 0, this.width, this.height);
+
+    this.drawGrid();
+    this.drawBarrier();
+    this.drawProbabilityCloud();
+    this.drawWaveFunction();
   }
 
-  setBarrier(h: number) {
-    this.sim.setBarrier(h, this.sim.barrierWidth);
+  drawGrid() {
+    const ctx = this.ctx;
+    const centerY = this.height / 2;
+
+    ctx.beginPath();
+    ctx.moveTo(0, centerY);
+    ctx.lineTo(this.width, centerY);
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  drawBarrier() {
+    const ctx = this.ctx;
+    const centerY = this.height / 2;
+    const h = (this.sim.barrierHeight / 2) * (this.height * 0.4);
+
+    const isOvercome = this.sim.energy >= this.sim.barrierHeight;
+
+    const color1 = isOvercome
+      ? 'rgba(34, 197, 94, 0.4)'
+      : 'rgba(239, 68, 68, 0.5)';
+    const color2 = isOvercome
+      ? 'rgba(34, 197, 94, 0.1)'
+      : 'rgba(239, 68, 68, 0.1)';
+    const borderColor = isOvercome ? '#22c55e' : '#ef4444';
+
+    const gradient = ctx.createLinearGradient(0, centerY - h, 0, centerY + h);
+    gradient.addColorStop(0, color2);
+    gradient.addColorStop(0.5, color1);
+    gradient.addColorStop(1, color2);
+
+    ctx.fillStyle = gradient;
+    ctx.fillRect(this.sim.barrierX, centerY - h, this.sim.barrierWidth, h * 2);
+
+    ctx.strokeStyle = borderColor;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(
+      this.sim.barrierX,
+      centerY - h,
+      this.sim.barrierWidth,
+      h * 2,
+    );
+
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = borderColor;
+    ctx.strokeRect(
+      this.sim.barrierX,
+      centerY - h,
+      this.sim.barrierWidth,
+      h * 2,
+    );
+    ctx.shadowBlur = 0;
+  }
+
+  drawWaveFunction() {
+    const ctx = this.ctx;
+    const centerY = this.height / 2;
+    const maxAmp = this.height * 0.25;
+
+    ctx.beginPath();
+    for (let x = 0; x < this.width; x += 2) {
+      const y = this.sim.getWave(x) * maxAmp;
+
+      if (x === 0) ctx.moveTo(x, centerY - y);
+      else ctx.lineTo(x, centerY - y);
+    }
+
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 2.5;
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = '#38bdf8';
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
+
+  drawProbabilityCloud() {
+    const ctx = this.ctx;
+    const centerY = this.height / 2;
+    const maxAmp = this.height * 0.25;
+
+    for (let x = 0; x < this.width; x += 3) {
+      const amp = this.sim.getWave(x);
+      const prob = amp * amp;
+
+      const alpha = Math.min(prob, 1);
+      const cloudHeight = maxAmp * 1.5;
+
+      ctx.fillStyle = `rgba(56, 189, 248, ${alpha * 0.15})`;
+      ctx.fillRect(x, centerY - cloudHeight / 2, 3, cloudHeight);
+    }
   }
 
   ngOnDestroy() {
     cancelAnimationFrame(this.animationId);
+    if (this.resizeObserver) this.resizeObserver.disconnect();
   }
 }

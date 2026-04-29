@@ -1,57 +1,127 @@
-<div class="container">
-  <div class="panel">
-    <h2>⚛ Quantum Lab</h2>
-
-    <button (click)="setMode('levels')">Energy Levels</button>
-    <button (click)="setMode('wave')">Wave Function</button>
-    <button (click)="setMode('states')">States</button>
-
-    <p *ngIf="mode === 'levels'">
-      Electrons occupy discrete energy levels.
-    </p>
-    <p *ngIf="mode === 'wave'">
-      Probability distribution of electron positions.
-    </p>
-    <p *ngIf="mode === 'states'">
-      Each level has quantized energy.
-    </p>
+<div class="quantum-root">
+  <div class="header">
+    <div class="title-group">
+      <div class="logo-icon">⚛</div>
+      <div>
+        <h1>Quantum Mechanics Lab</h1>
+        <p>Wave-Particle Duality & Discrete Energy States</p>
+      </div>
+    </div>
   </div>
 
-  <canvas #canvas></canvas>
+  <div class="layout">
+    <div class="panel glass-panel">
+      <h2>Visualizer Modes</h2>
+
+      <div class="mode-buttons">
+        <button [class.active]="mode === 'levels'" (click)="setMode('levels')">
+          <span class="icon">⚗</span> Orbital Levels
+        </button>
+        <button [class.active]="mode === 'wave'" (click)="setMode('wave')">
+          <span class="icon">〰</span> Wave Function
+        </button>
+        <button [class.active]="mode === 'states'" (click)="setMode('states')">
+          <span class="icon">📊</span> Energy States
+        </button>
+      </div>
+
+      <div class="mode-info">
+        <div *ngIf="mode === 'levels'">
+          <h3>Orbital Model</h3>
+          <p>
+            Electrons occupy discrete energy levels (n=1, 2, 3...) orbiting the
+            nucleus. Visualized as classical planetary motion.
+          </p>
+        </div>
+        <div *ngIf="mode === 'wave'">
+          <h3>Probability Cloud</h3>
+          <p>
+            Displays the radial wave function. Brightness indicates the
+            probability of finding an electron in that region.
+          </p>
+        </div>
+        <div *ngIf="mode === 'states'">
+          <h3>Energy Quantization</h3>
+          <p>
+            Electrons plotted on an energy scale. Notice how energy (eV)
+            strictly jumps between specific quantized values.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="canvas-wrap glass-panel" #canvasWrap>
+      <canvas #canvas></canvas>
+      <div class="hud-corner top-left"></div>
+      <div class="hud-corner top-right"></div>
+      <div class="hud-corner bottom-left"></div>
+      <div class="hud-corner bottom-right"></div>
+    </div>
+  </div>
+
+  <div class="quantum-explainer">
+    <div class="explainer-header">
+      <h2>⚛️ Добро пожаловать в Микромир!</h2>
+      <p>Здесь крошечные частицы играют в прятки и нарушают все правила</p>
+    </div>
+
+    <div class="explainer-grid">
+      <div class="q-card">
+        <div class="q-icon">🪜</div>
+        <div class="q-text">
+          <h3>Волшебная лестница</h3>
+          <p>
+            В обычном мире ты можешь подняться на горку на любую высоту. Но
+            электрон — это капризный прыгун. Он живет на
+            <b>энергетических уровнях</b>, которые похожи на ступеньки лестницы.
+            Он может быть на первой ступеньке или на второй, но
+            <i>никогда</i> не может зависнуть где-то посередине! Чтобы прыгнуть
+            выше, ему нужно «съесть» порцию света.
+          </p>
+        </div>
+      </div>
+
+      <div class="q-card glow-purple">
+        <div class="q-icon">☁️</div>
+        <div class="q-text">
+          <h3>Частица-призрак</h3>
+          <p>
+            Забудь о четких шариках! В режиме <b>«Волновой функции»</b> ты
+            видишь правду: электрон — это туман или облако. Он находится
+            <i>сразу везде</i>, где светятся яркие пятна. Чем ярче пятно, тем
+            больше шансов, что если мы внезапно включим свет, мы поймаем нашего
+            «призрака» именно там.
+          </p>
+        </div>
+      </div>
+
+      <div class="q-card glow-cyan">
+        <div class="q-icon">🕶️</div>
+        <div class="q-text">
+          <h3>Неуловимый Джо</h3>
+          <p>
+            Ученый Гейзенберг открыл забавный закон: чем точнее мы знаем,
+            <b>где</b> находится электрон, тем меньше мы понимаем,
+            <b>куда и как быстро</b> он бежит. Это как пытаться сфотографировать
+            очень быстрого бегуна: либо кадр четкий, но мы не видим движения,
+            либо всё размыто, и мы понимаем скорость, но не видим лица.
+          </p>
+        </div>
+      </div>
+
+      <div class="q-card wide">
+        <div class="q-icon">🍬</div>
+        <div class="q-text">
+          <h3>Энергия в конфетках</h3>
+          <p>
+            В режиме <b>«Энергии»</b> видно, что она не льется как вода, а
+            выдается в «пакетиках» — <b>квантах</b>. Это как в автомате с
+            игрушками: ты не можешь купить пол-игрушки, только целую. Поэтому на
+            графике мы видим четкие линии, а не плавную горку. Каждая линия —
+            это «стоимость» проживания электрона на определенном этаже атома.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
-<section class="quantum-theory">
-  <h2>Quantum Mechanics in Action</h2>
-
-  <p>
-    Electrons do not orbit the nucleus like planets around the Sun. Instead, they exist in regions of
-    probability called orbitals. These orbitals represent where an electron is likely to be found at
-    any given moment, forming a kind of quantum cloud around the nucleus.
-  </p>
-
-  <p>
-    Each electron can occupy only certain discrete energy levels. This is why atoms absorb and emit
-    light at specific wavelengths — energy changes only in quantized steps. Watching electrons move
-    through these levels in this simulation gives a tangible sense of how nature enforces order
-    at the smallest scales.
-  </p>
-
-  <p>
-    The wave function, which you can see in the "Wave Function" mode, describes the probability
-    distribution of an electron’s position. Peaks show the regions where an electron is most likely
-    to be found. This is the essence of quantum uncertainty — we can never know both position and
-    momentum precisely, but we can map the likelihood of where electrons exist.
-  </p>
-
-  <p>
-    Finally, the “States” mode summarizes each electron’s energy level. Observing these states together
-    highlights the harmony in the atomic structure — despite the apparent chaos at the quantum scale,
-    there is a precise, predictable pattern dictated by fundamental physics.
-  </p>
-
-  <p>
-    Exploring these visualizations gives more than pretty graphics. It provides intuition about
-    quantum behavior, helps understand spectroscopy, chemical reactions, and the fundamental rules
-    that govern matter. This is the invisible structure of the universe, brought to life on your screen.
-  </p>
-</section>
