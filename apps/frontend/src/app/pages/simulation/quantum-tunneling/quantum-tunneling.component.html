@@ -3,19 +3,21 @@
     <div class="title-group">
       <div class="logo-icon">🧱</div>
       <div>
-        <h1>Quantum Tunneling Lab</h1>
-        <p>Wave Packet Penetration Beyond Classical Limits</p>
+        <h1>Лаборатория квантового туннелирования</h1>
+        <p>
+          Проникновение волнового пакета за пределы классических ограничений
+        </p>
       </div>
     </div>
   </header>
 
   <div class="layout">
     <aside class="panel glass-panel">
-      <h2>Simulation Parameters</h2>
+      <h2>Параметры симуляции</h2>
 
       <div class="controls-container">
         <div class="control-group">
-          <label>Particle Energy (E)</label>
+          <label>Энергия частицы (E)</label>
           <div class="slider-wrapper">
             <input
               type="range"
@@ -34,7 +36,7 @@
         </div>
 
         <div class="control-group">
-          <label>Potential Barrier (V)</label>
+          <label>Потенциальный барьер (V)</label>
           <div class="slider-wrapper">
             <input
               type="range"
@@ -52,33 +54,35 @@
       </div>
 
       <button class="btn-reset" (click)="reset()">
-        <span class="icon">↻</span> Reset Defaults
+        <span class="icon">↻</span> Сброс значений
       </button>
 
       <div class="stats-box">
-        <h3>System Telemetry</h3>
+        <h3>Телеметрия системы</h3>
 
         <div class="stat-row">
-          <span>State</span>
+          <span>Состояние</span>
           <strong
             [class.text-success]="sim.energy >= sim.barrierHeight"
             [class.text-warning]="sim.energy < sim.barrierHeight"
           >
             {{
-              sim.energy >= sim.barrierHeight ? 'CLASSICAL PASS' : 'TUNNELING'
+              sim.energy >= sim.barrierHeight
+                ? 'КЛАССИЧЕСКОЕ ПРОХОЖДЕНИЕ'
+                : 'ТУННЕЛИРОВАНИЕ'
             }}
           </strong>
         </div>
 
         <div class="stat-row">
-          <span>Tunneling Prob. (T)</span>
+          <span>Вероятность туннелирования (T)</span>
           <strong class="text-primary"
             >{{ sim.getTunnelProbability() * 100 | number: '1.1-1' }}%</strong
           >
         </div>
 
         <div class="stat-row">
-          <span>Reflection Prob. (R)</span>
+          <span>Вероятность отражения (R)</span>
           <strong class="text-danger"
             >{{
               (1 - sim.getTunnelProbability()) * 100 | number: '1.1-1'
@@ -96,8 +100,8 @@
       <div class="hud-corner bottom-left"></div>
       <div class="hud-corner bottom-right"></div>
 
-      <div class="hud-label left-label">INCIDENT WAVE ψ(x)</div>
-      <div class="hud-label right-label">TRANSMITTED WAVE</div>
+      <div class="hud-label left-label">ПАДАЮЩАЯ ВОЛНА ψ(x)</div>
+      <div class="hud-label right-label">ПРОШЕДШАЯ ВОЛНА</div>
     </section>
   </div>
 

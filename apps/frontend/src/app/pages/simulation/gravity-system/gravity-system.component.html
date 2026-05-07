@@ -2,24 +2,24 @@
   <div class="main-layout">
     <aside class="sidebar">
       <header class="sidebar-header">
-        <h1 class="logo">🌌 Gravity<span>Lab</span></h1>
-        <p class="subtitle">Physics Simulation v2.0</p>
+        <h1 class="logo">🌌 Гравитация<span>Лаб</span></h1>
+        <p class="subtitle">Физическая симуляция v2.0</p>
       </header>
 
       <div class="control-section">
         <label class="section-label">Выберите режим</label>
         <div class="mode-buttons">
           <button (click)="setMode('orbit')" [class.active]="mode === 'orbit'">
-            <span class="icon">🪐</span> Orbit
+            <span class="icon">🪐</span> Орбита
           </button>
           <button
             (click)="setMode('galaxy')"
             [class.active]="mode === 'galaxy'"
           >
-            <span class="icon">🌀</span> Galaxy
+            <span class="icon">🌀</span> Галактика
           </button>
           <button (click)="setMode('chaos')" [class.active]="mode === 'chaos'">
-            <span class="icon">🌪</span> Chaos
+            <span class="icon">🌪</span> Хаос
           </button>
         </div>
       </div>
@@ -60,10 +60,11 @@
     <main class="canvas-area" #container>
       <canvas #canvas></canvas>
       <div class="canvas-overlay">
-        <div class="badge">{{ mode | uppercase }} MODE</div>
+        <div class="badge">{{ mode | uppercase }} РЕЖИМ</div>
       </div>
     </main>
   </div>
+
   <div class="space-guide-container">
     <div class="guide-header">
       <h2>🚀 Дневник космического исследователя</h2>
@@ -126,11 +127,11 @@
           <h3>Где прячется энергия?</h3>
           <p>
             У твоих звезд есть два «кошелька» с энергией:
-            <br />• 🏃 <b>Кинетическая</b> — это энергия бега (чем быстрее летит
-            звезда, тем её больше). <br />• 🏰 <b>Потенциальная</b> — это
-            энергия высоты (чем дальше звезда от центра, тем больше её «запас»).
-            Вместе они составляют <b>Полную энергию</b>, которая в космосе
-            никогда не пропадает зря!
+            <br />• 🏃 <b>Кинетическая</b> — это энергия движения (чем быстрее
+            летит звезда, тем её больше). <br />• 🏰 <b>Потенциальная</b> — это
+            энергия положения (чем дальше звезда от центра, тем больше её
+            «запас»). Вместе они составляют <b>Полную энергию</b>, которая в
+            космосе никогда не пропадает зря!
           </p>
         </div>
       </div>

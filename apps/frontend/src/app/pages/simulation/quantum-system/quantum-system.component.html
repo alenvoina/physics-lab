@@ -3,48 +3,49 @@
     <div class="title-group">
       <div class="logo-icon">⚛</div>
       <div>
-        <h1>Quantum Mechanics Lab</h1>
-        <p>Wave-Particle Duality & Discrete Energy States</p>
+        <h1>Лаборатория квантовой механики</h1>
+        <p>Волново-корпускулярный дуализм и дискретные энергетические уровни</p>
       </div>
     </div>
   </div>
 
   <div class="layout">
     <div class="panel glass-panel">
-      <h2>Visualizer Modes</h2>
+      <h2>Режимы визуализации</h2>
 
       <div class="mode-buttons">
         <button [class.active]="mode === 'levels'" (click)="setMode('levels')">
-          <span class="icon">⚗</span> Orbital Levels
+          <span class="icon">⚗</span> Орбитальные уровни
         </button>
         <button [class.active]="mode === 'wave'" (click)="setMode('wave')">
-          <span class="icon">〰</span> Wave Function
+          <span class="icon">〰</span> Волновая функция
         </button>
         <button [class.active]="mode === 'states'" (click)="setMode('states')">
-          <span class="icon">📊</span> Energy States
+          <span class="icon">📊</span> Энергетические состояния
         </button>
       </div>
 
       <div class="mode-info">
         <div *ngIf="mode === 'levels'">
-          <h3>Orbital Model</h3>
+          <h3>Орбитальная модель</h3>
           <p>
-            Electrons occupy discrete energy levels (n=1, 2, 3...) orbiting the
-            nucleus. Visualized as classical planetary motion.
+            Электроны занимают дискретные энергетические уровни (n=1, 2, 3...),
+            вращаясь вокруг ядра. Визуализируется как классическое планетарное
+            движение.
           </p>
         </div>
         <div *ngIf="mode === 'wave'">
-          <h3>Probability Cloud</h3>
+          <h3>Облако вероятности</h3>
           <p>
-            Displays the radial wave function. Brightness indicates the
-            probability of finding an electron in that region.
+            Отображает радиальную волновую функцию. Яркость показывает
+            вероятность обнаружения электрона в данной области.
           </p>
         </div>
         <div *ngIf="mode === 'states'">
-          <h3>Energy Quantization</h3>
+          <h3>Квантование энергии</h3>
           <p>
-            Electrons plotted on an energy scale. Notice how energy (eV)
-            strictly jumps between specific quantized values.
+            Электроны отображаются на энергетической шкале. Обрати внимание, как
+            энергия (эВ) скачкообразно принимает только дискретные значения.
           </p>
         </div>
       </div>

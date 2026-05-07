@@ -1,0 +1,45 @@
+<div class="article-layout" *ngIf="article; else notFound">
+  <div class="hero-section">
+    <div class="hero-bg" [style.background-image]="'url(' + article.image + ')'"></div>
+    <div class="hero-overlay"></div>
+    
+    <div class="hero-content">
+      <button class="back-btn" routerLink="/articles">
+        <span>←</span> Вернуться к статьям
+      </button>
+      
+      <div class="tags">
+        <span class="tag">{{ article.category }}</span>
+      </div>
+      
+      <h1 class="article-title">{{ article.title }}</h1>
+      
+      <div class="article-meta">
+        <div class="author-info">
+          <div class="avatar">НЖ</div>
+          <div>
+            <div class="author-name">Редакция Science</div>
+            <div class="publish-date">{{ article.date }} • {{ article.readTime }} мин чтения</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="article-body">
+    <div class="content-wrapper">
+      <p class="lead-text">{{ article.preview }}</p>
+      
+      <div class="rich-text">
+        {{ article.content }}
+      </div>
+    </div>
+  </main>
+</div>
+
+<ng-template #notFound>
+  <div class="not-found">
+    <h2>Статья не найдена</h2>
+    <button routerLink="/articles">Вернуться к списку</button>
+  </div>
+</ng-template>

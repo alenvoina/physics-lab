@@ -4,6 +4,8 @@ import {
   ElementRef,
   ViewChild,
   OnDestroy,
+  OnInit,
+  NgZone,
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -11,12 +13,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
-
-interface News {
-  title: string;
-  content: string;
-  image: string;
-}
+import { ArticlesService } from '../articles/articles.service';
+import { Article } from '../article/article.model';
 
 @Component({
   selector: 'app-home',
@@ -31,7 +29,7 @@ interface News {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements AfterViewInit, OnDestroy {
+export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('atomCanvas', { static: true })
   canvasRef!: ElementRef<HTMLCanvasElement>;
 
@@ -62,113 +60,106 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     },
     {
       year: 1926,
-      title: 'Эрвин Шредингер',
-      description: 'Волновая функция и квантовая механика',
+      title: 'Эрвин Шрёдингер',
+      description: 'Формулирует волновое уравнение — основу квантовой механики',
       icon: 'assets/Srhedinger.jpg',
     },
     {
       year: 1932,
       title: 'Джеймс Чедвик',
-      description: 'Открытие нейтрона',
+      description:
+        'Открывает нейтрон, что позволяет понять структуру атомного ядра',
       icon: 'assets/Chedwik.jpg',
     },
     {
       year: 1942,
-      title: 'Проект Манхэттен',
-      description: 'Разработка атомной бомбы',
-      icon: 'assets/Einstein.jpg',
+      title: 'Энрико Ферми',
+      description:
+        'Запускает первый в мире ядерный реактор (Чикагская поленница-1) в рамках Манхэттенского проекта',
+      icon: 'assets/Fermi.jpg',
     },
     {
       year: 1964,
-      title: 'Кварки',
-      description: 'Появляется квантовая хромодинамика',
-      icon: 'assets/Einstein.jpg',
+      title: 'Мюррей Гелл-Ман',
+      description:
+        'Выдвигает гипотезу о существовании кварков — фундаментальных составляющих материи',
+      icon: 'assets/GellMann.jpg',
     },
     {
       year: 1984,
-      title: 'Лазерное охлаждение',
-      description: 'Разработка лазерных охлаждений атомов',
-      icon: 'assets/Einstein.jpg',
+      title: 'Стивен Чу',
+      description: 'Разрабатыны методы лазерного охлаждения и удержания атомов',
+      icon: 'assets/Chu.jpg',
     },
     {
       year: 2001,
-      title: 'Квантовые компьютеры',
-      description: 'Первые прототипы квантовых вычислений',
-      icon: 'assets/Einstein.jpg',
+      title: 'Исаак Чуанг',
+      description:
+        'Создан 7-кубитный прототип квантового компьютера и демонстрируют алгоритм Шора',
+      icon: 'assets/Chuang.jpg',
     },
     {
       year: 2002,
-      title: 'Нейтрино',
-      description: 'Обнаружение космических нейтрино',
-      icon: 'assets/Einstein.jpg',
+      title: 'Раймонд Дэвис',
+      description:
+        'Успешная регистрация космических нейтрино (Нобелевская премия 2002 года)',
+      icon: 'assets/Davis.jpg',
     },
     {
       year: 2012,
-      title: 'Бозон Хиггса',
-      description: 'Открыт бозон Хиггса в CERN',
-      icon: 'assets/Einstein.jpg',
+      title: 'Питер Хиггс',
+      description:
+        'Открытие бозона Хиггса на Большом адронном коллайдере в CERN',
+      icon: 'assets/Higgs.jpg',
     },
     {
       year: 2015,
       title: 'Такааки Кадзита',
-      description: 'Нейтрино имеют массу',
-      icon: 'assets/Einstein.jpg',
+      description:
+        'Открытие нейтринных осцилляций, доказывающее, что нейтрино имеют массу',
+      icon: 'assets/Kajita.jpg',
     },
     {
       year: 2016,
-      title: 'Райнер Вайс',
-      description: 'Регистрация гравитационных волн',
-      icon: 'assets/Einstein.jpg',
+      title: 'Райнер Вайc',
+      description:
+        'Первая прямая регистрация гравитационных волн коллаборацией LIGO',
+      icon: 'assets/Weiss.jpg',
     },
     {
       year: 2020,
       title: 'Роджер Пенроуз',
-      description: 'Сверхмассивная чёрная дыра в центре галактики',
-      icon: 'assets/Einstein.jpg',
+      description:
+        'Открытие сверхмассивной чёрной дыры в центре Галактики и изучение теории их формирования',
+      icon: 'assets/Penrose.webp',
     },
     {
       year: 2025,
       title: 'Джон Кларк',
-      description: 'Квантовые эффекты в цепях',
-      icon: 'assets/Einstein.jpg',
+      description:
+        'Открытие макроскопического квантового туннелирования и квантования энергии в электрических цепях',
+      icon: 'assets/Clarke.jpg',
     },
   ];
 
-  newsList: News[] = [];
+  newsList: Article[] = [];
   private animationId!: number;
 
-  private allNews: News[] = [
-    {
-      title: 'Quantum Entanglement Breakthrough',
-      content: 'Scientists achieved record distances for entangled particles.',
-      image: 'assets/quantum.jpg',
-    },
-    {
-      title: 'Black Hole Imaging Updated',
-      content:
-        'The EHT released a new image of a black hole with unprecedented detail.',
-      image: 'assets/blackhole.jpeg',
-    },
-    {
-      title: 'Fusion Energy Milestone',
-      content: 'Net energy gain achieved in fusion reaction.',
-      image: 'assets/fusion.jpg',
-    },
-    {
-      title: 'Gravitational Waves Detected',
-      content: 'LIGO detected waves from a binary neutron star merger.',
-      image: 'assets/gravity.jpg',
-    },
-    {
-      title: 'Dark Matter Clues',
-      content: 'Experiments hint at dark matter interactions.',
-      image: 'assets/dark-matter.webp',
-    },
-  ];
+  constructor(
+    private articlesService: ArticlesService,
+    private ngZone: NgZone,
+  ) {}
+
+  ngOnInit() {
+    this.generateRandomNews();
+  }
 
   ngAfterViewInit() {
-    this.generateRandomNews();
     this.initCanvas();
+  }
+
+  generateRandomNews() {
+    this.newsList = this.articlesService.getRandom(3);
   }
 
   private initCanvas() {
@@ -178,78 +169,72 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
     const size = 350;
     const dpr = window.devicePixelRatio || 1;
-
     canvas.width = size * dpr;
     canvas.height = size * dpr;
-
     ctx.scale(dpr, dpr);
-
     const center = { x: size / 2, y: size / 2 };
 
     let a1 = 0,
       a2 = 0,
       a3 = 0;
 
-    const draw = () => {
-      ctx.clearRect(0, 0, size, size);
+    // ВАЖНО: Запускаем анимацию ВНЕ Angular, чтобы сайт не лагал!
+    this.ngZone.runOutsideAngular(() => {
+      const draw = () => {
+        ctx.clearRect(0, 0, size, size);
 
-      ctx.beginPath();
-      ctx.arc(center.x, center.y, 12, 0, Math.PI * 2);
-      ctx.fillStyle = '#1976d2';
-      ctx.fill();
-
-      const orbit = (r: number, tilt: number) => {
-        ctx.save();
-        ctx.translate(center.x, center.y);
-        ctx.rotate(tilt);
+        // ... (весь твой код отрисовки атома)
         ctx.beginPath();
-        ctx.ellipse(0, 0, r, r * 0.4, 0, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(100,150,255,0.2)';
-        ctx.stroke();
-        ctx.restore();
-      };
-
-      const electron = (r: number, a: number, t: number, c: string) => {
-        ctx.save();
-        ctx.translate(center.x, center.y);
-        ctx.rotate(t);
-
-        const x = Math.cos(a) * r;
-        const y = Math.sin(a) * r * 0.4;
-
-        ctx.beginPath();
-        ctx.arc(x, y, 5, 0, Math.PI * 2);
-        ctx.fillStyle = c;
+        ctx.arc(center.x, center.y, 12, 0, Math.PI * 2);
+        ctx.fillStyle = '#1976d2';
         ctx.fill();
 
-        ctx.restore();
+        const orbit = (r: number, tilt: number) => {
+          ctx.save();
+          ctx.translate(center.x, center.y);
+          ctx.rotate(tilt);
+          ctx.beginPath();
+          ctx.ellipse(0, 0, r, r * 0.4, 0, 0, Math.PI * 2);
+          ctx.strokeStyle = 'rgba(100,150,255,0.2)';
+          ctx.stroke();
+          ctx.restore();
+        };
+
+        const electron = (r: number, a: number, t: number, c: string) => {
+          ctx.save();
+          ctx.translate(center.x, center.y);
+          ctx.rotate(t);
+          const x = Math.cos(a) * r;
+          const y = Math.sin(a) * r * 0.4;
+          ctx.beginPath();
+          ctx.arc(x, y, 5, 0, Math.PI * 2);
+          ctx.fillStyle = c;
+          ctx.fill();
+          ctx.restore();
+        };
+
+        orbit(80, 0);
+        orbit(80, Math.PI / 3);
+        orbit(80, -Math.PI / 3);
+
+        electron(80, a1, 0, '#ff4081');
+        electron(80, a2, Math.PI / 3, '#00e5ff');
+        electron(80, a3, -Math.PI / 3, '#69f0ae');
+
+        a1 += 0.02;
+        a2 += 0.015;
+        a3 += 0.01;
+
+        this.animationId = requestAnimationFrame(draw);
       };
 
-      orbit(80, 0);
-      orbit(80, Math.PI / 3);
-      orbit(80, -Math.PI / 3);
-
-      electron(80, a1, 0, '#ff4081');
-      electron(80, a2, Math.PI / 3, '#00e5ff');
-      electron(80, a3, -Math.PI / 3, '#69f0ae');
-
-      a1 += 0.02;
-      a2 += 0.015;
-      a3 += 0.01;
-
-      this.animationId = requestAnimationFrame(draw);
-    };
-
-    draw();
-  }
-
-  generateRandomNews() {
-    this.newsList = [...this.allNews]
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 3);
+      draw();
+    });
   }
 
   ngOnDestroy() {
-    cancelAnimationFrame(this.animationId);
+    if (this.animationId) {
+      cancelAnimationFrame(this.animationId);
+    }
   }
 }

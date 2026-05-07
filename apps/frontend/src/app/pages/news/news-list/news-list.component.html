@@ -1,7 +1,27 @@
-<section class="premium-news-section">
+<section class="nasa-premium-section-light">
+  <header class="section-header">
+    <div class="live-indicator">
+      <span class="pulse"></span>
+      <span class="label">LIVE RSS-ЛЕНТА</span>
+    </div>
+    <h2 class="main-title">Официальные сводки NASA</h2>
+    <p class="subtitle">
+      Прямой поток данных Национального управления по аэронавтике и исследованию
+      космического пространства
+    </p>
+  </header>
+
   <div class="news-grid">
     <article class="news-card" *ngFor="let news of newsList">
       <div class="card-image-wrapper">
+        <div class="source-badge">
+          <svg class="nasa-star" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2L15 10H23L16.5 14.5L19 22L12 17.5L5 22L7.5 14.5L1 10H9L12 2Z"
+            />
+          </svg>
+          NASA RSS
+        </div>
         <img
           [src]="news.image"
           [alt]="news.title"
@@ -11,6 +31,12 @@
       </div>
 
       <div class="card-content">
+        <div class="card-meta">
+          <span class="date">{{ news.date | date: 'dd.MM.yyyy' }}</span>
+          <span class="divider">/</span>
+          <span class="agency-label">ОФИЦИАЛЬНАЯ СВОДКА</span>
+        </div>
+
         <h3 class="card-title">{{ news.title }}</h3>
         <div class="card-summary" [innerHTML]="news.summary"></div>
       </div>
@@ -21,7 +47,7 @@
           class="premium-button"
           [routerLink]="['/news', news.id]"
         >
-          Read More <span class="arrow">→</span>
+          Читать сводку <span class="arrow">↗</span>
         </button>
       </div>
     </article>

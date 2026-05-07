@@ -33,6 +33,16 @@ const routes: Routes = [
   { path: 'simulation/nuclear-stability', component: NuclearStabilityComponent },
   { path: 'physics-life', component: PhysicsInLifeComponent },
   { path: 'experiments', component: ExperimentsGalleryComponent },
+  {
+  path: 'articles',
+  loadComponent: () =>
+    import('./pages/articles/articles.component').then(m => m.ArticlesComponent)
+},
+{
+  path: 'articles/:slug',
+  loadComponent: () =>
+    import('./pages/article/article.component').then(m => m.ArticleComponent)
+}
 ];
 
 @NgModule({

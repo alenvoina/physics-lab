@@ -1,0 +1,31 @@
+<div class="page-container">
+  <header class="page-header">
+    <h1 class="header-name">Научный Журнал</h1>
+    <p>Исследования, открытия и технологии, меняющие мир.</p>
+  </header>
+
+  <div class="articles-grid">
+    <article class="premium-card" *ngFor="let article of articles"[routerLink]="['/articles', article.slug]">
+      <div class="card-image-wrapper">
+        <img [src]="article.image" [alt]="article.title" />
+        <span class="category-badge">{{ article.category }}</span>
+      </div>
+      
+      <div class="card-body">
+        <div class="meta-data">
+          <span>{{ article.date }}</span>
+          <span class="dot">•</span>
+          <span>{{ article.readTime }} мин чтения</span>
+        </div>
+        
+        <h2>{{ article.title }}</h2>
+        <p class="preview-text">{{ article.preview }}</p>
+        
+        <div class="card-action">
+          <span class="read-more">Читать статью</span>
+          <i class="icon-arrow-right">→</i>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>

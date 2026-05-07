@@ -3,8 +3,8 @@
     <div class="title-group">
       <div class="logo-icon">☢</div>
       <div>
-        <h1>Radioactive Decay Sim</h1>
-        <p>Exponential Decay & Half-Life Physics</p>
+        <h1>Симуляция радиоактивного распада</h1>
+        <p>Экспоненциальный распад и физика полураспада</p>
       </div>
     </div>
   </div>
@@ -12,31 +12,31 @@
   <div class="layout">
     <div class="top-section">
       <div class="panel glass-panel">
-        <h2>Decay Parameters</h2>
+        <h2>Параметры распада</h2>
 
         <div class="controls-grid">
           <button
             [class.active]="sim.decayType === 'alpha'"
             (click)="setType('alpha')"
           >
-            <b>α</b> Alpha
+            <b>α</b> Альфа
           </button>
           <button
             [class.active]="sim.decayType === 'beta'"
             (click)="setType('beta')"
           >
-            <b>β</b> Beta
+            <b>β</b> Бета
           </button>
           <button
             [class.active]="sim.decayType === 'gamma'"
             (click)="setType('gamma')"
           >
-            <b>γ</b> Gamma
+            <b>γ</b> Гамма
           </button>
         </div>
 
         <div class="control-group">
-          <label>Time Dialation (Speed)</label>
+          <label>Искажение времени (скорость)</label>
           <div class="slider-wrapper">
             <input
               type="range"
@@ -51,28 +51,28 @@
         </div>
 
         <button class="btn-reset" (click)="reset()">
-          <span class="icon">↻</span> Reset Material
+          <span class="icon">↻</span> Сброс материала
         </button>
 
         <div class="stats">
           <div class="stat">
-            <span>Elapsed Time</span>
+            <span>Прошедшее время</span>
             <strong class="text-primary"
-              >{{ sim.time | number: '1.1-1' }} s</strong
+              >{{ sim.time | number: '1.1-1' }} с</strong
             >
           </div>
           <div class="stat">
-            <span>Half-Life (T½)</span>
+            <span>Период полураспада (T½)</span>
             <strong class="text-warning"
-              >{{ sim.getHalfLife() | number: '1.1-1' }} s</strong
+              >{{ sim.getHalfLife() | number: '1.1-1' }} с</strong
             >
           </div>
           <div class="stat">
-            <span>Remaining Atoms</span>
+            <span>Оставшиеся атомы</span>
             <strong class="text-success">{{ sim.getRemaining() }}</strong>
           </div>
           <div class="stat">
-            <span>Decayed Atoms</span>
+            <span>Распавшиеся атомы</span>
             <strong class="text-danger">{{ sim.getDecayed() }}</strong>
           </div>
         </div>
@@ -86,63 +86,83 @@
         <div class="hud-corner bottom-right"></div>
       </div>
     </div>
-
     <div class="decay-guide">
-  <div class="guide-header">
-    <h2>☢️ Лаборатория распада: Время и Хаос</h2>
-    <p>Почему мы не знаем, когда умрет атом, но точно знаем, когда исчезнет половина</p>
-  </div>
-
-  <div class="guide-grid">
-    <!-- Секция: Случайность -->
-    <div class="guide-card neon-green">
-      <div class="card-icon">🎲</div>
-      <div class="card-content">
-        <h3>Квантовая лотерея</h3>
+      <div class="guide-header">
+        <h2>☢️ Лаборатория распада: Время и Хаос</h2>
         <p>
-          Представь, что у каждого атома в руках игральный кубик. Раз в секунду он его бросает. Если выпадет шестерка — атом «умирает» (распадается). 
-          Мы никогда не знаем, какой именно атом распадется следующим, но для огромной толпы атомов математика работает идеально.
+          Почему мы не знаем, когда умрет атом, но точно знаем, когда исчезнет
+          половина
         </p>
       </div>
-    </div>
 
-    <div class="guide-card neon-yellow">
-  <div class="card-icon">📉</div>
-  <div class="card-content">
-    <h3>Правило 50%</h3>
-    <p>
-      <b>Период полураспада (T<sub>1/2</sub>)</b> — это время, за которое ровно половина твоих зеленых точек станет серыми. 
-      Если у тебя было 1000 атомов, через один период их останется 500.
-    </p>
-    <div class="formula-box" [innerText]="decayFormula"></div>
-  </div>
-</div>
+      <div class="guide-grid">
+        <!-- Секция: Случайность -->
+        <div class="guide-card neon-green">
+          <div class="card-icon">🎲</div>
+          <div class="card-content">
+            <h3>Квантовая лотерея</h3>
+            <p>
+              Представь, что у каждого атома в руках игральный кубик. Раз в
+              секунду он его бросает. Если выпадет шестерка — атом «умирает»
+              (распадается). Мы никогда не знаем, какой именно атом распадется
+              следующим, но для огромной толпы атомов математика работает
+              идеально.
+            </p>
+          </div>
+        </div>
 
-    <div class="guide-card wide radiation-types">
-      <div class="card-icon">🚀</div>
-      <div class="card-content">
-        <h3>Три пути распада</h3>
-        <div class="types-flex">
-          <div class="type-item alpha">
-            <h4>Альфа (α)</h4>
-            <p>Тяжелые «пушечные ядра». Это ядра гелия. Сильные, но медленные — их может остановить даже лист бумаги.</p>
+        <div class="guide-card neon-yellow">
+          <div class="card-icon">📉</div>
+          <div class="card-content">
+            <h3>Правило 50%</h3>
+            <p>
+              <b>Период полураспада (T<sub>1/2</sub>)</b> — это время, за
+              которое ровно половина твоих зеленых точек станет серыми. Если у
+              тебя было 1000 атомов, через один период их останется 500.
+            </p>
+            <div class="formula-box" [innerText]="decayFormula"></div>
           </div>
-          <div class="type-item beta">
-            <h4>Бета (β)</h4>
-            <p>Быстрые электроны-пули. Прошивают бумагу, но застревают в тонкой алюминиевой пластине.</p>
-          </div>
-          <div class="type-item gamma">
-            <h4>Гамма (γ)</h4>
-            <p>Чистая энергия. Призрачные волны, которые проходят сквозь стены. Чтобы их остановить, нужен толстый слой свинца.</p>
+        </div>
+
+        <div class="guide-card wide radiation-types">
+          <div class="card-icon">🚀</div>
+          <div class="card-content">
+            <h3>Три пути распада</h3>
+            <div class="types-flex">
+              <div class="type-item alpha">
+                <h4>Альфа (α)</h4>
+                <p>
+                  Тяжелые «пушечные ядра». Это ядра гелия. Сильные, но медленные
+                  — их может остановить даже лист бумаги.
+                </p>
+              </div>
+              <div class="type-item beta">
+                <h4>Бета (β)</h4>
+                <p>
+                  Быстрые электроны-пули. Прошивают бумагу, но застревают в
+                  тонкой алюминиевой пластине.
+                </p>
+              </div>
+              <div class="type-item gamma">
+                <h4>Гамма (γ)</h4>
+                <p>
+                  Чистая энергия. Призрачные волны, которые проходят сквозь
+                  стены. Чтобы их остановить, нужен толстый слой свинца.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <div class="pro-tip">
-    <p>💡 <b>Задание для лаборанта:</b> Установи скорость на <b>0.1x</b> и выбери <b>Gamma</b>. Обрати внимание, как «волны» расходятся от атомов. Гамма-распад часто происходит вместе с другими типами, когда ядро просто хочет «сбросить пар».</p>
-  </div>
-</div>
+      <div class="pro-tip">
+        <p>
+          💡 <b>Задание для лаборанта:</b> Установи скорость на <b>0.1x</b> и
+          выбери <b>Gamma</b>. Обрати внимание, как «волны» расходятся от
+          атомов. Гамма-распад часто происходит вместе с другими типами, когда
+          ядро просто хочет «сбросить пар».
+        </p>
+      </div>
+    </div>
   </div>
 </div>

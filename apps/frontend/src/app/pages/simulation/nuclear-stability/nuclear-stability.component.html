@@ -3,8 +3,8 @@
     <div class="title-group">
       <div class="logo-icon">⚛</div>
       <div>
-        <h1>Nuclear Stability Engine</h1>
-        <p>Isotope Decay & Binding Energy Simulation</p>
+        <h1>Движок ядерной стабильности</h1>
+        <p>Симуляция распада изотопов и энергии связи</p>
       </div>
     </div>
   </div>
@@ -12,11 +12,11 @@
   <div class="layout">
     <div class="top-section">
       <div class="panel glass-panel">
-        <h2>System Parameters</h2>
+        <h2>Параметры системы</h2>
 
         <div class="controls">
           <div class="control-group">
-            <label>Time Dialation (Speed)</label>
+            <label>Искажение времени (скорость)</label>
             <div class="slider-wrapper">
               <input
                 type="range"
@@ -31,26 +31,28 @@
           </div>
 
           <button class="btn-primary" (click)="reset()">
-            <span class="icon">↻</span> Reseed Isotopes
+            <span class="icon">↻</span> Пересоздать изотопы
           </button>
         </div>
 
         <div class="legend">
-          <h3>Visual Legend</h3>
+          <h3>Условные обозначения</h3>
           <div class="legend-item">
-            <span class="dot stable"></span> Optimal Binding (Stable)
+            <span class="dot stable"></span> Оптимальная энергия связи
+            (стабильно)
           </div>
           <div class="legend-item">
-            <span class="dot unstable"></span> Unstable N/Z Ratio
+            <span class="dot unstable"></span> Нестабильное соотношение N/Z
           </div>
           <div class="legend-item">
-            <span class="dot flash"></span> Radiation Burst (Decay)
+            <span class="dot flash"></span> Вспышка излучения (распад)
           </div>
         </div>
 
         <p class="hint">
-          <b>Hover</b> over nuclei to inspect nucleon count. Unstable isotopes
-          will spontaneously undergo Alpha or Beta decay.
+          <b>Наведи курсор</b> на ядро, чтобы увидеть количество нуклонов.
+          Нестабильные изотопы самопроизвольно испытывают альфа- или
+          бета-распад.
         </p>
       </div>
 

@@ -3,28 +3,28 @@
     <div class="title-group">
       <div class="logo-icon">ψ</div>
       <div>
-        <h1>Quantum Superposition Lab</h1>
-        <p>Interference, Phase, and Wavefunction Collapse</p>
+        <h1>Лаборатория квантовой суперпозиции</h1>
+        <p>Интерференция, фаза и коллапс волновой функции</p>
       </div>
     </div>
   </div>
 
   <div class="layout">
     <div class="panel glass-panel">
-      <h2>Simulation Controls</h2>
+      <h2>Управление симуляцией</h2>
 
       <div class="system-stats">
         <div class="stat-box">
-          <span>Active States</span>
+          <span>Активные состояния</span>
           <strong>{{ system.states.length }} / 8</strong>
         </div>
         <div
           class="stat-box"
           [ngClass]="{ collapsed: lastMeasurement !== null }"
         >
-          <span>System Status</span>
+          <span>Состояние системы</span>
           <strong>{{
-            lastMeasurement !== null ? 'MEASURED' : 'SUPERPOSITION'
+            lastMeasurement !== null ? 'ИЗМЕРЕНО' : 'СУПЕРПОЗИЦИЯ'
           }}</strong>
         </div>
       </div>
@@ -35,24 +35,25 @@
           (click)="addState()"
           [disabled]="system.states.length >= 8"
         >
-          <span class="icon">+</span> Inject State
+          <span class="icon">+</span> Добавить состояние
         </button>
         <button class="btn-measure" (click)="measure()">
-          <span class="icon">👁</span> Measure (Observe)
+          <span class="icon">👁</span> Измерить (наблюдать)
         </button>
         <button class="btn-reset" (click)="reset()">
-          <span class="icon">↻</span> Reset System
+          <span class="icon">↻</span> Сброс системы
         </button>
       </div>
 
       <div class="info-box" *ngIf="lastMeasurement !== null">
-        System collapsed into State <b>|{{ lastMeasurement }}⟩</b>. <br />
-        All other probability amplitudes have been reduced to zero.
+        Система коллапсировала в состояние <b>|{{ lastMeasurement }}⟩</b>.
+        <br />
+        Все остальные амплитуды вероятности сведены к нулю.
       </div>
 
       <p class="hint">
-        Multiple quantum states exist simultaneously. Their complex amplitudes
-        interfere to form a single continuous probability wave.
+        Несколько квантовых состояний существуют одновременно. Их комплексные
+        амплитуды интерферируют, формируя единую непрерывную волну вероятности.
       </p>
     </div>
 
@@ -64,8 +65,8 @@
       <div class="hud-corner bottom-left"></div>
       <div class="hud-corner bottom-right"></div>
 
-      <div class="hud-label phasor-label">PHASOR DIAGRAM</div>
-      <div class="hud-label wave-label">PROBABILITY DENSITY WAVE</div>
+      <div class="hud-label phasor-label">ФАЗОРНАЯ ДИАГРАММА</div>
+      <div class="hud-label wave-label">ВОЛНА ПЛОТНОСТИ ВЕРОЯТНОСТИ</div>
     </div>
   </div>
 

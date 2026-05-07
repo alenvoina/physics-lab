@@ -3,8 +3,7 @@
     <div class="title-group">
       <div class="logo-icon">☢</div>
       <div>
-        <h1>Reactor Core Terminal</h1>
-        <p>Chain Reaction Simulation v2.0</p>
+        <h1>Терминал ядерного реактора</h1>
       </div>
     </div>
     <div class="system-status" [ngClass]="getStatusClass()">
@@ -23,10 +22,10 @@
     </div>
 
     <div class="panel glass-panel">
-      <h2>⚙ Control Panel</h2>
+      <h2>⚙ Панель управления</h2>
 
       <div class="control-group">
-        <label>Time Dialation (Speed)</label>
+        <label>Искажение времени (скорость)</label>
         <div class="slider-wrapper">
           <input
             type="range"
@@ -41,7 +40,7 @@
       </div>
 
       <div class="control-group">
-        <label>Control Rods Insertion</label>
+        <label>Ввод управляющих стержней</label>
         <div class="slider-wrapper">
           <input
             type="range"
@@ -55,13 +54,13 @@
             >{{ (sim.controlLevel * 100).toFixed(0) }}%</span
           >
         </div>
-        <div class="hint">Graphite rods absorb neutrons.</div>
+        <div class="hint">Графитовые стержни поглощают нейтроны.</div>
       </div>
 
       <div class="telemetry">
         <div class="bar-container">
           <div class="bar-label">
-            <span>Temperature</span>
+            <span>Температура</span>
             <span>{{ sim.temperature.toFixed(0) }} / 1200K</span>
           </div>
           <div class="progress">
@@ -74,8 +73,8 @@
 
         <div class="bar-container">
           <div class="bar-label">
-            <span>Power Output</span>
-            <span>{{ sim.energy.toFixed(0) }} MW</span>
+            <span>Выходная мощность</span>
+            <span>{{ sim.energy.toFixed(0) }} МВт</span>
           </div>
           <div class="progress">
             <div
@@ -87,14 +86,15 @@
       </div>
 
       <button class="btn-reset" (click)="reset()">
-        <span class="icon">↻</span> EMERGENCY SCRAM
+        <span class="icon">↻</span> АВАРИЙНАЯ ОСТАНОВКА (SCRAM)
       </button>
 
       <div class="theory-box">
-        <h3>System Manual</h3>
+        <h3>Системное руководство</h3>
         <p>
-          Neutrons strike <b>U-235</b> triggering fission. Drop the control rods
-          to absorb free neutrons and prevent thermal meltdown.
+          Нейтроны сталкиваются с <b>U-235</b>, вызывая деление. Опускайте
+          управляющие стержни, чтобы поглощать свободные нейтроны и
+          предотвратить перегрев активной зоны.
         </p>
       </div>
     </div>

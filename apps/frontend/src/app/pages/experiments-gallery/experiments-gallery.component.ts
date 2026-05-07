@@ -79,7 +79,7 @@ export class ExperimentsGalleryComponent {
       title: 'Опыт Милликена',
       category: 'Электромагнетизм',
       image:
-        'https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?q=80&w=800&auto=format&fit=crop',
+        'https://plus.unsplash.com/premium_photo-1664302244254-0b614b519f19?q=80&w=800&auto=format&fit=crop',
       short: 'Измерение элементарного заряда электрона.',
       full: 'Роберт Милликен подвешивал мельчайшие заряженные капли масла в электрическом поле между двумя металлическими пластинами. Балансируя силу тяжести и электрическую силу, он точно измерил заряд электрона.',
     },
@@ -95,7 +95,7 @@ export class ExperimentsGalleryComponent {
       title: 'Эксперимент Штерна-Герлаха',
       category: 'Квантовый спин',
       image:
-        'https://images.unsplash.com/photo-1614729939124-032d0b56c9ce?q=80&w=800&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1518365050014-70fe7232897f?q=80&w=800&auto=format&fit=crop',
       short: 'Доказательство квантования момента импульса.',
       full: 'Пропуская пучок атомов серебра через неоднородное магнитное поле, физики увидели, что пучок разделяется на две четкие полосы. Это доказало, что пространственная ориентация углового момента (спина) квантуется.',
     },
@@ -103,7 +103,7 @@ export class ExperimentsGalleryComponent {
       title: 'Дисперсия Ньютона',
       category: 'Оптика',
       image:
-        'https://images.unsplash.com/photo-1506764506544-0b1a43a0e633?q=80&w=800&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1683749987233-ee970b204f91?q=80&w=800&auto=format&fit=crop',
       short: 'Разложение белого света в спектр.',
       full: 'Исаак Ньютон с помощью стеклянной призмы доказал, что белый свет не является чистым, а состоит из всех цветов видимого спектра, которые преломляются под разными углами.',
     },

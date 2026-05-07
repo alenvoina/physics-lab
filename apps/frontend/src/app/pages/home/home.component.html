@@ -17,7 +17,7 @@
             Начать симуляцию
             <mat-icon>play_arrow</mat-icon>
           </button>
-          <button class="btn-secondary">Узнать больше</button>
+          <button class="btn-secondary" [routerLink]="['/articles']">Узнать больше</button>
         </div>
       </div>
 
@@ -61,22 +61,29 @@
   <section class="news-section">
     <div class="container">
       <div class="section-header">
-        <h2>Последние новости науки</h2>
+        <h2>Последние открытия</h2>
+        <a routerLink="/articles" class="view-all">Все статьи →</a>
       </div>
 
       <div class="news-grid">
-        <article class="news-card" *ngFor="let news of newsList">
+        <article
+          class="news-card"
+          *ngFor="let news of newsList"
+          [routerLink]="['/articles', news.slug]"
+        >
           <div class="news-img">
-            <img [src]="news.image" alt="" />
-            <div class="news-tag">Discovery</div>
+            <img [src]="news.image" [alt]="news.title" />
+            <div class="news-tag">{{ news.category }}</div>
           </div>
           <div class="news-content">
             <h3>{{ news.title }}</h3>
-            <p>{{ news.content }}</p>
+            <p>{{ news.preview }}</p>
             <div class="news-footer">
-              <span class="read-time">5 мин чтения</span>
+              <span class="read-time"
+                >{{ news.date }} • {{ news.readTime }} мин</span
+              >
               <button class="text-btn">
-                Читать <mat-icon>arrow_right_alt</mat-icon>
+                Читать <mat-icon>arrow_forward</mat-icon>
               </button>
             </div>
           </div>

@@ -36,7 +36,6 @@ export class Particle {
   step(dt: number) {
     this.position = this.position.add(this.velocity.scale(dt));
 
-    // лёгкое затухание скорости
     this.velocity = this.velocity.scale(0.999);
 
     this.life--;

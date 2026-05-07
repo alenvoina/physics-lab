@@ -1,19 +1,75 @@
 /* stylelint-disable selector-class-pattern */
-$text-main: #111827;
-$text-muted: #4b5563;
-$border-color: rgb(0 0 0 / 6%);
-$shadow-idle: 0 4px 24px rgb(0 0 0 / 4%);
-$shadow-hover: 0 12px 32px rgb(0 0 0 / 12%);
+$bg-section: #f8f9fa;
+$card-bg: #fff;
+$text-main: #0f172a;
+$text-muted: #64748b;
+$accent-color: #0b3d91;
+$border-color: rgb(0 0 0 / 8%);
+$border-hover: rgb(0 0 0 / 15%);
+$shadow-idle: 0 4px 20px rgb(0 0 0 / 3%);
+$shadow-hover: 0 12px 32px rgb(0 0 0 / 8%);
 
-.premium-news-section {
+.nasa-premium-section-light {
   padding: 3rem 1.5rem;
-  background-color: #fafafa;
+  background-color: $bg-section;
+  color: $text-main;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.section-header {
+  max-width: 1200px;
+  margin: 0 auto 3.5rem;
+  text-align: center;
+  line-height: 1.2;
+
+  .live-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 1.2rem;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: #fff;
+    border: 1px solid $border-color;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 2%);
+
+    .pulse {
+      width: 6px;
+      height: 6px;
+      background-color: #dc2626;
+      border-radius: 50%;
+      animation: pulse-light 2s infinite;
+    }
+
+    .label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: $text-main;
+    }
+  }
+
+  .main-title {
+    font-size: 2.5rem;
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    margin: 0 0 0.5rem;
+    color: $text-main;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+    color: $text-muted;
+    font-weight: 400;
+    margin: 0;
+  }
 }
 
 .news-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: 2.5rem;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -21,26 +77,29 @@ $shadow-hover: 0 12px 32px rgb(0 0 0 / 12%);
 .news-card {
   display: flex;
   flex-direction: column;
-  background: #fff;
-  border-radius: 16px;
+  background: $card-bg;
+  border-radius: 12px;
   border: 1px solid $border-color;
   box-shadow: $shadow-idle;
   overflow: hidden;
   height: 100%;
-  transition:
-    transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
-    box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 
   &:hover {
-    transform: translateY(-6px);
+    transform: translateY(-4px);
+    border-color: $border-hover;
     box-shadow: $shadow-hover;
 
     .news-image {
       transform: scale(1.05);
     }
 
-    .premium-button .arrow {
-      transform: translateX(4px);
+    .premium-button {
+      color: $accent-color;
+
+      .arrow {
+        transform: translate(3px, -3px);
+      }
     }
   }
 }
@@ -49,17 +108,38 @@ $shadow-hover: 0 12px 32px rgb(0 0 0 / 12%);
   width: 100%;
   aspect-ratio: 16 / 10;
   overflow: hidden;
-  margin: 0;
   position: relative;
-  background-color: #f3f4f6;
+  background-color: #e2e8f0;
+}
+
+.source-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #000;
+  padding: 6px 10px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #fff;
+
+  .nasa-star {
+    width: 10px;
+    height: 10px;
+    color: #fff;
+  }
 }
 
 .news-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
-  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .card-content {
@@ -67,6 +147,26 @@ $shadow-hover: 0 12px 32px rgb(0 0 0 / 12%);
   flex-direction: column;
   flex-grow: 1;
   padding: 24px 24px 16px;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: $text-muted;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+
+  .divider {
+    color: #cbd5e1;
+  }
+
+  .agency-label {
+    color: $text-main;
+  }
 }
 
 .card-title {
@@ -97,33 +197,57 @@ $shadow-hover: 0 12px 32px rgb(0 0 0 / 12%);
 .premium-button {
   background: transparent;
   color: $text-main;
-  font-weight: 600;
-  font-size: 0.875rem;
-  letter-spacing: 0.5px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
   text-transform: uppercase;
   padding: 0 !important;
   min-width: unset;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  transition: color 0.3s ease;
 
   /* stylelint-disable-next-line selector-pseudo-element-no-unknown */
   ::ng-deep .mdc-button__label {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
   }
 
   .arrow {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     line-height: 1;
-    transition: transform 0.3s ease;
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+}
+
+@keyframes pulse-light {
+  0% {
+    box-shadow: 0 0 0 0 rgb(220 38 38 / 30%);
+  }
+
+  70% {
+    box-shadow: 0 0 0 6px rgb(220 38 38 / 0%);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgb(220 38 38 / 0%);
+  }
+}
+
+@media (width <= 768px) {
+  .section-header .main-title {
+    font-size: 2rem;
   }
 }
 
 @media (width <= 480px) {
-  .premium-news-section {
-    padding: 2rem 1rem;
+  .nasa-premium-section-light {
+    padding: 3rem 1rem;
+  }
+
+  .news-grid {
+    gap: 1.5rem;
   }
 
   .card-content {
