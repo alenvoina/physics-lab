@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, TemplateRef, ViewChild, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./header.component.scss'],
   standalone: false,
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnDestroy {
   @Input() darkTheme = false;
 
   @ViewChild('loginModal') loginModal!: TemplateRef<any>;
@@ -18,15 +18,32 @@ export class HeaderComponent {
 
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
+    this.toggleBodyScroll();
   }
 
   closeMenu() {
     this.menuOpen = false;
+    this.toggleBodyScroll();
   }
 
   openLoginModal() {
     this.dialog.open(this.loginModal, {
       width: '300px',
     });
+    if (this.menuOpen) {
+      this.closeMenu();
+    }
+  }
+
+  private toggleBodyScroll() {
+    if (this.menuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }
+
+  ngOnDestroy() {
+    document.body.style.overflow = '';
   }
 }

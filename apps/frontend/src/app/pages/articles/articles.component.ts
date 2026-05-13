@@ -6,9 +6,9 @@ import { RouterModule } from '@angular/router';
 @Component({
   standalone: true,
   selector: 'app-articles-page',
-  imports: [CommonModule, RouterModule],
   templateUrl: './articles.component.html',
-  styleUrls:['./articles.component.scss'] 
+  styleUrls: ['./articles.component.scss'],
+  imports: [CommonModule, RouterModule],
 })
 export class ArticlesComponent {
   articles = this.articlesService.getAll();

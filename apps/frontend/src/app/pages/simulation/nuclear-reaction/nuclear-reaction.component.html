@@ -3,7 +3,7 @@
     <div class="title-group">
       <div class="logo-icon">☢</div>
       <div>
-        <h1>Терминал ядерного реактора</h1>
+        <h1>Терминал реактора</h1>
       </div>
     </div>
     <div class="system-status" [ngClass]="getStatusClass()">
@@ -40,7 +40,7 @@
       </div>
 
       <div class="control-group">
-        <label>Ввод управляющих стержней</label>
+        <label>Управляющие стержни</label>
         <div class="slider-wrapper">
           <input
             type="range"
@@ -73,8 +73,8 @@
 
         <div class="bar-container">
           <div class="bar-label">
-            <span>Выходная мощность</span>
-            <span>{{ sim.energy.toFixed(0) }} МВт</span>
+            <span>Мощность (МВт)</span>
+            <span>{{ sim.energy.toFixed(0) }}</span>
           </div>
           <div class="progress">
             <div
@@ -99,70 +99,72 @@
       </div>
     </div>
   </div>
-</div>
 
-<div class="reactor-guide">
-  <div class="guide-header">
-    <h2>⚛️ Анатомия цепной реакции</h2>
-    <p>Как удержать энергию звезд внутри стального бака</p>
-  </div>
-
-  <div class="guide-grid">
-    <div class="guide-card cyan-border">
-      <div class="card-icon">🎯</div>
-      <div class="card-content">
-        <h3>Ядерное деление</h3>
-        <p>
-          Всё начинается, когда свободный <b>нейтрон</b> попадает в ядро
-          <b>Урана-235</b>. Ядро становится нестабильным и разлетается на два
-          осколка, попутно выбрасывая 2-3 новых нейтрона.
-        </p>
-      </div>
+  <!-- Гайд перенесен внутрь root -->
+  <div class="reactor-guide">
+    <div class="guide-header">
+      <h2>⚛️ Анатомия цепной реакции</h2>
+      <p>Как удержать энергию звезд внутри стального бака</p>
     </div>
 
-    <div class="guide-card yellow-border">
-      <div class="card-icon">⛓️</div>
-      <div class="card-content">
-        <h3>Геометрическая прогрессия</h3>
-        <p>
-          Если каждый новый нейтрон попадет в соседнее ядро, количество делений
-          будет расти взрывообразно: 1 → 2 → 4 → 8... В реакторе мы стремимся к
-          <b>Критическому состоянию</b>, когда ровно один нейтрон от каждого
-          деления вызывает новое.
-        </p>
+    <div class="guide-grid">
+      <div class="guide-card cyan-border">
+        <div class="card-icon">🎯</div>
+        <div class="card-content">
+          <h3>Ядерное деление</h3>
+          <p>
+            Всё начинается, когда свободный <b>нейтрон</b> попадает в ядро
+            <b>Урана-235</b>. Ядро становится нестабильным и разлетается на два
+            осколка, попутно выбрасывая 2-3 новых нейтрона.
+          </p>
+        </div>
       </div>
-    </div>
 
-    <div class="guide-card red-border wide">
-      <div class="card-icon">🕹️</div>
-      <div class="card-content">
-        <div class="flex-row">
-          <div class="text">
-            <h3>Управляющие стержни</h3>
-            <p>
-              Чтобы реактор не превратился в бомбу, мы используем
-              <b>поглотители</b> (например, бор или графит). Опуская стержни в
-              зону (Rod Insertion), ты буквально «ловишь» лишние нейтроны,
-              замедляя реакцию.
-            </p>
-          </div>
-          <div class="scram-info">
-            <div class="scram-label">Кнопка SCRAM</div>
-            <p>
-              Это экстренный сброс всех стержней в зону под действием силы
-              тяжести. Полная остановка за секунды.
-            </p>
+      <div class="guide-card yellow-border">
+        <div class="card-icon">⛓️</div>
+        <div class="card-content">
+          <h3>Геометрическая прогрессия</h3>
+          <p>
+            Если каждый новый нейтрон попадет в соседнее ядро, количество
+            делений будет расти взрывообразно: 1 → 2 → 4 → 8... В реакторе мы
+            стремимся к
+            <b>Критическому состоянию</b>, когда ровно один нейтрон от каждого
+            деления вызывает новое.
+          </p>
+        </div>
+      </div>
+
+      <div class="guide-card red-border wide">
+        <div class="card-icon">🕹️</div>
+        <div class="card-content">
+          <div class="flex-row">
+            <div class="text">
+              <h3>Управляющие стержни</h3>
+              <p>
+                Чтобы реактор не превратился в бомбу, мы используем
+                <b>поглотители</b> (например, бор или графит). Опуская стержни в
+                зону, ты буквально «ловишь» лишние нейтроны, замедляя реакцию.
+              </p>
+            </div>
+            <div class="scram-info">
+              <div class="scram-label">Кнопка SCRAM</div>
+              <p>
+                Экстренный сброс всех стержней в зону под действием силы
+                тяжести. Полная остановка за секунды.
+              </p>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="pro-tip">
-    <p>
-      💡 <b>Миссия оператора:</b> Попробуй поднять температуру до <b>900K</b>,
-      удерживая её стабильной. Как только увидишь статус <code>CRITICAL</code>,
-      быстро опускай стержни на 70%, чтобы избежать расплавления (Meltdown)!
-    </p>
+    <div class="pro-tip">
+      <p>
+        💡 <b>Миссия оператора:</b> Попробуй поднять температуру до <b>900K</b>,
+        удерживая её стабильной. Как только увидишь статус
+        <code>CRITICAL</code>, быстро опускай стержни на 70%, чтобы избежать
+        расплавления (Meltdown)!
+      </p>
+    </div>
   </div>
 </div>

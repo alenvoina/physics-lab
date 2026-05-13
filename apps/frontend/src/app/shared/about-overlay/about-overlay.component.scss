@@ -32,24 +32,46 @@
   inset: 0;
   z-index: 9999;
   background: rgb(2 6 23 / 60%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 1fr auto 1fr;
+  padding: 0 1.5rem;
   animation: fade-in 0.4s ease-out forwards;
+
+  &::before {
+    content: '';
+    grid-row: 1;
+  }
+
+  &::after {
+    content: '';
+    grid-row: 3;
+  }
+
+  @media (width <= 600px) {
+    padding: 0 1rem;
+  }
 }
 
 .bento-container {
+  grid-row: 2;
   position: relative;
   width: 100%;
   max-width: 860px;
+  margin: 60px auto;
   animation: scale-up-bounce 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+
+  @media (width <= 600px) {
+    margin: 56px auto;
+  }
 }
 
 .close-btn {
   position: absolute;
-  top: -40px;
-  right: 0;
+  top: -44px;
+  right: -8px;
   background: none;
   border: none;
   color: #94a3b8;
@@ -68,16 +90,30 @@
     background: rgb(255 255 255 / 10%);
     transform: rotate(90deg);
   }
+
+  @media (width <= 600px) {
+    right: 0;
+    top: -40px;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
 }
 
 .bento-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: auto auto;
   gap: 16px;
 
-  @media (width <= 768px) {
+  @media (width <= 900px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (width <= 600px) {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 }
 
@@ -99,6 +135,11 @@
   &:hover {
     border-color: rgb(255 255 255 / 15%);
   }
+
+  @media (width <= 600px) {
+    padding: 20px;
+    border-radius: 20px;
+  }
 }
 
 .project-card {
@@ -109,7 +150,11 @@
     rgb(2 6 23 / 90%) 100%
   );
 
-  @media (width <= 768px) {
+  @media (width <= 900px) {
+    grid-column: span 2;
+  }
+
+  @media (width <= 600px) {
     grid-column: span 1;
   }
 
@@ -131,6 +176,11 @@
     font-size: 1.8rem;
     margin: 0 0 12px;
     font-weight: 700;
+    line-height: 1.2;
+
+    @media (width <= 600px) {
+      font-size: 1.4rem;
+    }
   }
 
   p {
@@ -139,6 +189,12 @@
     font-size: 0.95rem;
     margin-bottom: 24px;
     max-width: 90%;
+
+    @media (width <= 600px) {
+      max-width: 100%;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
   }
 
   .tech-stack {
@@ -154,6 +210,11 @@
       padding: 6px 12px;
       border-radius: 8px;
       border: 1px solid rgb(255 255 255 / 5%);
+
+      @media (width <= 600px) {
+        font-size: 0.75rem;
+        padding: 4px 10px;
+      }
     }
   }
 }
@@ -164,6 +225,14 @@
   justify-content: center;
   align-items: center;
   text-align: center;
+
+  @media (width <= 900px) {
+    grid-column: span 2;
+  }
+
+  @media (width <= 600px) {
+    grid-column: span 1;
+  }
 
   .avatar-glow {
     position: relative;
@@ -193,6 +262,12 @@
     font-size: 1.5rem;
     font-weight: bold;
     color: #fff;
+
+    @media (width <= 600px) {
+      width: 70px;
+      height: 70px;
+      font-size: 1.3rem;
+    }
   }
 
   h3 {
@@ -201,6 +276,10 @@
     background: linear-gradient(to right, #fff, #94a3b8);
     background-clip: text;
     -webkit-text-fill-color: transparent;
+
+    @media (width <= 600px) {
+      font-size: 1.25rem;
+    }
   }
 
   .role {
@@ -215,6 +294,7 @@
     color: #64748b;
     font-style: italic;
     line-height: 1.5;
+    max-width: 400px;
   }
 }
 
@@ -227,6 +307,20 @@
   text-decoration: none;
   cursor: pointer;
 
+  @media (width <= 900px) {
+    &:last-child {
+      grid-column: span 2;
+    }
+  }
+
+  @media (width <= 600px) {
+    padding: 16px 20px;
+
+    &:last-child {
+      grid-column: span 1;
+    }
+  }
+
   .contact-icon {
     width: 40px;
     height: 40px;
@@ -236,6 +330,7 @@
     align-items: center;
     justify-content: center;
     color: #fff;
+    flex-shrink: 0;
 
     svg {
       width: 20px;
@@ -247,6 +342,10 @@
     font-weight: 600;
     font-size: 1rem;
     flex: 1;
+
+    @media (width <= 600px) {
+      font-size: 0.95rem;
+    }
   }
 
   .arrow {
@@ -256,6 +355,7 @@
     transition:
       transform 0.3s ease,
       color 0.3s ease;
+    flex-shrink: 0;
   }
 
   &:hover {

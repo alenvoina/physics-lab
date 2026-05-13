@@ -1,8 +1,8 @@
 <mat-toolbar class="header" [class.dark-theme]="darkTheme">
   <div class="left">
     <div class="logo" routerLink="/">
-      <mat-icon>science</mat-icon>
-      <span>Physics Lab</span>
+      <mat-icon class="logo-icon">science</mat-icon>
+      <span class="logo-text">Physics Lab</span>
     </div>
   </div>
 
@@ -16,36 +16,70 @@
   </div>
 
   <div class="right">
-    <button mat-icon-button class="burger" (click)="toggleMenu()">
-      <mat-icon>menu</mat-icon>
-    </button>
-
     <div class="auth desktop-auth">
-      <button mat-stroked-button color="accent" (click)="openLoginModal()">
+      <button
+        mat-stroked-button
+        color="accent"
+        class="btn-login"
+        (click)="openLoginModal()"
+      >
         Войти
       </button>
-      <button mat-button (click)="openLoginModal()">Зарегистрироваться</button>
+      <button mat-button class="btn-register" (click)="openLoginModal()">
+        Регистрация
+      </button>
     </div>
+
+    <button
+      mat-icon-button
+      class="burger"
+      (click)="toggleMenu()"
+      [class.active]="menuOpen"
+    >
+      <mat-icon>{{ menuOpen ? 'close' : 'menu' }}</mat-icon>
+    </button>
   </div>
 </mat-toolbar>
 
-<div class="mobile-menu" *ngIf="menuOpen">
-  <button mat-button routerLink="/simulations" (click)="closeMenu()">
-    Симуляции
-  </button>
-  <button mat-button routerLink="/experiments" (click)="closeMenu()">
-    Галерея
-  </button>
-  <button mat-button routerLink="/physics-life" (click)="closeMenu()">
-    Физика
-  </button>
-  <button mat-button routerLink="/news" (click)="closeMenu()">Новости</button>
+<div
+  class="mobile-menu-overlay"
+  [class.is-open]="menuOpen"
+  [class.dark-theme]="darkTheme"
+>
+  <div class="mobile-menu-content">
+    <nav class="mobile-nav">
+      <a class="nav-link" routerLink="/simulations" (click)="closeMenu()">
+        <span class="link-text">Симуляции</span>
+        <mat-icon>chevron_right</mat-icon>
+      </a>
+      <a class="nav-link" routerLink="/experiments" (click)="closeMenu()">
+        <span class="link-text">Галерея</span>
+        <mat-icon>chevron_right</mat-icon>
+      </a>
+      <a class="nav-link" routerLink="/articles" (click)="closeMenu()">
+        <span class="link-text">Журнал</span>
+        <mat-icon>chevron_right</mat-icon>
+      </a>
+      <a class="nav-link" routerLink="/news" (click)="closeMenu()">
+        <span class="link-text">Новости</span>
+        <mat-icon>chevron_right</mat-icon>
+      </a>
+    </nav>
 
-  <div class="mobile-auth">
-    <button mat-stroked-button color="accent" (click)="openLoginModal()">
-      Войти
-    </button>
-    <button mat-button (click)="openLoginModal()">Зарегистрироваться</button>
+    <div class="mobile-auth-wrapper">
+      <div class="divider"></div>
+      <button
+        mat-flat-button
+        color="accent"
+        class="btn-mobile-login"
+        (click)="openLoginModal()"
+      >
+        Войти в аккаунт
+      </button>
+      <button mat-button class="btn-mobile-register" (click)="openLoginModal()">
+        Создать профиль
+      </button>
+    </div>
   </div>
 </div>
 

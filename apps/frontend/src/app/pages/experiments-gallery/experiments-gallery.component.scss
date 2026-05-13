@@ -7,6 +7,9 @@ $text-secondary: #475569;
 $text-muted: #94a3b8;
 $accent: #3b82f6;
 $accent-light: #eff6ff;
+$primary: #6366f1;
+$white: #fff;
+$border-color: #e2e8f0;
 
 .gallery-root {
   min-height: 100vh;
@@ -29,13 +32,21 @@ $accent-light: #eff6ff;
   }
 
   .eyebrow {
-    display: inline-block;
-    font-size: 13px;
-    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 16px;
+    background: $white;
+    border: 1px solid $border-color;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    color: $accent;
-    margin-bottom: 16px;
+    letter-spacing: 1.5px;
+    color: $primary;
+    box-shadow:
+      0 4px 14px 0 rgb(0 0 0 / 5%),
+      0 1px 2px 0 rgb(0 0 0 / 2%);
+    margin-bottom: 20px;
   }
 
   h1 {

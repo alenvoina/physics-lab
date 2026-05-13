@@ -10,14 +10,14 @@ $text: #f8fafc;
 $text-muted: #94a3b8;
 
 .reactor-root {
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
   background: radial-gradient(circle at center, #0f172a, $bg-color);
   color: $text;
   font-family: Inter, sans-serif;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 .header {
@@ -29,11 +29,25 @@ $text-muted: #94a3b8;
   border-bottom: 1px solid rgba($primary, 0.2);
   backdrop-filter: blur(10px);
   z-index: 10;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  @media (width <= 600px) {
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    padding: 1rem;
+  }
 
   .title-group {
     display: flex;
     align-items: center;
     gap: 1rem;
+
+    @media (width <= 600px) {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
 
     .logo-icon {
       font-size: 2.5rem;
@@ -43,17 +57,11 @@ $text-muted: #94a3b8;
 
     h1 {
       margin: 0;
-      font-size: 1.25rem;
+      font-size: clamp(1.2rem, 4vw, 1.5rem);
       font-family: 'JetBrains Mono', monospace;
       text-transform: uppercase;
       letter-spacing: 2px;
       color: $primary;
-    }
-
-    p {
-      margin: 0;
-      font-size: 0.8rem;
-      color: $text-muted;
     }
   }
 }
@@ -64,6 +72,13 @@ $text-muted: #94a3b8;
   font-family: 'JetBrains Mono', monospace;
   font-weight: 700;
   border: 1px solid transparent;
+  text-align: center;
+  min-width: 140px;
+
+  @media (width <= 600px) {
+    width: 100%;
+    box-sizing: border-box;
+  }
 
   &.stable {
     color: $success;
@@ -104,19 +119,37 @@ $text-muted: #94a3b8;
 
 .layout {
   display: flex;
-  flex: 1;
-  overflow: hidden;
+  gap: 20px;
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+
+  @media (width <= 1024px) {
+    flex-direction: column;
+    padding: 10px;
+    gap: 15px;
+  }
 }
 
 .canvas-wrap {
   flex: 1;
   position: relative;
   min-width: 0;
+  min-height: 500px;
+  border-radius: 12px;
+  overflow: hidden;
+
+  @media (width <= 1024px) {
+    min-height: 400px;
+  }
 
   canvas {
     display: block;
     width: 100%;
     height: 100%;
+    touch-action: none;
   }
 
   .hud-corner {
@@ -156,16 +189,22 @@ $text-muted: #94a3b8;
   }
 }
 
-.panel {
-  width: 340px;
+.glass-panel {
+  width: 360px;
+  flex-shrink: 0;
   background: $panel-bg;
   backdrop-filter: blur(12px);
-  border-left: 1px solid rgb(255 255 255 / 5%);
+  border: 1px solid rgb(255 255 255 / 5%);
+  border-radius: 12px;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  overflow-y: auto;
+  box-sizing: border-box;
+
+  @media (width <= 1024px) {
+    width: 100%;
+  }
 
   h2 {
     margin: 0;
@@ -179,7 +218,7 @@ $text-muted: #94a3b8;
 .control-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.8rem;
 
   label {
     font-size: 0.85rem;
@@ -222,11 +261,11 @@ input[type='range'] {
 
   &::-webkit-slider-thumb {
     appearance: none;
-    height: 16px;
-    width: 16px;
+    height: 20px;
+    width: 20px;
     border-radius: 50%;
     background: $primary;
-    margin-top: -6px;
+    margin-top: -8px;
     cursor: pointer;
     box-shadow: 0 0 10px rgba($primary, 0.5);
     transition: transform 0.1s;
@@ -240,14 +279,14 @@ input[type='range'] {
 .telemetry {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.2rem;
 
   .bar-container {
     .bar-label {
       display: flex;
       justify-content: space-between;
       font-size: 0.85rem;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.5rem;
       font-family: 'JetBrains Mono', monospace;
 
       span:last-child {
@@ -256,9 +295,9 @@ input[type='range'] {
     }
 
     .progress {
-      height: 8px;
+      height: 10px;
       background: #0f172a;
-      border-radius: 4px;
+      border-radius: 5px;
       overflow: hidden;
       box-shadow: inset 0 1px 3px rgb(0 0 0 / 50%);
 
@@ -281,10 +320,10 @@ input[type='range'] {
 
 .btn-reset {
   width: 100%;
-  padding: 1rem;
+  padding: 1.2rem 1rem;
   background: rgba($danger, 0.1);
   border: 1px solid rgba($danger, 0.5);
-  border-radius: 6px;
+  border-radius: 8px;
   color: $danger;
   font-weight: 600;
   text-transform: uppercase;
@@ -298,7 +337,7 @@ input[type='range'] {
   &:hover {
     background: $danger;
     color: white;
-    box-shadow: 0 0 15px rgba($danger, 0.5);
+    box-shadow: 0 0 20px rgba($danger, 0.6);
   }
 }
 
@@ -306,7 +345,7 @@ input[type='range'] {
   margin-top: auto;
   background: rgb(0 0 0 / 30%);
   padding: 1rem;
-  border-radius: 6px;
+  border-radius: 8px;
   border-left: 3px solid #64748b;
 
   h3 {
@@ -323,51 +362,29 @@ input[type='range'] {
   }
 }
 
-@media (width <= 850px) {
-  .reactor-root {
-    height: 100vh;
-    overflow-y: auto;
-  }
-
-  .header {
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
-    padding: 1rem;
-  }
-
-  .layout {
-    flex-direction: column;
-  }
-
-  .canvas-wrap {
-    flex: none;
-    height: 40vh;
-    min-height: 300px;
-  }
-
-  .panel {
-    width: 100%;
-    border-left: none;
-    border-top: 1px solid rgb(255 255 255 / 5%);
-  }
-}
-
 .reactor-guide {
-  max-width: 1100px;
-  margin: 40px auto;
-  padding: 30px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 20px auto 40px;
+  padding: 40px;
   background: radial-gradient(circle at top left, #0f172a, #020617);
   border-radius: 24px;
   border: 1px solid rgb(56 189 248 / 20%);
   color: #f1f5f9;
-  font-family: Inter, sans-serif;
+  box-sizing: border-box;
+
+  @media (width <= 768px) {
+    padding: 20px;
+    border-radius: 16px;
+    margin: 10px auto 20px;
+  }
 
   .guide-header {
     margin-bottom: 30px;
+    text-align: center;
 
     h2 {
-      font-size: 2.2rem;
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
       color: #38bdf8;
       text-shadow: 0 0 15px rgb(56 189 248 / 40%);
       margin-bottom: 8px;
@@ -382,6 +399,10 @@ input[type='range'] {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
+
+    @media (width <= 900px) {
+      grid-template-columns: 1fr;
+    }
   }
 
   .guide-card {
@@ -392,19 +413,25 @@ input[type='range'] {
     gap: 15px;
     border: 1px solid rgb(255 255 255 / 5%);
 
+    @media (width <= 600px) {
+      flex-direction: column;
+    }
+
     .card-icon {
       font-size: 2.5rem;
+      line-height: 1;
     }
 
     h3 {
-      margin-bottom: 10px;
+      margin: 0 0 10px;
       color: #f1f5f9;
     }
 
     p {
-      font-size: 0.9rem;
-      line-height: 1.5;
+      font-size: 0.95rem;
+      line-height: 1.6;
       color: #cbd5e1;
+      margin: 0;
     }
   }
 
@@ -423,59 +450,60 @@ input[type='range'] {
   .wide {
     grid-column: span 2;
 
+    @media (width <= 900px) {
+      grid-column: span 1;
+    }
+
     .flex-row {
       display: flex;
       gap: 30px;
       align-items: center;
+
+      @media (width <= 768px) {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
   }
 
   .scram-info {
-    min-width: 200px;
+    min-width: 250px;
     padding: 15px;
     background: rgb(239 68 68 / 10%);
     border: 1px solid rgb(239 68 68 / 30%);
     border-radius: 12px;
 
+    @media (width <= 768px) {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
     .scram-label {
       color: #ef4444;
       font-weight: bold;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       text-transform: uppercase;
       margin-bottom: 5px;
     }
 
     p {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       margin: 0;
     }
   }
 
   .pro-tip {
     margin-top: 30px;
-    padding: 15px 25px;
+    padding: 20px;
     background: rgb(56 189 248 / 5%);
-    border-radius: 100px;
-    border: 1px solid rgb(56 189 248 / 20%);
+    border-radius: 16px;
+    border: 1px dashed rgb(56 189 248 / 40%);
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
 
     b {
       color: #38bdf8;
-    }
-  }
-}
-
-@media (width <= 768px) {
-  .guide-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .wide {
-    grid-column: span 1;
-
-    .flex-row {
-      flex-direction: column;
     }
   }
 }

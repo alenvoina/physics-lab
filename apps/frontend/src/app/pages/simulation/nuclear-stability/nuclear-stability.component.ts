@@ -17,8 +17,10 @@ import { NuclearStabilitySystem, Nucleus } from '@physics-lab/engine';
   imports: [CommonModule],
 })
 export class NuclearStabilityComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('canvasWrap', { static: true }) canvasWrapRef!: ElementRef<HTMLDivElement>;
-  @ViewChild('canvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('canvasWrap', { static: true })
+  canvasWrapRef!: ElementRef<HTMLDivElement>;
+  @ViewChild('canvas', { static: true })
+  canvasRef!: ElementRef<HTMLCanvasElement>;
 
   ctx!: CanvasRenderingContext2D;
 
@@ -34,21 +36,29 @@ export class NuclearStabilityComponent implements AfterViewInit, OnDestroy {
   private resizeObserver!: ResizeObserver;
 
   ngAfterViewInit() {
-    this.ctx = this.canvasRef.nativeElement.getContext('2d', { alpha: false })!;
+    this.ctx = this.canvasRef.nativeElement.getContext('2d')!;
 
-    this.resizeObserver = new ResizeObserver(entries => {
-      const { width, height } = entries[0].contentRect;
+    const rect = this.canvasWrapRef.nativeElement.getBoundingClientRect();
+    this.updateCanvasSize(rect.width, rect.height);
 
-      this.canvasRef.nativeElement.width = width;
-      this.canvasRef.nativeElement.height = height;
-
-      this.sim.setBounds(width, height);
+    this.resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        const { width, height } = entry.contentRect;
+        this.updateCanvasSize(width, height);
+      }
     });
 
     this.resizeObserver.observe(this.canvasWrapRef.nativeElement);
 
     this.lastTime = performance.now();
     this.loop(this.lastTime);
+  }
+
+  private updateCanvasSize(width: number, height: number) {
+    if (width === 0 || height === 0) return;
+    this.canvasRef.nativeElement.width = width;
+    this.canvasRef.nativeElement.height = height;
+    this.sim.setBounds(width, height);
   }
 
   setSpeed(val: string) {
@@ -88,7 +98,7 @@ export class NuclearStabilityComponent implements AfterViewInit, OnDestroy {
 
     this.hovered = undefined;
 
-    this.sim.nuclei.forEach(n => {
+    this.sim.nuclei.forEach((n) => {
       const dx = n.position.x - this.mouse.x;
       const dy = n.position.y - this.mouse.y;
 
@@ -111,7 +121,13 @@ export class NuclearStabilityComponent implements AfterViewInit, OnDestroy {
     const isHovered = this.hovered === n;
 
     ctx.beginPath();
-    ctx.arc(n.position.x, n.position.y, n.radius * (isHovered ? 4 : 2.5), 0, Math.PI * 2);
+    ctx.arc(
+      n.position.x,
+      n.position.y,
+      n.radius * (isHovered ? 4 : 2.5),
+      0,
+      Math.PI * 2,
+    );
     ctx.fillStyle = `rgba(${r}, ${g}, 50, ${isHovered ? 0.4 : 0.15})`;
     ctx.fill();
 
@@ -122,7 +138,13 @@ export class NuclearStabilityComponent implements AfterViewInit, OnDestroy {
 
     if (n.flash > 0.01) {
       ctx.beginPath();
-      ctx.arc(n.position.x, n.position.y, n.radius + (1 - n.flash) * 30, 0, Math.PI * 2);
+      ctx.arc(
+        n.position.x,
+        n.position.y,
+        n.radius + (1 - n.flash) * 30,
+        0,
+        Math.PI * 2,
+      );
       ctx.strokeStyle = `rgba(56, 189, 248, ${n.flash})`;
       ctx.lineWidth = 2;
       ctx.stroke();
@@ -132,8 +154,11 @@ export class NuclearStabilityComponent implements AfterViewInit, OnDestroy {
   drawTooltip(n: Nucleus) {
     const ctx = this.ctx;
 
-    const tx = this.mouse.x + 15;
-    const ty = this.mouse.y + 15;
+    let tx = this.mouse.x + 15;
+    let ty = this.mouse.y + 15;
+
+    if (tx + 150 > this.sim.width) tx = this.mouse.x - 165;
+    if (ty + 70 > this.sim.height) ty = this.mouse.y - 85;
 
     ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
     ctx.fillRect(tx, ty, 150, 70);
@@ -143,7 +168,11 @@ export class NuclearStabilityComponent implements AfterViewInit, OnDestroy {
 
     ctx.fillText(`Z: ${n.protons}`, tx + 10, ty + 20);
     ctx.fillText(`N: ${n.neutrons}`, tx + 10, ty + 35);
-    ctx.fillText(`Stability: ${(n.stability * 100).toFixed(0)}%`, tx + 10, ty + 50);
+    ctx.fillText(
+      `Stability: ${(n.stability * 100).toFixed(0)}%`,
+      tx + 10,
+      ty + 50,
+    );
   }
 
   reset() {
@@ -152,6 +181,6 @@ export class NuclearStabilityComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     cancelAnimationFrame(this.animationId);
-    this.resizeObserver.disconnect();
+    if (this.resizeObserver) this.resizeObserver.disconnect();
   }
 }

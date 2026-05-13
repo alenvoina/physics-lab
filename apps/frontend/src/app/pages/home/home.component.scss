@@ -4,6 +4,9 @@ $text-main: #0f172a;
 $text-light: #64748b;
 $bg-color: #f8fafc;
 $glass: rgb(255 255 255 / 70%);
+$primary: #6366f1;
+$white: #fff;
+$border-color: #e2e8f0;
 
 .home-page {
   background-color: $bg-color;
@@ -44,7 +47,6 @@ $glass: rgb(255 255 255 / 70%);
   z-index: 1;
 }
 
-// --- HERO ---
 .hero {
   padding: 120px 0 80px;
 
@@ -56,15 +58,20 @@ $glass: rgb(255 255 255 / 70%);
   }
 
   .badge {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     padding: 6px 16px;
-    background: white;
-    border: 1px solid #e2e8f0;
+    background: $white;
+    border: 1px solid $border-color;
     border-radius: 100px;
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
     color: $primary;
-    margin-bottom: 24px;
+    box-shadow:
+      0 4px 14px 0 rgb(0 0 0 / 5%),
+      0 1px 2px 0 rgb(0 0 0 / 2%);
   }
 
   h1 {

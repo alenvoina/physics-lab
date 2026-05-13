@@ -4,7 +4,7 @@ import {
   Component,
   ElementRef,
   OnDestroy,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 
 import { NuclearReactorSystem } from '@physics-lab/engine';
@@ -14,11 +14,13 @@ import { NuclearReactorSystem } from '@physics-lab/engine';
   templateUrl: './nuclear-reaction.component.html',
   styleUrls: ['./nuclear-reaction.component.scss'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule],
 })
 export class NuclearReactorComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('canvasWrap', { static: true }) canvasWrapRef!: ElementRef<HTMLDivElement>;
-  @ViewChild('canvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('canvasWrap', { static: true })
+  canvasWrapRef!: ElementRef<HTMLDivElement>;
+  @ViewChild('canvas', { static: true })
+  canvasRef!: ElementRef<HTMLCanvasElement>;
 
   ctx!: CanvasRenderingContext2D;
 
@@ -39,16 +41,18 @@ export class NuclearReactorComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.ctx = this.canvasRef.nativeElement.getContext('2d', { alpha: false })!;
+    // 1. Убрали { alpha: false } чтобы прозрачные хвосты (rgba) работали корректно
+    this.ctx = this.canvasRef.nativeElement.getContext('2d')!;
 
-    this.resizeObserver = new ResizeObserver(entries => {
+    // 2. Синхронно задаем размеры сразу при рендере
+    const rect = this.canvasWrapRef.nativeElement.getBoundingClientRect();
+    this.updateCanvasSize(rect.width, rect.height);
+
+    // 3. Следим за адаптивным изменением размера
+    this.resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
         const { width, height } = entry.contentRect;
-
-        this.canvasRef.nativeElement.width = width;
-        this.canvasRef.nativeElement.height = height;
-
-        this.sim.setBounds(width, height);
+        this.updateCanvasSize(width, height);
       }
     });
 
@@ -58,12 +62,18 @@ export class NuclearReactorComponent implements AfterViewInit, OnDestroy {
     this.loop(this.lastTime);
   }
 
+  private updateCanvasSize(width: number, height: number) {
+    if (width === 0 || height === 0) return;
+    this.canvasRef.nativeElement.width = width;
+    this.canvasRef.nativeElement.height = height;
+    this.sim.setBounds(width, height);
+  }
+
   loop = (time: number) => {
     const dt = Math.min((time - this.lastTime) / 1000, 0.05) * this.speed;
     this.lastTime = time;
 
     this.sim.step(dt);
-
     this.draw();
 
     this.animationId = requestAnimationFrame(this.loop);
@@ -99,16 +109,29 @@ export class NuclearReactorComponent implements AfterViewInit, OnDestroy {
       ctx.fillRect(0, 0, w, h);
     }
 
-    this.sim.particles.forEach(p => {
+    this.sim.particles.forEach((p) => {
       let color = '#fff';
       let glow = 0;
 
-      if (p.type === 'neutron') { color = '#38bdf8'; glow = 6; }
-      else if (p.type === 'nucleus') { color = '#facc15'; glow = 15; }
-      else if (p.type === 'fragment') { color = '#ef4444'; glow = 8; }
+      if (p.type === 'neutron') {
+        color = '#38bdf8';
+        glow = 6;
+      } else if (p.type === 'nucleus') {
+        color = '#facc15';
+        glow = 15;
+      } else if (p.type === 'fragment') {
+        color = '#ef4444';
+        glow = 8;
+      }
 
       ctx.beginPath();
-      ctx.arc(p.position.x, p.position.y, p.radius * (glow / 2), 0, Math.PI * 2);
+      ctx.arc(
+        p.position.x,
+        p.position.y,
+        p.radius * (glow / 2),
+        0,
+        Math.PI * 2,
+      );
       ctx.fillStyle = `${color}22`;
       ctx.fill();
 
@@ -149,7 +172,6 @@ export class NuclearReactorComponent implements AfterViewInit, OnDestroy {
       const py = gy + graphH - Math.min(val / 1200, 1) * graphH;
       i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
     });
-
     ctx.stroke();
 
     ctx.beginPath();
@@ -160,7 +182,6 @@ export class NuclearReactorComponent implements AfterViewInit, OnDestroy {
       const py = gy + graphH - Math.min(val / 100, 1) * graphH;
       i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
     });
-
     ctx.stroke();
 
     ctx.fillStyle = '#fff';
@@ -180,10 +201,10 @@ export class NuclearReactorComponent implements AfterViewInit, OnDestroy {
   }
 
   getStatusText() {
-    if (this.sim.meltdown) return '⚠️ CORE MELTDOWN';
-    if (this.sim.temperature > 800) return 'CRITICAL';
-    if (this.sim.temperature > 400) return 'HEATING';
-    return 'NOMINAL';
+    if (this.sim.meltdown) return '⚠️ РАСПЛАВЛЕНИЕ АЗ';
+    if (this.sim.temperature > 800) return 'КРИТИЧЕСКОЕ';
+    if (this.sim.temperature > 400) return 'НАГРЕВ';
+    return 'НОМИНАЛЬНОЕ';
   }
 
   reset() {

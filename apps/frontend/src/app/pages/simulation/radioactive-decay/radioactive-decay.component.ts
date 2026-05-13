@@ -35,21 +35,32 @@ export class RadioactiveDecayComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.ctx = this.canvasRef.nativeElement.getContext('2d', { alpha: false })!;
+    this.ctx = this.canvasRef.nativeElement.getContext('2d')!;
+
+    const rect = this.canvasWrapRef.nativeElement.getBoundingClientRect();
+    this.updateCanvasSize(rect.width, rect.height);
 
     this.resizeObserver = new ResizeObserver((entries) => {
       const { width, height } = entries[0].contentRect;
-      this.canvasRef.nativeElement.width = width;
-      this.canvasRef.nativeElement.height = height;
-      this.sim.width = width;
-      this.sim.height = height;
-
-      if (this.sim.time === 0) this.sim.reset();
+      this.updateCanvasSize(width, height);
     });
     this.resizeObserver.observe(this.canvasWrapRef.nativeElement);
 
     this.lastTime = performance.now();
     this.loop(this.lastTime);
+  }
+
+  private updateCanvasSize(width: number, height: number) {
+    if (width === 0 || height === 0) return;
+
+    this.canvasRef.nativeElement.width = width;
+    this.canvasRef.nativeElement.height = height;
+    this.sim.width = width;
+    this.sim.height = height;
+
+    if (this.sim.time === 0 || this.sim.atoms.length === 0) {
+      this.sim.reset();
+    }
   }
 
   loop = (time: number) => {

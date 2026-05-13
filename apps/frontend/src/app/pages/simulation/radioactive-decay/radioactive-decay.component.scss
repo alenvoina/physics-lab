@@ -17,6 +17,7 @@ $text-muted: #94a3b8;
   background: radial-gradient(circle at center, #0f172a, $bg-color);
   color: $text;
   font-family: Inter, sans-serif;
+  overflow-x: hidden;
 }
 
 .header {
@@ -29,6 +30,7 @@ $text-muted: #94a3b8;
     display: flex;
     align-items: center;
     gap: 1rem;
+    flex-wrap: wrap;
 
     .logo-icon {
       font-size: 2.2rem;
@@ -38,7 +40,7 @@ $text-muted: #94a3b8;
 
     h1 {
       margin: 0;
-      font-size: 1.25rem;
+      font-size: clamp(1rem, 4vw, 1.25rem);
       font-family: 'JetBrains Mono', monospace;
       text-transform: uppercase;
       color: $primary;
@@ -50,6 +52,10 @@ $text-muted: #94a3b8;
       color: $text-muted;
     }
   }
+
+  @media (width <= 600px) {
+    padding: 1rem;
+  }
 }
 
 .layout {
@@ -58,12 +64,26 @@ $text-muted: #94a3b8;
   gap: 20px;
   padding: 20px;
   flex: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+
+  @media (width <= 600px) {
+    padding: 10px;
+    gap: 15px;
+  }
 }
 
 .top-section {
   display: flex;
   gap: 20px;
   min-height: 450px;
+
+  @media (width <= 1024px) {
+    flex-direction: column;
+    min-height: auto;
+  }
 }
 
 .glass-panel {
@@ -76,10 +96,16 @@ $text-muted: #94a3b8;
 
 .panel {
   width: 340px;
+  flex-shrink: 0;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  box-sizing: border-box;
+
+  @media (width <= 1024px) {
+    width: 100%;
+  }
 
   h2 {
     margin: 0;
@@ -100,11 +126,12 @@ $text-muted: #94a3b8;
     background: rgb(0 0 0 / 40%);
     border: 1px solid #1e293b;
     color: $text-muted;
-    padding: 10px 0;
+    padding: 10px 4px;
     border-radius: 8px;
     cursor: pointer;
     transition: 0.3s ease;
     font-size: 0.85rem;
+    text-align: center;
 
     b {
       font-size: 1.1rem;
@@ -123,6 +150,12 @@ $text-muted: #94a3b8;
       border-color: $primary;
       color: $primary;
       box-shadow: 0 0 15px rgba($primary, 0.3);
+    }
+  }
+
+  @media (width <= 380px) {
+    button {
+      font-size: 0.75rem;
     }
   }
 }
@@ -166,11 +199,11 @@ input[type='range'] {
 
   &::-webkit-slider-thumb {
     appearance: none;
-    height: 16px;
-    width: 16px;
+    height: 18px;
+    width: 18px;
     border-radius: 50%;
     background: $primary;
-    margin-top: -5px;
+    margin-top: -6px;
     cursor: pointer;
     box-shadow: 0 0 10px rgba($primary, 0.6);
     transition: 0.2s;
@@ -183,7 +216,7 @@ input[type='range'] {
 
 .stats {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: 10px;
   margin-top: auto;
 
@@ -197,14 +230,16 @@ input[type='range'] {
     gap: 4px;
 
     span {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: $text-muted;
       text-transform: uppercase;
+      line-height: 1.2;
     }
 
     strong {
-      font-size: 1.2rem;
+      font-size: clamp(1rem, 3vw, 1.2rem);
       font-family: 'JetBrains Mono', monospace;
+      word-break: break-all;
     }
 
     .text-primary {
@@ -223,6 +258,10 @@ input[type='range'] {
       color: $danger;
     }
   }
+
+  @media (width <= 480px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .btn-reset {
@@ -236,8 +275,10 @@ input[type='range'] {
   transition: 0.2s;
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 8px;
   text-transform: uppercase;
+  width: 100%;
 
   &:hover {
     background: $danger;
@@ -252,11 +293,13 @@ input[type='range'] {
   min-width: 0;
   overflow: hidden;
   border: 1px solid rgba($primary, 0.2);
+  min-height: 400px;
 
   canvas {
     display: block;
     width: 100%;
     height: 100%;
+    touch-action: none;
   }
 
   .hud-corner {
@@ -296,129 +339,39 @@ input[type='range'] {
   }
 }
 
-.theory {
-  padding: 1.5rem;
-}
-
-.theory-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-
-  .theory-col {
-    h3 {
-      margin: 0 0 0.5rem;
-      font-size: 1.1rem;
-      color: $primary;
-    }
-
-    p {
-      margin: 0;
-      font-size: 0.9rem;
-      color: #cbd5e1;
-      line-height: 1.6;
-    }
-
-    .formula {
-      background: rgb(0 0 0 / 50%);
-      border: 1px solid rgb(255 255 255 / 10%);
-      padding: 10px;
-      border-radius: 6px;
-      text-align: center;
-      margin-top: 10px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1.1rem;
-      color: $warning;
-    }
-
-    &.highlight {
-      background: rgb(56 189 248 / 5%);
-      padding: 1rem;
-      border-radius: 8px;
-      border-left: 3px solid $primary;
-
-      h4 {
-        margin: 0 0 10px;
-        color: #fff;
-      }
-
-      ul {
-        margin: 0;
-        padding-left: 1.2rem;
-        font-size: 0.85rem;
-        color: #cbd5e1;
-        line-height: 1.6;
-
-        .c-alpha {
-          color: #fb923c;
-        }
-
-        .c-beta {
-          color: #60a5fa;
-        }
-
-        .c-gamma {
-          color: #c084fc;
-        }
-      }
-    }
-  }
-}
-
-@media (width <= 850px) {
-  .layout {
-    padding: 10px;
-    gap: 10px;
-  }
-
-  .top-section {
-    flex-direction: column;
-    min-height: auto;
-  }
-
-  .panel {
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .canvas-wrap {
-    height: 350px;
-    flex: none;
-  }
-
-  .theory-grid {
-    gap: 1rem;
-  }
-}
-
 .decay-guide {
-  max-width: 1100px;
-  margin: 50px auto;
+  width: 100%;
+  margin: 20px 0;
   padding: 40px;
   background: #020617;
-  border-radius: 35px;
+  border-radius: 24px;
   border: 1px solid rgb(34 197 94 / 30%);
-  color: #f1f5f9;
-  font-family: Inter, sans-serif;
   box-shadow: 0 0 50px rgb(34 197 94 / 10%);
+  box-sizing: border-box;
+
+  @media (width <= 768px) {
+    padding: 20px;
+    border-radius: 16px;
+  }
 
   .guide-header {
     text-align: center;
     margin-bottom: 40px;
 
     h2 {
-      font-size: 2.6rem;
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
       background: linear-gradient(90deg, #22c55e, #facc15);
       background-clip: text;
       -webkit-text-fill-color: transparent;
       display: inline-block;
       padding: 5px 0;
       line-height: 1.2;
+      margin-bottom: 10px;
     }
 
     p {
       color: #94a3b8;
-      font-size: 1.15rem;
+      font-size: clamp(0.95rem, 3vw, 1.15rem);
     }
   }
 
@@ -426,6 +379,10 @@ input[type='range'] {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 25px;
+
+    @media (width <= 992px) {
+      grid-template-columns: 1fr;
+    }
   }
 
   .guide-card {
@@ -437,24 +394,32 @@ input[type='range'] {
     gap: 20px;
     transition: all 0.3s ease;
 
+    @media (width <= 600px) {
+      flex-direction: column;
+      padding: 20px;
+      gap: 15px;
+    }
+
     &:hover {
-      transform: scale(1.02);
+      transform: translateY(-5px);
       background: rgb(30 41 59 / 70%);
     }
 
     .card-icon {
       font-size: 3rem;
+      line-height: 1;
     }
 
     h3 {
-      margin-bottom: 15px;
-      font-size: 1.4rem;
+      margin: 0 0 10px;
+      font-size: 1.3rem;
     }
 
     p {
       line-height: 1.6;
       color: #cbd5e1;
       font-size: 0.95rem;
+      margin: 0;
     }
   }
 
@@ -472,16 +437,35 @@ input[type='range'] {
     }
 
     border-bottom: 3px solid #facc15;
+
+    .formula-box {
+      margin-top: 15px;
+      padding: 10px;
+      background: rgb(0 0 0 / 50%);
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #facc15;
+      font-size: 0.9rem;
+      word-break: break-all;
+    }
   }
 
   .wide {
     grid-column: span 2;
+
+    @media (width <= 992px) {
+      grid-column: span 1;
+    }
   }
 
   .types-flex {
     display: flex;
     gap: 20px;
     margin-top: 20px;
+
+    @media (width <= 768px) {
+      flex-direction: column;
+    }
 
     .type-item {
       flex: 1;
@@ -490,7 +474,7 @@ input[type='range'] {
       background: rgb(15 23 42 / 60%);
 
       h4 {
-        margin-bottom: 10px;
+        margin: 0 0 10px;
       }
 
       &.alpha h4 {
@@ -507,6 +491,7 @@ input[type='range'] {
 
       p {
         font-size: 0.85rem;
+        margin: 0;
       }
     }
   }
@@ -519,23 +504,11 @@ input[type='range'] {
     border: 1px dashed #22c55e;
     text-align: center;
     color: #cbd5e1;
+    font-size: 0.95rem;
+    line-height: 1.5;
 
     b {
       color: #22c55e;
     }
-  }
-}
-
-@media (width <= 768px) {
-  .guide-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .wide {
-    grid-column: span 1;
-  }
-
-  .types-flex {
-    flex-direction: column;
   }
 }
