@@ -119,6 +119,13 @@ $text-muted: #94a3b8;
   }
 }
 
+.formula {
+  text-align: center;
+  font-style: italic;
+  font-size: 1.1em;
+  margin: 15px 0;
+}
+
 @keyframes pulse {
   0% {
     opacity: 1;

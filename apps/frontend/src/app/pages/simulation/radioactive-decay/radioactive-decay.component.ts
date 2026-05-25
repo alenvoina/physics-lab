@@ -20,7 +20,8 @@ export class RadioactiveDecayComponent implements AfterViewInit, OnDestroy {
   canvasWrapRef!: ElementRef<HTMLDivElement>;
   @ViewChild('canvas', { static: true })
   canvasRef!: ElementRef<HTMLCanvasElement>;
-  decayFormula = 'Математически: N(t) = N₀ · 2^{-t/T_{1/2}}';
+  decayFormula =
+    'Математически: N(t) = N<sub>0</sub> · 2<sup>-t / T<sub>1/2</sub></sup>';
   ctx!: CanvasRenderingContext2D;
 
   sim = new RadioactiveDecaySystem(400);

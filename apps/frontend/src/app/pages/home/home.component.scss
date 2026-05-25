@@ -282,7 +282,7 @@ $border-color: #e2e8f0;
   padding: 80px 0;
 
   .section-header {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 
     h2 {
       font-size: 32px;
@@ -371,6 +371,48 @@ $border-color: #e2e8f0;
     transform: translateY(-5px);
     box-shadow: 0 30px 60px -12px rgb(0 0 0 / 12%);
   }
+}
+
+.view-all {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 500;
+  color: #1a1a1a;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  position: relative;
+  padding-bottom: 4px;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+}
+
+.view-all::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: #1a1a1a;
+  transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.view-all:hover {
+  opacity: 0.8;
+}
+
+.view-all:hover::after {
+  width: 100%;
+}
+
+.view-all .arrow {
+  display: inline-block;
+  margin-left: 4px;
+  transition: transform 0.3s ease;
+}
+
+.view-all:hover .arrow {
+  transform: translateX(4px);
 }
 
 @media (width <= 992px) {
